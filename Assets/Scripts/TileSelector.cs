@@ -21,6 +21,7 @@ public class TileSelector : MonoBehaviour
     
 
     public GameObject plot;
+    public List<GameObject> plots;
     public GameObject plotParent;
     public bool plowActive;
 
@@ -37,13 +38,22 @@ public class TileSelector : MonoBehaviour
 
         //used for writing info to a file
         //WriteGridToFile();
+
+        for(int i = 0; i < availablePlaces.Count; i++)
+        {
+            PlacePlot(availablePlaces[i]);
+            
+        }
     }
 
     void Update() 
     {
         if (Input.GetButtonDown("Fire1") && plowActive)
         {
-            GetPlotPosition();
+            if (!GameHandler.instance.overMenu)
+            {
+                GetPlotPosition();
+            }
         }
         if(Input.GetKeyDown(KeyCode.J)){
             plowActive = false;
@@ -74,6 +84,7 @@ public class TileSelector : MonoBehaviour
         {
             if (localPlaces[i].x == cellIndex.x && localPlaces[i].y == cellIndex.y)
             {
+                //this is the array index
                 intendedPlotPosition = i;
             }
         }
@@ -94,37 +105,37 @@ public class TileSelector : MonoBehaviour
                 return;
             }
         }
-
-
+        //an array of active plot indexes based on localPlaces array. 
         currentPlotPositionsActive.Add(intendedPlotPosition);
 
-        
+        ActivatePlot(intendedPlotPosition);
+    }
 
-        //grab actual transform.position of grid coordinates, turn grid number into transform number
-        Vector3 plotPosition = availablePlaces[intendedPlotPosition];
-        //add .5 for some reason i don't understand
-        plotPosition.y += .5f;
-        PlacePlot(plotPosition);
+    private void ActivatePlot(int intendedPlotPosition)
+    {
+        // activate plot at plot position
+
+        plots[intendedPlotPosition].SetActive(true);
+            
+        //add EXP
+        StatsController.instance.AddExp(10);
     }
 
     private void PlacePlot(Vector3 plotPosition)
     {
-        if (!GameHandler.instance.overMenu)
-        {
-            /*GOOD STUFF DON'T DELETE*/
-            GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation);
-            tempPlot.SetActive(true);
-            tempPlot.transform.SetParent(plotParent.transform);
-            //add EXP
-            StatsController.instance.AddExp(10);
-            EventTrigger trigger = tempPlot.GetComponent<EventTrigger>();
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = EventTriggerType.PointerClick;
-            entry.callback.AddListener((eventData) => { PlotController.instance.PlotTest(); });
-            trigger.triggers.Add(entry);
-            Debug.Log(trigger.triggers);
-            Debug.Log(entry.callback);
-        }
+
+        /*GOOD STUFF DON'T DELETE*/
+
+        //add .5 for some reason i don't understand
+        plotPosition.y += .5f;
+        GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation);
+        tempPlot.SetActive(false);
+        tempPlot.transform.SetParent(plotParent.transform);
+        plots.Add(tempPlot);
+        
+            
+            
+        
 
     }
 
