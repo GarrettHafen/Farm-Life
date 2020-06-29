@@ -67,7 +67,6 @@ public class TileSelector : MonoBehaviour
          * get mouse position
          * get tile position at mouse position
          * check if plot should go there
-         * place plot on tile position
         */
 
         //get mouse position

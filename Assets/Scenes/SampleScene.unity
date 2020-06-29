@@ -3123,6 +3123,7 @@ MonoBehaviour:
   grid2: {fileID: 755322609}
   tilemapGround: {fileID: 1954216285}
   plot: {fileID: 2555449587901654986, guid: a81cbca989cfe0749aa2b8858702564b, type: 3}
+  plots: []
   plotParent: {fileID: 1309107404}
   plowActive: 0
 --- !u!114 &1843866710
