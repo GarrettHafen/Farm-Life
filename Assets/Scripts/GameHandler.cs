@@ -17,9 +17,9 @@ public class GameHandler : MonoBehaviour
 
     private bool edgeScrolling;
 
-    public SeedsController[] seedsList;
-
     public bool overMenu = false;
+
+    public Tool PlowTool;
 
     //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
     //the planting pointer will be dependant on which seed is selected
@@ -44,8 +44,7 @@ public class GameHandler : MonoBehaviour
         HandleManualMovement(moveAmount);
         HandleScreenEdges(edgeSize, moveAmount);
         HandleZoom();
-        
-       
+
     }
 
     private void HandleZoom()
@@ -157,6 +156,10 @@ public class GameHandler : MonoBehaviour
     {
         overMenu = false;
     }
+
+    
+
+    
 }
 
 

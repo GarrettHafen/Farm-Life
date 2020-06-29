@@ -48,20 +48,10 @@ public class TileSelector : MonoBehaviour
 
     void Update() 
     {
-        if (Input.GetButtonDown("Fire1") && plowActive)
-        {
-            if (!GameHandler.instance.overMenu)
-            {
-                GetPlotPosition();
-            }
-        }
-        if(Input.GetKeyDown(KeyCode.J)){
-            plowActive = false;
-            MenuController.instance.ResetCursor();
-        }
+        
     }
 
-    private void GetPlotPosition()
+    public void GetPlotPosition()
     {
         /*
          * get mouse position
@@ -100,7 +90,7 @@ public class TileSelector : MonoBehaviour
             if (intendedPlotPosition == currentPlotPositionsActive[i])
             {
                 //better code needs to go here one day
-                Debug.Log("cant do that");
+                
                 return;
             }
         }

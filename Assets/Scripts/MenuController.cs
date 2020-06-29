@@ -50,6 +50,7 @@ public class MenuController : MonoBehaviour
                     TileSelector.instance.plowActive = true;
                     //change cursor to plow
                     SetCursor(GameHandler.instance.plowPointer);
+                    PlayerInteraction.instance.SetTool(GameHandler.instance.PlowTool);
                 }
                 break;
             case 2:

@@ -198,6 +198,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!4 &98583979 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1079547998}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &139552975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1156,8 @@ GameObject:
   m_Component:
   - component: {fileID: 755322610}
   - component: {fileID: 755322609}
+  - component: {fileID: 755322612}
+  - component: {fileID: 755322611}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1185,6 +1193,49 @@ Transform:
   m_Father: {fileID: 1876099544}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &755322611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755322608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f44afcc01e130dd409ed8273eb1a676d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overMap: 0
+--- !u!60 &755322612
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755322608}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 4.5, y: 0.5}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.0008711815, y: 2.2339225}
+      - {x: -4.978284, y: -0.2663014}
+      - {x: 0.00024366379, y: -2.7436235}
+      - {x: 1.3932314, y: -2.0747168}
+      - {x: 4.9839725, y: -0.26244116}
 --- !u!1 &938349971
 GameObject:
   m_ObjectHideFlags: 0
@@ -2011,6 +2062,75 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   delegates: []
+--- !u!1001 &1079547998
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1309107405}
+    m_Modifications:
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181765647571676105, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555449587901654986, guid: a81cbca989cfe0749aa2b8858702564b,
+        type: 3}
+      propertyPath: m_Name
+      value: TilledTile
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a81cbca989cfe0749aa2b8858702564b, type: 3}
 --- !u!1 &1249604873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,7 +2388,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.9848107, y: -3.4971678, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 98583979}
   m_Father: {fileID: 1876099544}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3051,44 +3172,8 @@ MonoBehaviour:
   cameraFollow: {fileID: 519420030}
   playerTransform: {fileID: 0}
   manualMovementTransform: {fileID: 0}
-  seedsList:
-  - seedName: Corn
-    growthTimer: 5
-    seedCost: 5
-    returnedXP: 5
-    returnedCoins: 10
-    levelRequired: 1
-    cropImage: {fileID: 0}
-    stage1: {fileID: 0}
-    stage2: {fileID: 0}
-    stage3: {fileID: 0}
-    fullGrown: {fileID: 0}
-    witheredCrop: {fileID: 0}
-  - seedName: Wheat
-    growthTimer: 10
-    seedCost: 10
-    returnedXP: 10
-    returnedCoins: 20
-    levelRequired: 3
-    cropImage: {fileID: 0}
-    stage1: {fileID: 0}
-    stage2: {fileID: 0}
-    stage3: {fileID: 0}
-    fullGrown: {fileID: 0}
-    witheredCrop: {fileID: 0}
-  - seedName: Carrots
-    growthTimer: 15
-    seedCost: 15
-    returnedXP: 15
-    returnedCoins: 30
-    levelRequired: 5
-    cropImage: {fileID: 0}
-    stage1: {fileID: 0}
-    stage2: {fileID: 0}
-    stage3: {fileID: 0}
-    fullGrown: {fileID: 0}
-    witheredCrop: {fileID: 0}
   overMenu: 0
+  PlowTool: {fileID: 11400000, guid: e254a8096944a96499bdcb3484ba996d, type: 2}
   plowPointer: {fileID: 2800000, guid: 175ecebaae91e6a40bef045bfd184d2e, type: 3}
   defaultPointer: {fileID: 2800000, guid: c1c50e8465d60a549a4e5c5c1e46a435, type: 3}
   harvestPointer: {fileID: 2800000, guid: 6e5a6e4cbb2c58945a442697631b172a, type: 3}
@@ -3135,9 +3220,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1843866706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d660caa593047e640a980f67db3f8be8, type: 3}
+  m_Script: {fileID: 11500000, guid: d9fb4e6c25b85134bb285d94a07375ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  interactKey: 0
+  iconBox: {fileID: 0}
+  crop:
+    asset: {fileID: 0}
+    state: 0
+  tool: {fileID: 0}
 --- !u!1 &1876099543
 GameObject:
   m_ObjectHideFlags: 0
