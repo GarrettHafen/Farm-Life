@@ -108,6 +108,7 @@ public class TileSelector : MonoBehaviour
             
         //add EXP
         StatsController.instance.AddExp(10);
+        StatsController.instance.RemoveCoins(5, 1);
     }
 
     private void PlacePlot(Vector3 plotPosition)

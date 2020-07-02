@@ -72,5 +72,6 @@ public class MenuController : MonoBehaviour
     {
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
         TileSelector.instance.plowActive = false;
+        PlayerInteraction.instance.SetTool(null);
     }
 }

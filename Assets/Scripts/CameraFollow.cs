@@ -35,6 +35,7 @@ public class CameraFollow : MonoBehaviour
     {
         HandleMovement();
         HandleZoom();
+        
     }
 
     private void HandleMovement()
@@ -85,4 +86,5 @@ public class CameraFollow : MonoBehaviour
             }
         }
     }
+
 }

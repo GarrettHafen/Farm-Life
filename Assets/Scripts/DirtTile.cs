@@ -28,6 +28,7 @@ public class DirtTile : MonoBehaviour
 
 	public void Interact (Crop c, Tool t, PlayerInteraction player)
 	{
+		Debug.Log("dirtTile interact");
 		if (c.HasCrop())
 		{
 			if (!needsPlowing)
@@ -40,7 +41,7 @@ public class DirtTile : MonoBehaviour
 
 		if (t != null)
 		{
-			TileSelector.instance.GetPlotPosition();
+			
 			if (t.toolType == ToolType.Plow && needsPlowing)
 			{
 				Plow();
@@ -85,13 +86,6 @@ public class DirtTile : MonoBehaviour
 		}
 	}
 
-	public void BirdEatsCrop()
-	{
-		crop = new Crop(null);
-		needsPlowing = true;
-		AddDirt();
-	}
-
 	void AddDirt()
 	{
 		overlay.sprite = fallowed;
@@ -100,9 +94,9 @@ public class DirtTile : MonoBehaviour
 
 	void Plow ()
 	{
-		//Debug.Log("Plowing...");
+		Debug.Log("Plowing...");
 		overlay.sprite = null;
-		//needsPlowing = false;
+		needsPlowing = false;
 	}
 
 	void WaterCrop ()
@@ -129,14 +123,6 @@ public class DirtTile : MonoBehaviour
 
 	private void Update()
 	{
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-			CheckFallow();
-        }
-        /*Ray ray;
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		Debug.Log(Physics.Raycast(ray, out _));
-*/
 		if (crop.HasCrop())
 		{
 			if (crop.state == CropState.Planted)
@@ -159,15 +145,12 @@ public class DirtTile : MonoBehaviour
 				}
 			}
 		}
-		//CheckFallow();
+		CheckFallow();
 	}
 
 	private void CheckFallow()
     {
-		Ray ray;
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		Debug.Log(ray);
-		Debug.Log(Physics.Raycast(ray, out _, 100f));
+		
 		if (needsPlowing)
         {
 			AddDirt();

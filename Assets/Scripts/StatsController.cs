@@ -48,21 +48,21 @@ public class StatsController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            addCoins(25, 1);
+            AddCoins(25, 1);
         }else if (Input.GetKeyDown(KeyCode.V))
         {
-            addCoins(250, 3);
+            AddCoins(250, 3);
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
-            addCoins(1000, 10);
+            AddCoins(1000, 10);
         }else if (Input.GetKeyDown(KeyCode.J))
         {
             AddExp(75);
         }
     }
 
-    private void addCoins(int coinsToAdd, int speed)
+    private void AddCoins(int coinsToAdd, int speed)
     {
         targetCoinsTotal = currentCoins + coinsToAdd;
         if(targetCoinsTotal > 999999999f)
@@ -74,6 +74,19 @@ public class StatsController : MonoBehaviour
             StartCoroutine(CountUpToTarget(speed));
         }
         
+    }
+
+    public void RemoveCoins(int coinsToRemove, int Speed)
+    {
+        targetCoinsTotal = currentCoins - coinsToRemove;
+        if(targetCoinsTotal < coinsToRemove)
+        {
+            Debug.Log("cant do that you poor fool");
+        }
+        else
+        {
+            StartCoroutine(CountDownToTarget(Speed));
+        }
     }
 
     IEnumerator CountUpToTarget(int speed)
@@ -92,6 +105,23 @@ public class StatsController : MonoBehaviour
             }
             yield return null;
         }    
+    }
+    IEnumerator CountDownToTarget(int speed)
+    {
+        while (currentCoins > targetCoinsTotal)
+        {
+            currentCoins -= speed;
+            currentCoins = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal);
+            if (currentCoins < 1000000)
+            {
+                coinsText.text = currentCoins + " coins";
+            }
+            else
+            {
+                coinsText.text = currentCoins.ToString();
+            }
+        }
+        yield return null;
     }
 
     public void AddExp(int expToAdd)

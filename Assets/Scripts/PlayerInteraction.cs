@@ -6,43 +6,45 @@ public class PlayerInteraction : MonoBehaviour
 {
 	public static PlayerInteraction instance;
 
-	public GameObject target;
+	public GameObject target = null;
 
 	public KeyCode interactKey;
 
 	public IconBox iconBox;
+
+	RaycastHit2D hit;
 
 	[SerializeField]
 	private Crop crop;
 	[SerializeField]
 	private Tool tool;
 
-	Ray ray;
-	RaycastHit hit;
-
 	private void Start()
     {
 		instance = this;
+		Debug.Log(target);
+		
     }
 
-    private void Update()
+	private void Update()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			if(!GameHandler.instance.overMenu && MapController.instance.overMap)
-			{
+			
+			if (!GameHandler.instance.overMenu && MapController.instance.overMap)
+			{Debug.Log("not menu or map");
 				if (target == null)
 				{
-                    if (TileSelector.instance.plowActive)
-                    {
+					if (TileSelector.instance.plowActive)
+					{
 						TileSelector.instance.GetPlotPosition();
-                    }
+					}
 					return;
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
+				Debug.Log(dirt);
 				if (dirt != null)
 				{
-					Debug.Log("inside if dirt != null");
 					dirt.Interact(crop, tool, this);
 				}
 
@@ -59,14 +61,26 @@ public class PlayerInteraction : MonoBehaviour
 				}
 			}
 		}
-		/*ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-		
-		if (Physics.Raycast(ray, out hit, maxDistance, layerMask, QueryTriggerInteraction.Collide))
+		// define target by what is under mouse
+		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
+		hit = Physics2D.Raycast(mousePosition, left, Mathf.Infinity, LayerMask.NameToLayer("Plots"));
+		if (hit.collider != null)
 		{
-			target = hit.transform.gameObject;
-			Debug.Log(target);
-		}*/
+			if (hit.collider.gameObject.Equals(target))
+			{
+				MapController.instance.overMap = true;
+			}
+			else {
+				target = hit.collider.gameObject;
+				MapController.instance.overMap = true;
+			}
+        }
+        else
+        {
+			Deselect();
+		}
+
 	}
 
 	public void SetCrop(Crop c)
@@ -95,7 +109,7 @@ public class PlayerInteraction : MonoBehaviour
 			iconBox.Close();
 		}
 	}
-
+	/*
 	private void OnTriggerEnter2D(Collider2D col)
 	{
 		if (target != col.gameObject && target != null)
@@ -126,28 +140,19 @@ public class PlayerInteraction : MonoBehaviour
 			target = null;
 		}
 	}
-
+	*/
 	void Deselect()
 	{
-		SeedBarrel barrel = target.GetComponent<SeedBarrel>();
-		if (barrel != null)
-		{
-			barrel.DeSelect();
-		}
+		target = null;
+
+		/*
 
 		SpriteRenderer[] srs = target.GetComponentsInChildren<SpriteRenderer>();
 		foreach (SpriteRenderer sr in srs)
 		{
 			sr.color = Color.white;
-		}
+		}*/
 	}
-	private void OnMouseEnter()
-	{
-		target = gameObject;
-	}
-	private void OnMouseExit()
-	{
-		target = null;
-	}
+	
 
 }
