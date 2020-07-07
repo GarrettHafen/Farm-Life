@@ -28,34 +28,27 @@ public class DirtTile : MonoBehaviour
 
 	public void Interact (Crop c, Tool t, PlayerInteraction player)
 	{
-		Debug.Log("dirtTile interact");
-		if (c.HasCrop())
-		{
-			if (!needsPlowing)
-				PlantSeed(c, player);
-			else
-				Debug.Log("Ground needs plowing!");
-
-			return;
-		}
-
 		if (t != null)
 		{
-			
 			if (t.toolType == ToolType.Plow && needsPlowing)
 			{
 				Plow();
-			} else if (t.toolType == ToolType.Watercan && crop.state == CropState.Planted)
-			{
-				WaterCrop();
-			}
+
+			}else if(t.toolType == ToolType.Market && c.HasCrop())
+            {
+				if (!needsPlowing)
+					PlantSeed(c, player);
+				else
+					Debug.Log("Ground needs plowing!");
+
+				return;
+
+			}else if(t.toolType == ToolType.Harvest && c.HasCrop())
+            {
+				HarvestCrop(player);
+            }
 
 			return;
-		}
-
-		if (crop.HasCrop())
-		{
-			HarvestCrop(player);
 		}
 	}
 
@@ -72,7 +65,7 @@ public class DirtTile : MonoBehaviour
 
 		UpdateSprite();
 
-		player.SetCrop(new Crop(null));
+		//player.SetCrop(new Crop(null));
 	}
 
 	void HarvestCrop (PlayerInteraction player)
@@ -99,17 +92,7 @@ public class DirtTile : MonoBehaviour
 		needsPlowing = false;
 	}
 
-	void WaterCrop ()
-	{
-		if (crop.GetWaterState() == WaterState.Dry)
-		{
-			crop.Water();
-			UpdateSprite();
-			waterIndicator.SetActive(false);
-		}
-	}
-
-	void UpdateSprite ()
+	public void UpdateSprite ()
 	{
 		overlay.sprite = crop.GetCropSprite();
 		if (crop.IsOnGround())
@@ -125,23 +108,12 @@ public class DirtTile : MonoBehaviour
 	{
 		if (crop.HasCrop())
 		{
-			if (crop.state == CropState.Planted)
+			if (crop.state == CropState.Planted || crop.state == CropState.Growing)
 			{
 				bool isDone = crop.Grow(Time.deltaTime);
 				if (isDone)
 				{
 					UpdateSprite();
-				} else
-				{
-					WaterState state = crop.Dry(Time.deltaTime);
-					if (state == WaterState.Dry)
-					{
-						waterIndicator.SetActive(true);
-					} else if (state == WaterState.Dead)
-					{
-						UpdateSprite();
-						waterIndicator.SetActive(false);
-					}
 				}
 			}
 		}

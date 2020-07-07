@@ -12,5 +12,6 @@ public class Tool : ScriptableObject
 public enum ToolType
 {
 	Plow,
-	Watercan
+	Market,
+	Harvest
 }

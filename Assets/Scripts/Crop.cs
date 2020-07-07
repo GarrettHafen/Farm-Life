@@ -3,65 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Crop
+public class Crop 
 {
 	public CropAsset asset;
 
 	public CropState state;
 
 	private float growthLevel;
-	private float waterLevel;
 	private bool isDead;
 
 	public bool Grow(float amount)
 	{
-		if (GetWaterState() == WaterState.Watered)
-		{
-			growthLevel += amount / 20f;
-		}
-
+		growthLevel += amount / asset.cropTimer;
 		if (growthLevel >= 1f)
 		{
 			state = CropState.Done;
 			return true;
-		}
-
+		}else if (growthLevel <= 1f && growthLevel >= .75f)
+        {
+			state = CropState.Growing;
+			if(DirtTile.instance.overlay.sprite = asset.seedSprite)
+            {
+				DirtTile.instance.UpdateSprite();
+            }
+			return false;
+        }
 		return false;
-	}
-
-	public WaterState Dry(float amount)
-	{
-		waterLevel -= amount / 8f;
-		return GetWaterState();
-	}
-
-	public WaterState GetWaterState ()
-	{
-		if (waterLevel > 0f)
-		{
-			return WaterState.Watered;
-		}
-		else if (waterLevel > -1f)
-		{
-			return WaterState.Dry;
-		}
-		else
-		{
-			state = CropState.Dead;
-			return WaterState.Dead;
-		}
-	}
-
-	public void Water ()
-	{
-		waterLevel = 1f;
 	}
 
 	public Crop (CropAsset a) {
 		asset = a;
 		state = CropState.Seed;
 		growthLevel = 0f;
-		waterLevel = 1f;
 		isDead = false;
 	}
 
@@ -84,6 +57,8 @@ public class Crop
 				return asset.seedSprite;
 			case CropState.Planted:
 				return asset.seedSprite;
+			case CropState.Growing://displays the sprout sprite
+				return asset.sproutSprite;
 			case CropState.Dead:
 				return asset.deadSprite;
 			case CropState.Done:
@@ -120,15 +95,9 @@ public enum CropState
 {
 	Seed, //may not be needed
 	Planted,
+	Growing,
 	Dead,
 	Done
 		//plowed = DirtTile !needsPlowing
 		//fallowed = DirtTile needsPlowing
-}
-
-public enum WaterState
-{
-	Watered,
-	Dry,
-	Dead
 }

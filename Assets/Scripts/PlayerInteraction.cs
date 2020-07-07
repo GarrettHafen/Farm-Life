@@ -42,10 +42,8 @@ public class PlayerInteraction : MonoBehaviour
 					return;
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
-				Debug.Log(dirt);
 				if (dirt != null)
 				{
-					Debug.Log("dirt notNull");
 					dirt.Interact(crop, tool, this);
 				}
 
@@ -75,13 +73,12 @@ public class PlayerInteraction : MonoBehaviour
         {
 			Deselect();
 		}
-
 	}
 
 	public void SetCrop(Crop c)
 	{
 		crop = c;
-		DisplayInventory();
+		//DisplayInventory();
 	}
 
 	public void SetTool(Tool t)
@@ -93,6 +90,10 @@ public class PlayerInteraction : MonoBehaviour
 	public Tool GetTool()
     {
 		return tool;
+    }
+	public Crop GetCrop()
+    {
+		return crop;
     }
 
 	void DisplayInventory ()

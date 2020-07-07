@@ -6,8 +6,12 @@ using UnityEngine;
 public class CropAsset : ScriptableObject
 {
 	public Sprite seedSprite;
+	public Sprite sproutSprite;
 	public Sprite deadSprite;
 	public Sprite doneSprite;
+	public float cropTimer;
+	public string test = "testCode";
 
 	public bool seedIsOnGround = false;
+
 }

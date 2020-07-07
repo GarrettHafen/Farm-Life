@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
@@ -12,14 +13,12 @@ public class MenuController : MonoBehaviour
 
     public SpriteRenderer overlay;
 
-    public Crop crop;
-    public Tool tool;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-        ResetCursor();
+        ResetTool();
     }
 
     // Update is called once per frame
@@ -41,42 +40,15 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    public void ActivatePointer(int pointer)
-    {
-        switch (pointer)
-        {
-            case 1:
-                /*if (TileSelector.instance.plowActive)
-                {
-                    ResetCursor();
-                }
-                else
-                {
-                    TileSelector.instance.plowActive = true;
-                    //change cursor to plow
-                    SetCursor(GameHandler.instance.plowPointer);
-                    PlayerInteraction.instance.SetTool(GameHandler.instance.PlowTool);
-                }*/
-                break;
-            case 2:
-                //harvest
-                break;
-            case 3:
-                //planting
-                break;
-        }
-        
-    }
 
     public void SetCursor(Texture2D cursorToBe)
     {
         Cursor.SetCursor(cursorToBe, hotSpot, cursorMode);
     }
 
-    public void ResetCursor()
+    public void ResetTool()
     {
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
-        //TileSelector.instance.plowActive = false;
         PlayerInteraction.instance.SetTool(null);
     }
 
@@ -84,18 +56,15 @@ public class MenuController : MonoBehaviour
     {
         if (PlayerInteraction.instance.GetTool() == t)
         {
-            ResetCursor();
+            ResetTool();
         }
         else
         {
             PlayerInteraction.instance.SetTool(t);
         }
-
-        /*if (tool != null)
-            overlay.sprite = tool.sprite;
-        else if (crop != null)
-            overlay.sprite = crop.GetCropSprite();
-        else
-            overlay.sprite = null;*/
+    }
+    public void SetSeed(SeedBarrel c)
+    {
+        PlayerInteraction.instance.SetCrop(c.crop);
     }
 }
