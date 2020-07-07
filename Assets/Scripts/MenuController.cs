@@ -10,6 +10,11 @@ public class MenuController : MonoBehaviour
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
 
+    public SpriteRenderer overlay;
+
+    public Crop crop;
+    public Tool tool;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +46,7 @@ public class MenuController : MonoBehaviour
         switch (pointer)
         {
             case 1:
-                if (TileSelector.instance.plowActive)
+                /*if (TileSelector.instance.plowActive)
                 {
                     ResetCursor();
                 }
@@ -51,7 +56,7 @@ public class MenuController : MonoBehaviour
                     //change cursor to plow
                     SetCursor(GameHandler.instance.plowPointer);
                     PlayerInteraction.instance.SetTool(GameHandler.instance.PlowTool);
-                }
+                }*/
                 break;
             case 2:
                 //harvest
@@ -71,7 +76,26 @@ public class MenuController : MonoBehaviour
     public void ResetCursor()
     {
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
-        TileSelector.instance.plowActive = false;
+        //TileSelector.instance.plowActive = false;
         PlayerInteraction.instance.SetTool(null);
+    }
+
+    public void SetTool(Tool t)
+    {
+        if (PlayerInteraction.instance.GetTool() == t)
+        {
+            ResetCursor();
+        }
+        else
+        {
+            PlayerInteraction.instance.SetTool(t);
+        }
+
+        /*if (tool != null)
+            overlay.sprite = tool.sprite;
+        else if (crop != null)
+            overlay.sprite = crop.GetCropSprite();
+        else
+            overlay.sprite = null;*/
     }
 }

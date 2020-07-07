@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -10,7 +10,6 @@ public class TileSelector : MonoBehaviour
 {
     public static TileSelector instance;
     public GridLayout grid;
-    public Grid grid2;
 
     public Tilemap tilemapGround;
     private List<Vector3> availablePlaces;
@@ -18,12 +17,10 @@ public class TileSelector : MonoBehaviour
     private int intendedPlotPosition;
     private List<int> currentPlotPositionsActive = new List<int>();
 
-    
-
     public GameObject plot;
     public List<GameObject> plots;
     public GameObject plotParent;
-    public bool plowActive;
+    //public bool plowActive;
 
 
     void Start() //-----------------------------------------------------------------------
@@ -39,16 +36,11 @@ public class TileSelector : MonoBehaviour
         //used for writing info to a file
         //WriteGridToFile();
 
-        for(int i = 0; i < availablePlaces.Count; i++)
+        for (int i = 0; i < availablePlaces.Count; i++)
         {
             PlacePlot(availablePlaces[i]);
-            
-        }
-    }
 
-    void Update() 
-    {
-        
+        }
     }
 
     public void GetPlotPosition()
@@ -78,8 +70,8 @@ public class TileSelector : MonoBehaviour
             }
         }
         CheckPlot(intendedPlotPosition);
-        
-        
+
+
     }
 
     private void CheckPlot(int intendedPlotPosition)
@@ -90,7 +82,7 @@ public class TileSelector : MonoBehaviour
             if (intendedPlotPosition == currentPlotPositionsActive[i])
             {
                 //better code needs to go here one day
-                
+
                 return;
             }
         }
@@ -105,7 +97,7 @@ public class TileSelector : MonoBehaviour
         // activate plot at plot position
 
         plots[intendedPlotPosition].SetActive(true);
-            
+
         //add EXP
         StatsController.instance.AddExp(10);
         StatsController.instance.RemoveCoins(5, 1);
@@ -122,10 +114,10 @@ public class TileSelector : MonoBehaviour
         tempPlot.SetActive(false);
         tempPlot.transform.SetParent(plotParent.transform);
         plots.Add(tempPlot);
-        
-            
-            
-        
+
+
+
+
 
     }
 
@@ -158,7 +150,7 @@ public class TileSelector : MonoBehaviour
         *write all the values to a file for easy viewing*/
         string path = "Assets/test2.txt";
         StreamWriter writer = new StreamWriter(path, true);
-        int count = 0; 
+        int count = 0;
         foreach (Vector3 element in localPlaces)
         {
             count++;
@@ -167,7 +159,7 @@ public class TileSelector : MonoBehaviour
         count = 0;
         foreach (Vector3 element in availablePlaces)
         {
-            
+
             count++;
             writer.WriteLine("Available place #" + count + ": " + element);
         }

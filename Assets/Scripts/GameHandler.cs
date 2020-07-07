@@ -13,7 +13,7 @@ public class GameHandler : MonoBehaviour
 
     private Vector3 cameraFollowPostion;
 
-    private float zoom = 1f;
+    private float zoom = 1.25f;
 
     private bool edgeScrolling;
 
@@ -30,7 +30,7 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         instance = this;
-
+        cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
         cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
 
     }

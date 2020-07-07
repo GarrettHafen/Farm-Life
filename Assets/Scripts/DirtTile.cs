@@ -145,7 +145,7 @@ public class DirtTile : MonoBehaviour
 				}
 			}
 		}
-		CheckFallow();
+		//CheckFallow();
 	}
 
 	private void CheckFallow()

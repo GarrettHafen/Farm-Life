@@ -22,7 +22,6 @@ public class PlayerInteraction : MonoBehaviour
 	private void Start()
     {
 		instance = this;
-		Debug.Log(target);
 		
     }
 
@@ -31,13 +30,14 @@ public class PlayerInteraction : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			
-			if (!GameHandler.instance.overMenu && MapController.instance.overMap)
-			{Debug.Log("not menu or map");
+			if (!GameHandler.instance.overMenu && MapController.instance.overMap && tool != null)
+			{
 				if (target == null)
 				{
-					if (TileSelector.instance.plowActive)
+					if (tool.toolType == ToolType.Plow)
 					{
 						TileSelector.instance.GetPlotPosition();
+						return;
 					}
 					return;
 				}
@@ -45,13 +45,8 @@ public class PlayerInteraction : MonoBehaviour
 				Debug.Log(dirt);
 				if (dirt != null)
 				{
+					Debug.Log("dirt notNull");
 					dirt.Interact(crop, tool, this);
-				}
-
-				TableTile table = target.GetComponent<TableTile>();
-				if (table != null)
-				{
-					table.Interact(crop, tool, this);
 				}
 
 				SeedBarrel barrel = target.GetComponent<SeedBarrel>();
@@ -95,6 +90,10 @@ public class PlayerInteraction : MonoBehaviour
 		//don't need until implement IconBox
 		//DisplayInventory();
 	}
+	public Tool GetTool()
+    {
+		return tool;
+    }
 
 	void DisplayInventory ()
 	{
