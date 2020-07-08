@@ -10,7 +10,9 @@ public class CropAsset : ScriptableObject
 	public Sprite deadSprite;
 	public Sprite doneSprite;
 	public float cropTimer;
-	public string test = "testCode";
+	public int cropCost;
+	public int cropReward;
+	public int expReward;
 
 	public bool seedIsOnGround = false;
 

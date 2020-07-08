@@ -20,6 +20,7 @@ public class TileSelector : MonoBehaviour
     public GameObject plot;
     public List<GameObject> plots;
     public GameObject plotParent;
+    private int num = 0;
     //public bool plowActive;
 
 
@@ -33,14 +34,16 @@ public class TileSelector : MonoBehaviour
         instance = this;
         SetupGrid();
 
-        //used for writing info to a file
-        //WriteGridToFile();
+        
 
         for (int i = 0; i < availablePlaces.Count; i++)
         {
             PlacePlot(availablePlaces[i]);
 
         }
+        
+        //used for writing info to a file
+        //WriteGridToFile();
     }
 
     public void GetPlotPosition()
@@ -99,8 +102,7 @@ public class TileSelector : MonoBehaviour
         plots[intendedPlotPosition].SetActive(true);
 
         //add EXP
-        StatsController.instance.AddExp(10);
-        StatsController.instance.RemoveCoins(5, 1);
+        StatsController.instance.RemoveCoins(5);
     }
 
     private void PlacePlot(Vector3 plotPosition)
@@ -110,7 +112,11 @@ public class TileSelector : MonoBehaviour
 
         //add .5 for some reason i don't understand
         plotPosition.y += .5f;
-        GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation);
+        //GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
+        GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject;
+        tempPlot.transform.position = plotPosition;
+        tempPlot.name = "Plot: " + num;
+        num++;
         tempPlot.SetActive(false);
         tempPlot.transform.SetParent(plotParent.transform);
         plots.Add(tempPlot);
@@ -148,7 +154,7 @@ public class TileSelector : MonoBehaviour
     {
         /*--------------------------------------------------------------------
         *write all the values to a file for easy viewing*/
-        string path = "Assets/test2.txt";
+        string path = "Assets/test3.txt";
         StreamWriter writer = new StreamWriter(path, true);
         int count = 0;
         foreach (Vector3 element in localPlaces)
@@ -163,7 +169,14 @@ public class TileSelector : MonoBehaviour
             count++;
             writer.WriteLine("Available place #" + count + ": " + element);
         }
+        count = 0;
+        foreach(GameObject element in plots)
+        {
+            count++;
+            writer.WriteLine("Plot: " + count + " at loctaion: " + element.transform.position);
+        }
         writer.Close();
+        Debug.Log("file created");
         /*--------------------------------------------------------------------*/
     }
 }

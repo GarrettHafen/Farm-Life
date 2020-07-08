@@ -24,7 +24,7 @@ public class GameHandler : MonoBehaviour
     //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
     //the planting pointer will be dependant on which seed is selected
     public Texture2D plowPointer, defaultPointer, harvestPointer, plantingPointer;
-
+    //might not need all of these
 
     // Start is called before the first frame update
     void Start()

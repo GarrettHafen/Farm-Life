@@ -43,8 +43,8 @@ public class PlayerInteraction : MonoBehaviour
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
 				if (dirt != null)
-				{
-					dirt.Interact(crop, tool, this);
+				{					
+					dirt.Interact(crop, tool, this, dirt);
 				}
 
 				SeedBarrel barrel = target.GetComponent<SeedBarrel>();

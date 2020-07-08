@@ -11,7 +11,6 @@ public class DirtTile : MonoBehaviour
 
 	public bool needsPlowing = false;
 	public Sprite fallowed;
-	public GameObject waterIndicator;
 
 	public string onGroundLayer;
 	public string normalCropLayer;
@@ -26,7 +25,7 @@ public class DirtTile : MonoBehaviour
 		instance = this;
 	}
 
-	public void Interact (Crop c, Tool t, PlayerInteraction player)
+	public void Interact (Crop c, Tool t, PlayerInteraction player, DirtTile dirt)
 	{
 		if (t != null)
 		{
@@ -37,7 +36,7 @@ public class DirtTile : MonoBehaviour
 			}else if(t.toolType == ToolType.Market && c.HasCrop())
             {
 				if (!needsPlowing)
-					PlantSeed(c, player);
+					PlantSeed(c, player, dirt);
 				else
 					Debug.Log("Ground needs plowing!");
 
@@ -52,9 +51,9 @@ public class DirtTile : MonoBehaviour
 		}
 	}
 
-	void PlantSeed (Crop c, PlayerInteraction player)
+	void PlantSeed (Crop c, PlayerInteraction player, DirtTile dirt)
 	{
-		if (c.state != CropState.Seed)
+		if (dirt.crop.asset != null)
 		{
 			Debug.Log("Crop not seed, can't plan't.");
 			return;
@@ -64,15 +63,17 @@ public class DirtTile : MonoBehaviour
 		crop.state = CropState.Planted;
 
 		UpdateSprite();
+		StatsController.instance.RemoveCoins(c.asset.cropCost);
 
-		//player.SetCrop(new Crop(null));
+		player.SetCrop(new Crop(c.asset));
 	}
 
 	void HarvestCrop (PlayerInteraction player)
 	{
 		if (crop.state == CropState.Done || crop.state == CropState.Dead)
 		{
-			player.SetCrop(crop);
+			StatsController.instance.AddCoins(crop.asset.cropReward);
+			StatsController.instance.AddExp(crop.asset.expReward);
 			crop = new Crop(null);
 			needsPlowing = true;
 			AddDirt();
@@ -88,6 +89,7 @@ public class DirtTile : MonoBehaviour
 	void Plow ()
 	{
 		Debug.Log("Plowing...");
+		StatsController.instance.RemoveCoins(5);
 		overlay.sprite = null;
 		needsPlowing = false;
 	}
@@ -110,7 +112,7 @@ public class DirtTile : MonoBehaviour
 		{
 			if (crop.state == CropState.Planted || crop.state == CropState.Growing)
 			{
-				bool isDone = crop.Grow(Time.deltaTime);
+				bool isDone = crop.Grow(Time.deltaTime, this);
 				if (isDone)
 				{
 					UpdateSprite();

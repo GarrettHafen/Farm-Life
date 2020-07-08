@@ -65,6 +65,7 @@ public class MenuController : MonoBehaviour
     }
     public void SetSeed(SeedBarrel c)
     {
-        PlayerInteraction.instance.SetCrop(c.crop);
+        Crop tempCrop = c.crop;
+        PlayerInteraction.instance.SetCrop(new Crop(tempCrop.asset));
     }
 }

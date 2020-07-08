@@ -12,7 +12,7 @@ public class Crop
 	private float growthLevel;
 	private bool isDead;
 
-	public bool Grow(float amount)
+	public bool Grow(float amount, DirtTile dirt)
 	{
 		growthLevel += amount / asset.cropTimer;
 		if (growthLevel >= 1f)
@@ -22,9 +22,9 @@ public class Crop
 		}else if (growthLevel <= 1f && growthLevel >= .75f)
         {
 			state = CropState.Growing;
-			if(DirtTile.instance.overlay.sprite = asset.seedSprite)
+			if(dirt.overlay.sprite = asset.seedSprite)
             {
-				DirtTile.instance.UpdateSprite();
+				dirt.UpdateSprite();
             }
 			return false;
         }

@@ -48,22 +48,23 @@ public class StatsController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            AddCoins(25, 1);
+            AddCoins(25);
         }else if (Input.GetKeyDown(KeyCode.V))
         {
-            AddCoins(250, 3);
+            AddCoins(250);
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
-            AddCoins(1000, 10);
+            AddCoins(1000);
         }else if (Input.GetKeyDown(KeyCode.J))
         {
             AddExp(75);
         }
     }
 
-    private void AddCoins(int coinsToAdd, int speed)
+    public void AddCoins(int coinsToAdd)
     {
+        
         targetCoinsTotal = currentCoins + coinsToAdd;
         if(targetCoinsTotal > 999999999f)
         {
@@ -71,12 +72,12 @@ public class StatsController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(CountUpToTarget(speed));
+            StartCoroutine(CountUpToTarget(GetSpeed(coinsToAdd)));
         }
         
     }
 
-    public void RemoveCoins(int coinsToRemove, int Speed)
+    public void RemoveCoins(int coinsToRemove)
     {
         targetCoinsTotal = currentCoins - coinsToRemove;
         if(targetCoinsTotal < coinsToRemove)
@@ -85,12 +86,13 @@ public class StatsController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(CountDownToTarget(Speed));
+            StartCoroutine(CountDownToTarget(GetSpeed(coinsToRemove)));
         }
     }
 
     IEnumerator CountUpToTarget(int speed)
     {
+
         while (currentCoins < targetCoinsTotal)
         {
             currentCoins += speed;
@@ -122,6 +124,24 @@ public class StatsController : MonoBehaviour
             }
         }
         yield return null;
+    }
+
+    private int GetSpeed(int coins)
+    {
+        int speed = 1;
+        if (coins < 100)
+        {
+            speed = 1;
+        }
+        else if (coins >= 100 && coins < 1000)
+        {
+            speed = 5;
+        }
+        else if (coins >= 1000)
+        {
+            speed = 1000;
+        }
+        return speed;
     }
 
     public void AddExp(int expToAdd)
