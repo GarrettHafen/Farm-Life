@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         instance = this;
-        ResetTool();
+        //ResetTool();
     }
 
     // Update is called once per frame

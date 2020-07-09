@@ -27,4 +27,6 @@ public class IconBox : MonoBehaviour
 		iconBoxAnim.SetBool("Enable", false);
 	}
 
+
+
 }

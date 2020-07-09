@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerInteraction : MonoBehaviour
 	public KeyCode interactKey;
 
 	public IconBox iconBox;
+	public SpriteRenderer handIndicator;
 
 	RaycastHit2D hit;
 
@@ -78,14 +80,13 @@ public class PlayerInteraction : MonoBehaviour
 	public void SetCrop(Crop c)
 	{
 		crop = c;
-		//DisplayInventory();
+		DisplayInventory();
 	}
 
 	public void SetTool(Tool t)
 	{
 		tool = t;
-		//don't need until implement IconBox
-		//DisplayInventory();
+		DisplayInventory();
 	}
 	public Tool GetTool()
     {
@@ -98,60 +99,19 @@ public class PlayerInteraction : MonoBehaviour
 
 	void DisplayInventory ()
 	{
-		if (crop.HasCrop())
-		{
-			iconBox.SetIcon(crop.GetCropSprite());
-		} else if (tool != null)
-		{
-			iconBox.SetIcon(tool.sprite);
-		} else
-		{
-			iconBox.Close();
+		if(tool.toolType == ToolType.Plow || tool.toolType == ToolType.Harvest)
+        {
+			handIndicator.sprite = tool.sprite;
+        }else if(tool.toolType == ToolType.Market)
+        {
+			handIndicator.sprite = crop.asset.iconSprite;
+
 		}
 	}
-	/*
-	private void OnTriggerEnter2D(Collider2D col)
-	{
-		if (target != col.gameObject && target != null)
-		{
-			Deselect();
-		}
-
-		target = col.gameObject;
-
-		SeedBarrel barrel = target.GetComponent<SeedBarrel>();
-		if (barrel != null)
-		{
-			barrel.Select();
-		}
-
-		SpriteRenderer[] srs = target.GetComponentsInChildren<SpriteRenderer>();
-		foreach (SpriteRenderer sr in srs)
-		{
-			sr.color = new Color(1f, 1f, 1f, 0.9f);
-		}
-	}
-
-	private void OnTriggerExit2D(Collider2D col)
-	{
-		if (col.gameObject == target)
-		{
-			Deselect();
-			target = null;
-		}
-	}
-	*/
 	void Deselect()
 	{
 		target = null;
 
-		/*
-
-		SpriteRenderer[] srs = target.GetComponentsInChildren<SpriteRenderer>();
-		foreach (SpriteRenderer sr in srs)
-		{
-			sr.color = Color.white;
-		}*/
 	}
 	
 

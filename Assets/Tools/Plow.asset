@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc170f05368d72c4ba19badffe9f0db4, type: 3}
   m_Name: Plow
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: acdda31820800d84db7b00caf45567aa, type: 3}
   toolType: 0

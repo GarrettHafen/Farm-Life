@@ -9,6 +9,7 @@ public class CropAsset : ScriptableObject
 	public Sprite sproutSprite;
 	public Sprite deadSprite;
 	public Sprite doneSprite;
+	public Sprite iconSprite;
 	public float cropTimer;
 	public int cropCost;
 	public int cropReward;
