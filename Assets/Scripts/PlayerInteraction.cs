@@ -80,13 +80,13 @@ public class PlayerInteraction : MonoBehaviour
 	public void SetCrop(Crop c)
 	{
 		crop = c;
-		DisplayInventory();
+		//DisplayInventory();
 	}
 
 	public void SetTool(Tool t)
 	{
 		tool = t;
-		DisplayInventory();
+		//DisplayInventory();
 	}
 	public Tool GetTool()
     {

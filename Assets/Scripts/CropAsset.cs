@@ -14,6 +14,7 @@ public class CropAsset : ScriptableObject
 	public int cropCost;
 	public int cropReward;
 	public int expReward;
+	public string cropName;
 
 	public bool seedIsOnGround = false;
 

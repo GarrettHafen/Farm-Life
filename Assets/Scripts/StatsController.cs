@@ -199,6 +199,15 @@ public class StatsController : MonoBehaviour
         
     }
 
+    public string GetCoins()
+    {
+        return currentCoins.ToString();
+    }
+    public string GetLvl()
+    {
+        return playerLevel.ToString();
+    }
+
     private void WriteExpToFile()
     {
         /*--------------------------------------------------------------------
