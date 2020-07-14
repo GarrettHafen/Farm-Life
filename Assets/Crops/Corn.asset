@@ -21,4 +21,5 @@ MonoBehaviour:
   cropCost: 100
   cropReward: 500
   expReward: 250
+  cropName: Corn
   seedIsOnGround: 0
