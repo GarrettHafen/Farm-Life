@@ -59,7 +59,7 @@ public class MenuController : MonoBehaviour
             if (PlayerInteraction.instance.GetTool().toolType == ToolType.Market)
             {
                 //this excellent but inelegant code is to prevent buying different seeds one after another from
-                //reseting the market tool causing every other market buy button work properly
+                //reseting the market tool causing every other s
             }
             else { 
                 ResetTool(); 
