@@ -42,7 +42,7 @@ public class DirtTile : MonoBehaviour
 
 				return;
 
-			}else if(t.toolType == ToolType.Harvest && c.HasCrop())
+			}else if(t.toolType == ToolType.Harvest && dirt.crop.HasCrop())
             {
 				HarvestCrop(player);
             }
@@ -53,19 +53,25 @@ public class DirtTile : MonoBehaviour
 
 	void PlantSeed (Crop c, PlayerInteraction player, DirtTile dirt)
 	{
-		if (dirt.crop.asset != null)
-		{
-			Debug.Log("Crop not seed, can't plan't.");
-			return;
-		}
-		Debug.Log("Planting " + c.GetName());
-		crop = c;
-		crop.state = CropState.Planted;
+		if (StatsController.instance.RemoveCoins(c.asset.cropCost)) {
+			if (dirt.crop.asset != null)
+			{
+				Debug.Log("Crop not seed, can't plan't.");
+				return;
+			}
+			Debug.Log("Planting " + c.GetName());
+			crop = c;
+			crop.state = CropState.Planted;
 
-		UpdateSprite();
-		StatsController.instance.RemoveCoins(c.asset.cropCost);
+			UpdateSprite();
 
-		player.SetCrop(new Crop(c.asset));
+
+			player.SetCrop(new Crop(c.asset));
+        }
+        else
+        {
+			//add red hand or wiggle or something
+        }
 	}
 
 	void HarvestCrop (PlayerInteraction player)

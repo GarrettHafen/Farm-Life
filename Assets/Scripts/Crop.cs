@@ -31,6 +31,11 @@ public class Crop
 		return false;
 	}
 
+	public float GetGrowthLvl()
+    {
+		return growthLevel;
+    }
+
 	public Crop (CropAsset a) {
 		asset = a;
 		state = CropState.Seed;

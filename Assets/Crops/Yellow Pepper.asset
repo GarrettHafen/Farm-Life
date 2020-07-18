@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
-  m_Name: Corn
+  m_Name: Yellow Pepper
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 21300000, guid: d715f025747b0a340ac06ecb9d2dbe31, type: 3}
-  sproutSprite: {fileID: 21300000, guid: 80496d42dbcce0142b201e7f790c0193, type: 3}
+  seedSprite: {fileID: 0}
+  sproutSprite: {fileID: 0}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 21300000, guid: 28ad4a3775eea9f4997ececadccbf0a3, type: 3}
-  iconSprite: {fileID: 21300000, guid: 71b06d491d88ac842ba994b6a6651188, type: 3}
+  doneSprite: {fileID: 0}
+  iconSprite: {fileID: 21300000, guid: 8db8626497696204fb053be00efad2a5, type: 3}
   cropTimer: 60
-  cropCost: 100
-  cropReward: 500
-  expReward: 250
-  cropName: Corn
+  cropCost: 50
+  cropReward: 100
+  expReward: 25
+  cropName: Yellow Pepper
   seedIsOnGround: 0

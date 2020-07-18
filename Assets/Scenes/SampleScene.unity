@@ -432,7 +432,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 107934148}
+  - component: {fileID: 107934150}
   - component: {fileID: 107934149}
+  - component: {fileID: 107934151}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -440,8 +442,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &107934148
-Transform:
+--- !u!224 &107934148
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -454,7 +456,47 @@ Transform:
   m_Father: {fileID: 1716647100}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &107934149
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &107934149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107934147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &107934150
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107934147}
+  m_CullTransparentMesh: 0
+--- !u!212 &107934151
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10494,14 +10536,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 77138c60acaad2c42ba817433ef94d08, type: 2}
   - {fileID: 11400000, guid: bd93ce1e4f49c724781663072a16bf31, type: 2}
   - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
+  - {fileID: 11400000, guid: 02dd74d71ef1a454dba5c64d9c95a953, type: 2}
+  - {fileID: 11400000, guid: 358f6026b498500468198bb505eed567, type: 2}
+  - {fileID: 11400000, guid: 44b5fbff0192ae94f9937510439ceeea, type: 2}
+  - {fileID: 11400000, guid: 6a51ab9aa7c6d2542a4a8202fe1a83fe, type: 2}
+  - {fileID: 11400000, guid: 8f8f528cf311d2941934dd2a7d2d650e, type: 2}
+  - {fileID: 11400000, guid: 231eca4ef22b7b24d93bb9df8cf83a33, type: 2}
   - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  - {fileID: 11400000, guid: 294516514744f694883ccfde758b2988, type: 2}
-  plowPointer: {fileID: 0}
+  plowPointer: {fileID: 2800000, guid: c1c50e8465d60a549a4e5c5c1e46a435, type: 3}
   defaultPointer: {fileID: 0}
   harvestPointer: {fileID: 0}
   plantingPointer: {fileID: 0}
@@ -10552,6 +10594,8 @@ MonoBehaviour:
   interactKey: 0
   iconBox: {fileID: 0}
   handIndicator: {fileID: 107934149}
+  handIndicatorParent: {fileID: 1122340466}
+  timer: {fileID: 0}
   crop:
     asset: {fileID: 0}
     state: 0

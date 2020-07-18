@@ -77,16 +77,19 @@ public class StatsController : MonoBehaviour
         
     }
 
-    public void RemoveCoins(int coinsToRemove)
+    public bool RemoveCoins(int coinsToRemove)
     {
         targetCoinsTotal = currentCoins - coinsToRemove;
-        if(targetCoinsTotal < coinsToRemove)
+        if(targetCoinsTotal < 0)
         {
             Debug.Log("cant do that you poor fool");
+            return false;
         }
         else
         {
+            
             StartCoroutine(CountDownToTarget(GetSpeed(coinsToRemove)));
+            return true;
         }
     }
 
