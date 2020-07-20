@@ -35,6 +35,10 @@ public class Crop
     {
 		return growthLevel;
     }
+	public void SetGrowthLvl(float time)
+    {
+		growthLevel = time;
+    }
 
 	public Crop (CropAsset a) {
 		asset = a;
@@ -93,6 +97,52 @@ public class Crop
 			return null;
 
 		return asset.name;
+	}
+	public string GetState()
+	{
+		string saveState = "Seed";
+		switch (state)
+		{
+			case CropState.Seed:
+				saveState = "Seed";
+				break;
+			case CropState.Planted:
+				saveState = "Planted";
+				break;
+			case CropState.Growing:
+				saveState = "Growing";
+				break;
+			case CropState.Dead:
+				saveState = "Dead";
+				break;
+			case CropState.Done:
+				saveState = "Done";
+				break;
+		}
+		return saveState;
+	}
+	public CropState GetState(string state)
+    {
+		CropState loadedState = CropState.Seed;
+        switch (state)
+        {
+			case "Seed":
+				loadedState = CropState.Seed;
+				break;
+			case "Planted":
+				loadedState = CropState.Planted;
+				break;
+			case "Growing":
+				loadedState = CropState.Growing;
+				break;
+			case "Dead":
+				loadedState = CropState.Dead;
+				break;
+			case "Done":
+				loadedState = CropState.Done;
+				break;
+		}
+		return loadedState;
 	}
 }
 

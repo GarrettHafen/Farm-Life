@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
@@ -22,6 +23,8 @@ public class GameHandler : MonoBehaviour
     public Tool PlowTool;
 
     public List<CropAsset> cropsList;
+
+    private List<CropAsset> loadCropList = new List<CropAsset>();
 
     //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
     //the planting pointer will be dependant on which seed is selected
@@ -46,6 +49,15 @@ public class GameHandler : MonoBehaviour
         HandleManualMovement(moveAmount);
         HandleScreenEdges(edgeSize, moveAmount);
         HandleZoom();
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            SaveSystem.SavePlayer();
+            Debug.Log("Save Complete");
+        }else if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadData(SaveSystem.LoadPlayer());
+        }
 
     }
 
@@ -159,9 +171,59 @@ public class GameHandler : MonoBehaviour
         overMenu = false;
     }
 
-    
+    private void LoadData(PlayerData data)
+    {
+        StatsController.instance.SetLvl(data.level);
+        StatsController.instance.SetCoins(data.coins);
+        StatsController.instance.SetExp(data.exp);
+        //deactivate all current plots
+        for (int j = 0; j < TileSelector.instance.currentPlotPositionsActive.Count; j++)
+        {
+            DirtTile dirt = TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[j]].GetComponent<DirtTile>();
+            dirt.crop = null;
+            TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[j]].SetActive(false);
 
-    
+        }
+        //----------------plots Array----------------
+        for (int i = 0; i < data.activePlots.Length; i++)
+        {
+            //activate plots based on loadData
+            TileSelector.instance.currentPlotPositionsActive[i] = data.activePlots[i]; // will this work if list is empty?
+            TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].SetActive(true);
+        }
+
+        //----------------crops/timers Array----------------
+        for(int i = 0; i < data.activeCrops.Length; i++)
+        {
+            if(data.activeCrops[i] != null)
+            {
+                for(int j = 0; j < cropsList.Count; j++)
+                {
+                    if(data.activeCrops[i] == cropsList[j].cropName)
+                    {
+                        loadCropList.Add(cropsList[j]);
+                    }
+                }
+            }
+            else
+            {
+                loadCropList.Add(cropsList[0]);
+            }
+        }
+
+        for(int i = 0; i < TileSelector.instance.currentPlotPositionsActive.Count; i++)
+        {
+            DirtTile dirt = TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].GetComponent<DirtTile>();
+            dirt.crop = new Crop(loadCropList[i]);
+            dirt.crop.SetGrowthLvl(data.activeTimers[i]);
+            dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
+            Debug.Log(dirt.crop.state);
+            dirt.crop.GetCropSprite();
+            dirt.UpdateSprite();
+        }
+    }
+
+
 }
 
 

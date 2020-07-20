@@ -202,13 +202,29 @@ public class StatsController : MonoBehaviour
         
     }
 
-    public string GetCoins()
+    public float GetCoins()
     {
-        return currentCoins.ToString();
+        return currentCoins;
     }
-    public string GetLvl()
+    public void SetCoins(float coins)
     {
-        return playerLevel.ToString();
+        currentCoins = coins;
+    }
+    public int GetLvl()
+    {
+        return playerLevel;
+    }
+    public void SetLvl(int lvl)
+    {
+        playerLevel = lvl;
+    }
+    public int GetExp()
+    {
+        return currentEXP;
+    }
+    public void SetExp(int exp)
+    {
+        currentEXP = exp;
     }
 
     private void WriteExpToFile()

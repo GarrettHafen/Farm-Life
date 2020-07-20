@@ -15,7 +15,7 @@ public class TileSelector : MonoBehaviour
     private List<Vector3> availablePlaces;
     private List<Vector3Int> localPlaces;
     private int intendedPlotPosition;
-    private List<int> currentPlotPositionsActive = new List<int>();
+    public List<int> currentPlotPositionsActive = new List<int>();
 
     public GameObject plot;
     public List<GameObject> plots;
@@ -107,7 +107,7 @@ public class TileSelector : MonoBehaviour
 
     private void PlacePlot(Vector3 plotPosition)
     {
-
+        //this is for creating all the plots and setting them as inactive until the player wants to activate them.
         /*GOOD STUFF DON'T DELETE*/
 
         //add .5 for some reason i don't understand
@@ -126,6 +126,7 @@ public class TileSelector : MonoBehaviour
 
 
     }
+
 
     private void SetupGrid()
     {

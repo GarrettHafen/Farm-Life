@@ -17,7 +17,7 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 28ad4a3775eea9f4997ececadccbf0a3, type: 3}
   iconSprite: {fileID: 21300000, guid: 71b06d491d88ac842ba994b6a6651188, type: 3}
-  cropTimer: 60
+  cropTimer: 10
   cropCost: 100
   cropReward: 500
   expReward: 250

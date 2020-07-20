@@ -50,6 +50,8 @@ public class MarketController : MonoBehaviour
         market.SetActive(true);
         pageNumber = 1;
         cellNumber = 0;
+        coinText.text = StatsController.instance.GetCoins().ToString();
+        lvlText.text = StatsController.instance.GetLvl().ToString();
         PopulateMarket();
     }
 
@@ -157,8 +159,8 @@ public class MarketController : MonoBehaviour
         }
         else
         { 
-            return timeInSeconds + " Broke";
-            Debug.Log("What went Wrong?");
+            return timeInSeconds + " Seconds";
+            
         }
 
         
