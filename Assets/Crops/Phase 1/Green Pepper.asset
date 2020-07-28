@@ -22,4 +22,5 @@ MonoBehaviour:
   cropReward: 225
   expReward: 150
   cropName: Green Pepper
+  reqLvl: 7
   seedIsOnGround: 0

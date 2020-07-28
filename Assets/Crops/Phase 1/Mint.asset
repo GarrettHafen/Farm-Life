@@ -22,4 +22,5 @@ MonoBehaviour:
   cropReward: 0
   expReward: 0
   cropName: 
+  reqLvl: 15
   seedIsOnGround: 0

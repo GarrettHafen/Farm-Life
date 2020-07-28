@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -13,12 +14,14 @@ public class PlayerData
     public string[] activeCrops;
     public float[] activeTimers;
     public string[] activeCropsStates;
+    public DateTime savedTime;
     
     private int numActive = TileSelector.instance.currentPlotPositionsActive.Count;
 
     
     public PlayerData ()
     {
+        savedTime = System.DateTime.Now;
         level = StatsController.instance.GetLvl();
         exp = StatsController.instance.GetExp();
         coins = StatsController.instance.GetCoins();

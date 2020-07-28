@@ -13,6 +13,8 @@ public class MenuController : MonoBehaviour
 
     public SpriteRenderer overlay;
 
+    public GameObject settingsMenu;
+
 
     // Start is called before the first frame update
     void Start()
@@ -75,5 +77,23 @@ public class MenuController : MonoBehaviour
     {
         Crop tempCrop = c.crop;
         PlayerInteraction.instance.SetCrop(new Crop(tempCrop.asset));
+    }
+
+    public void OpenSettings()
+    {
+        settingsMenu.SetActive(true);
+    }
+    public void CloseSettings()
+    {
+        settingsMenu.SetActive(false);
+    }
+    public void SaveGame()
+    {
+        SaveSystem.SavePlayer();
+        Debug.Log("Save Complete");
+    }
+    public void LoadGame()
+    {
+        GameHandler.instance.LoadData(SaveSystem.LoadPlayer());
     }
 }

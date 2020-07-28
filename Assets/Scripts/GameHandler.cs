@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -11,6 +13,9 @@ public class GameHandler : MonoBehaviour
     public CameraFollow cameraFollow;
     public Transform playerTransform;
     public Transform manualMovementTransform;
+
+    private float autoSaveTimer;
+    private int autoSaveInterval = 70;
 
     private Vector3 cameraFollowPostion;
 
@@ -58,6 +63,19 @@ public class GameHandler : MonoBehaviour
         {
             LoadData(SaveSystem.LoadPlayer());
         }
+
+        if(autoSaveTimer < autoSaveInterval)
+        {
+            autoSaveTimer += Time.deltaTime;
+        }
+        else
+        {
+            SaveSystem.SavePlayer();
+            Debug.Log("Save Complete");
+            autoSaveTimer = 0;
+        }
+
+
 
     }
 
@@ -171,11 +189,12 @@ public class GameHandler : MonoBehaviour
         overMenu = false;
     }
 
-    private void LoadData(PlayerData data)
+    public void LoadData(PlayerData data)
     {
         StatsController.instance.SetLvl(data.level);
         StatsController.instance.SetCoins(data.coins);
         StatsController.instance.SetExp(data.exp);
+        StatsController.instance.UpdateStats();
         //deactivate all current plots
         for (int j = 0; j < TileSelector.instance.currentPlotPositionsActive.Count; j++)
         {
@@ -184,11 +203,13 @@ public class GameHandler : MonoBehaviour
             TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[j]].SetActive(false);
 
         }
+
+        TileSelector.instance.currentPlotPositionsActive.Clear();
         //----------------plots Array----------------
         for (int i = 0; i < data.activePlots.Length; i++)
         {
             //activate plots based on loadData
-            TileSelector.instance.currentPlotPositionsActive[i] = data.activePlots[i]; // will this work if list is empty?
+            TileSelector.instance.currentPlotPositionsActive.Add(data.activePlots[i]); // will this work if list is empty?
             TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].SetActive(true);
         }
 
@@ -210,18 +231,57 @@ public class GameHandler : MonoBehaviour
                 loadCropList.Add(cropsList[0]);
             }
         }
-
+        //attach crops to the plots
         for(int i = 0; i < TileSelector.instance.currentPlotPositionsActive.Count; i++)
         {
             DirtTile dirt = TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].GetComponent<DirtTile>();
-            dirt.crop = new Crop(loadCropList[i]);
-            dirt.crop.SetGrowthLvl(data.activeTimers[i]);
-            dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
-            Debug.Log(dirt.crop.state);
-            dirt.crop.GetCropSprite();
-            dirt.UpdateSprite();
+            if (loadCropList[i].name != "Blank")
+            {
+                dirt.crop = new Crop(loadCropList[i]);
+                dirt.crop.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, dirt.crop.asset.cropTimer, dirt));
+                dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
+                dirt.crop.GetCropSprite();
+                dirt.UpdateSprite();
+            }
+            else
+            {
+                dirt.crop = new Crop(null);
+                dirt.crop.state = CropState.Seed;
+                dirt.crop.GetCropSprite();
+                dirt.UpdateSprite();
+            }
+        }
+        Debug.Log("Data Loaded");
+    }
+
+    private float CalcTimePassed(float currentGrowthTime, DateTime oldTime, float cropTimeTotal, DirtTile dirt)
+    {
+        float newTime;
+        TimeSpan difference = System.DateTime.Now.Subtract(oldTime);
+        newTime = (float)difference.TotalSeconds; // number of seconds that have passed since the save to the load.
+        //need to determine how many seconds from when the crop was planted, to the save, then add that to the difference
+        // from there need to figure out based on the growth time total, where its at. if its greater than 1, then its full grown. 
+        //and to future proof, need to also save the difference between new time and growth time to factor in weathering in the future. 
+        if(newTime >= cropTimeTotal)
+        {
+            dirt.crop.SetWitherTimer(newTime - cropTimeTotal);
+            return 1f;
+        }
+        else
+        {
+            float temp = newTime / cropTimeTotal;
+            return temp + currentGrowthTime;
         }
     }
+
+
+    //do we want to save on quit just yet?
+    /*void OnApplicationQuit()
+    {
+        SaveSystem.SavePlayer();
+        Debug.Log("Save Complete");
+    }*/
+
 
 
 }

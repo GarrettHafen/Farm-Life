@@ -16,10 +16,11 @@ MonoBehaviour:
   sproutSprite: {fileID: 0}
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 0}
-  iconSprite: {fileID: 0}
+  iconSprite: {fileID: 21300000, guid: 205954f862138064f9e28faddf1f14c6, type: 3}
   cropTimer: 0
   cropCost: 0
   cropReward: 0
   expReward: 0
   cropName: 
+  reqLvl: 24
   seedIsOnGround: 0

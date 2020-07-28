@@ -10,7 +10,9 @@ public class Crop
 	public CropState state;
 
 	private float growthLevel;
-	private bool isDead;
+    private bool isDead;
+
+	private float witherTimer;
 
 	public bool Grow(float amount, DirtTile dirt)
 	{
@@ -98,6 +100,10 @@ public class Crop
 
 		return asset.name;
 	}
+	public void SetWitherTimer(float pastGrown)
+    {
+		witherTimer = pastGrown;
+    }
 	public string GetState()
 	{
 		string saveState = "Seed";

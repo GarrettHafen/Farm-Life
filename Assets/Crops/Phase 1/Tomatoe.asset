@@ -22,4 +22,5 @@ MonoBehaviour:
   cropReward: 50
   expReward: 12
   cropName: Tomato
+  reqLvl: 5
   seedIsOnGround: 0

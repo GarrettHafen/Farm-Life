@@ -22,4 +22,5 @@ MonoBehaviour:
   cropReward: 65
   expReward: 65
   cropName: Orange Pepper
+  reqLvl: 23
   seedIsOnGround: 0

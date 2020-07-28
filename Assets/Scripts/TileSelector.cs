@@ -112,9 +112,9 @@ public class TileSelector : MonoBehaviour
 
         //add .5 for some reason i don't understand
         plotPosition.y += .5f;
-        //GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
-        GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject;
-        tempPlot.transform.position = plotPosition;
+        GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); //changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
+        //GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject; // this code wouldn't build?
+        //tempPlot.transform.position = plotPosition; // related to the above line
         tempPlot.name = "Plot: " + num;
         num++;
         tempPlot.SetActive(false);

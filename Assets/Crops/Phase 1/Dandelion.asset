@@ -16,10 +16,11 @@ MonoBehaviour:
   sproutSprite: {fileID: 0}
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 0}
-  iconSprite: {fileID: 0}
-  cropTimer: 0
+  iconSprite: {fileID: 21300000, guid: 737c259183777a048a9051d265a1bcf7, type: 3}
+  cropTimer: 300
   cropCost: 0
-  cropReward: 0
+  cropReward: 5
   expReward: 0
-  cropName: 
+  cropName: Dandelion
+  reqLvl: 0
   seedIsOnGround: 0

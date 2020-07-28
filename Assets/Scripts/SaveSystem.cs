@@ -1,14 +1,49 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 public static class SaveSystem 
 {
     public static void SavePlayer()
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/player.farm";
+        string folderPath = Application.persistentDataPath + "/saves";
+        string path;
+        string tempPath = "";
+        var info = new DirectoryInfo(folderPath);
+        FileInfo[] files = info.GetFiles();
+        DateTime temp2 = new DateTime(3000, 1, 1);
+
+        if(files.Length < 1)
+        {
+            path = Application.persistentDataPath + "/saves/save1.farm";
+        }else if(files.Length == 1){
+            path = Application.persistentDataPath + "/saves/save2.farm";
+        }
+        else if (files.Length == 2)
+        {
+            path = Application.persistentDataPath + "/saves/save3.farm";
+        }
+        else if (files.Length == 3)
+        {
+            path = Application.persistentDataPath + "/saves/save4.farm";
+        }
+        else
+        {
+            foreach (System.IO.FileInfo thingy in files)
+            {
+                DateTime temp1 = System.IO.File.GetLastWriteTime(thingy.ToString());
+                if (temp1 < temp2)
+                {
+                    temp2 = temp1;
+                    tempPath = thingy.ToString();
+                }
+            }
+            path = tempPath.ToString();
+        }
         //path = C:/Users/garre/AppData/LocalLow/DefaultCompany/FarmLife/player.farm
+        
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData();
@@ -19,7 +54,22 @@ public static class SaveSystem
 
     public static PlayerData LoadPlayer()
     {
-        string path = Application.persistentDataPath + "/player.farm";
+        string folderPath = Application.persistentDataPath + "/saves";
+        string path;
+        DateTime temp2 = new DateTime(2000, 1, 1);
+        string tempPath = "";
+        var info = new DirectoryInfo(folderPath);
+        FileInfo[] files = info.GetFiles();
+        foreach (System.IO.FileInfo thingy in files)
+        {
+            DateTime temp1 = System.IO.File.GetLastWriteTime(thingy.ToString());
+            if (temp1 > temp2)
+            {
+                temp2 = temp1;
+                tempPath = thingy.ToString();
+            }
+        }
+        path = tempPath.ToString();
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

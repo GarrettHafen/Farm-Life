@@ -32,9 +32,8 @@ public class StatsController : MonoBehaviour
     void Start()
     {
         instance = this;
-        coinsText.text = currentCoins + " coins";
-        levelText.text = "" + playerLevel;
         SetupExp();
+        UpdateStats();
 
         //used for writing info to a file
         //WriteExpToFile();
@@ -59,6 +58,9 @@ public class StatsController : MonoBehaviour
         }else if (Input.GetKeyDown(KeyCode.J))
         {
             AddExp(75);
+        }else if (Input.GetKeyDown(KeyCode.K))
+        {
+            AddExp(500);
         }
     }
 
@@ -226,7 +228,12 @@ public class StatsController : MonoBehaviour
     {
         currentEXP = exp;
     }
-
+    public void UpdateStats()
+    {
+        coinsText.text = currentCoins + " coins";
+        levelText.text = "" + playerLevel;
+        GetCurrentFill(currentEXP, expToNextLevel[playerLevel - 1], expToNextLevel[playerLevel]);
+    }
     private void WriteExpToFile()
     {
         /*--------------------------------------------------------------------

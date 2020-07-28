@@ -16,6 +16,7 @@ public class MarketController : MonoBehaviour
     public List<Text> cropTimeList;
     public List<Image> cropImageList;
     public List<CropAsset> cropAssetList;
+    public List<Image> cropLockedList;
 
     public GameObject cropCell;
     private int pageNumber;
@@ -39,8 +40,7 @@ public class MarketController : MonoBehaviour
         }
         else
         {
-            //lowerPageNumber button activate
-            //repeate for upperpagenumber
+            backButton.SetActive(true);
         }
     }
 
@@ -87,38 +87,58 @@ public class MarketController : MonoBehaviour
     public void LowerPageNumber()
     {
         //same as the raise, but lower. 
-        if(pageNumber == 1)
-        {
-
-        }
-        else
-        {
+        if(pageNumber > 1)
+        { 
             pageNumber -= 9;
             cellNumber = 0;
             PopulateMarket();
         }
+        forwardButton.SetActive(true);
     }
 
     public void PopulateMarket()
     {
+        cropAssetList.Clear();
+        forwardButton.SetActive(true);
         //based on page number, populate those crops on the market page.
         //should always start with one
         //------------------------need to eventually handle unavialable crops due to level------------------------
         for (int i = pageNumber; i < pageNumber + 9; i++)
         {
-            
-            if (GameHandler.instance.cropsList[i] != null)
+
+            if (GameHandler.instance.cropsList[i] != null && GameHandler.instance.cropsList[i].reqLvl <= StatsController.instance.GetLvl())
             {
+                cropLockedList[cellNumber].gameObject.SetActive(false);
                 cropNameList[cellNumber].text = GameHandler.instance.cropsList[i].cropName;
+                cropNameList[cellNumber].gameObject.SetActive(true);
                 cropCostList[cellNumber].text = GameHandler.instance.cropsList[i].cropCost.ToString();
+                cropCostList[cellNumber].gameObject.SetActive(true);
                 cropYieldList[cellNumber].text = GameHandler.instance.cropsList[i].cropReward.ToString();
+                cropYieldList[cellNumber].gameObject.SetActive(true);
                 cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.cropsList[i].cropTimer);
+                cropTimeList[cellNumber].gameObject.SetActive(true);
                 cropExpList[cellNumber].text = GameHandler.instance.cropsList[i].expReward.ToString();
+                cropExpList[cellNumber].gameObject.SetActive(true);
                 cropImageList[cellNumber].sprite = GameHandler.instance.cropsList[i].iconSprite;
+                cropImageList[cellNumber].gameObject.SetActive(true);
                 cropAssetList.Add(GameHandler.instance.cropsList[i]);
                 cellNumber++;
-            }//thought about putting in an else to catch empty cells, but i think we'll just always have enough crops
-            //to fill groups of 9.
+            }
+            else
+            {
+                cropLockedList[cellNumber].gameObject.SetActive(true);
+                cropNameList[cellNumber].gameObject.SetActive(false);
+                cropCostList[cellNumber].gameObject.SetActive(false);
+                cropYieldList[cellNumber].gameObject.SetActive(false);
+                cropTimeList[cellNumber].gameObject.SetActive(false);
+                cropExpList[cellNumber].gameObject.SetActive(false);
+                cropImageList[cellNumber].gameObject.SetActive(false);
+                cellNumber++;
+            }
+        }
+        if (GameHandler.instance.cropsList[pageNumber+9] == null || GameHandler.instance.cropsList[pageNumber + 9].reqLvl > StatsController.instance.GetLvl())
+        {
+            forwardButton.SetActive(false);
         }
     }
 
