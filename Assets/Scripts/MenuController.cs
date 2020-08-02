@@ -21,6 +21,7 @@ public class MenuController : MonoBehaviour
     {
         instance = this;
         //ResetTool();
+        Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
     }
 
     // Update is called once per frame

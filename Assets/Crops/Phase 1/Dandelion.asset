@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Dandelion
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 0}
-  sproutSprite: {fileID: 0}
+  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
+  sproutSprite: {fileID: 21300000, guid: 7b482d05e07ca5942a9a0ecda0afe105, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: ec0a445854dc8ab41bd6780ae0f67a3b, type: 3}
   iconSprite: {fileID: 21300000, guid: 737c259183777a048a9051d265a1bcf7, type: 3}
-  cropTimer: 300
+  cropTimer: 60
   cropCost: 0
-  cropReward: 5
+  cropReward: 10
   expReward: 0
   cropName: Dandelion
   reqLvl: 0

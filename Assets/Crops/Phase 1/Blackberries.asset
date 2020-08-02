@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Blackberries
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 0}
-  sproutSprite: {fileID: 0}
+  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
+  sproutSprite: {fileID: 21300000, guid: 3a17ed7204f023b468f9262391482026, type: 3}
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: fb58ec9fec80765499e7fb7424ea8f66, type: 3}
   iconSprite: {fileID: 21300000, guid: ec0e56a3269ec564ebe24554ef60d14c, type: 3}
-  cropTimer: 0
-  cropCost: 0
-  cropReward: 0
-  expReward: 0
-  cropName: 
+  cropTimer: 300
+  cropCost: 15
+  cropReward: 45
+  expReward: 50
+  cropName: Blackberry
   reqLvl: 8
   seedIsOnGround: 0

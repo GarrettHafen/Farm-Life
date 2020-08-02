@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Orange Pepper
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 0}
-  sproutSprite: {fileID: 0}
+  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
+  sproutSprite: {fileID: 21300000, guid: a642c67c357b23743af7290a6ffa8aa0, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: 56f415b83e56aec44afb03b0333d03fb, type: 3}
   iconSprite: {fileID: 21300000, guid: 3825d7fddc0df4c4da2886bf64cab5ed, type: 3}
-  cropTimer: 60
-  cropCost: 60
-  cropReward: 65
-  expReward: 65
+  cropTimer: 7200
+  cropCost: 405
+  cropReward: 1215
+  expReward: 1350
   cropName: Orange Pepper
   reqLvl: 23
   seedIsOnGround: 0

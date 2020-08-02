@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Celery
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 0}
-  sproutSprite: {fileID: 0}
+  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
+  sproutSprite: {fileID: 21300000, guid: d704b5bd4b7f1c64f938ce37c53d5834, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: 5faac82c4dcd16745b26d68376332539, type: 3}
   iconSprite: {fileID: 21300000, guid: a9a67364278b2984bb16ef80334c4c43, type: 3}
-  cropTimer: 0
-  cropCost: 0
-  cropReward: 0
-  expReward: 0
-  cropName: 
+  cropTimer: 900
+  cropCost: 45
+  cropReward: 135
+  expReward: 150
+  cropName: Celery
   reqLvl: 12
   seedIsOnGround: 0

@@ -21,7 +21,7 @@ public class Crop
 		{
 			state = CropState.Done;
 			return true;
-		}else if (growthLevel <= 1f && growthLevel >= .75f)
+		}else if (growthLevel <= 1f && growthLevel >= .5f)
         {
 			state = CropState.Growing;
 			if(dirt.overlay.sprite = asset.seedSprite)

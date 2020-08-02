@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Corn
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 21300000, guid: d715f025747b0a340ac06ecb9d2dbe31, type: 3}
-  sproutSprite: {fileID: 21300000, guid: 80496d42dbcce0142b201e7f790c0193, type: 3}
+  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
+  sproutSprite: {fileID: 21300000, guid: a642c67c357b23743af7290a6ffa8aa0, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 21300000, guid: 28ad4a3775eea9f4997ececadccbf0a3, type: 3}
+  doneSprite: {fileID: 21300000, guid: 096b033d4d771434b87f2720fe674769, type: 3}
   iconSprite: {fileID: 21300000, guid: 71b06d491d88ac842ba994b6a6651188, type: 3}
-  cropTimer: 10
-  cropCost: 100
-  cropReward: 5000
-  expReward: 250
+  cropTimer: 60
+  cropCost: 5
+  cropReward: 15
+  expReward: 10
   cropName: Corn
   reqLvl: 1
   seedIsOnGround: 0

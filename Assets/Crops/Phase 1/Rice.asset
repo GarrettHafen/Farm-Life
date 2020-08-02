@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Rice
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 0}
-  sproutSprite: {fileID: 0}
+  seedSprite: {fileID: 21300000, guid: 124e74c262977144aafe5a78cbafb0f5, type: 3}
+  sproutSprite: {fileID: 21300000, guid: 12ecbca39e665ed4687ae4080bb35d59, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: d9ee46f85180a2f40aa1b5358a4642c3, type: 3}
   iconSprite: {fileID: 21300000, guid: eaad5aee365a7fc4fbcced9eac791df2, type: 3}
-  cropTimer: 0
-  cropCost: 0
-  cropReward: 0
-  expReward: 0
-  cropName: 
+  cropTimer: 2700
+  cropCost: 135
+  cropReward: 405
+  expReward: 450
+  cropName: Rice
   reqLvl: 18
   seedIsOnGround: 0

@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Parsnip
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 0}
-  sproutSprite: {fileID: 0}
+  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
+  sproutSprite: {fileID: 21300000, guid: d90db5ddfe9abbe459b08e4e8b3315b0, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: 54c703f23ac948d49b9ba2991245c0e1, type: 3}
   iconSprite: {fileID: 21300000, guid: 41dc63f4b5e667b4fb182206834842f6, type: 3}
-  cropTimer: 0
-  cropCost: 0
-  cropReward: 0
-  expReward: 0
-  cropName: 
+  cropTimer: 2700
+  cropCost: 135
+  cropReward: 405
+  expReward: 450
+  cropName: Parsnip
   reqLvl: 19
   seedIsOnGround: 0

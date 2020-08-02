@@ -16,7 +16,7 @@ public class StatsController : MonoBehaviour
     private int baseEXP = 100;
     private int currentEXP = 0;
     private int[] expToNextLevel;
-    private float currentCoins = 500;
+    private float currentCoins = 50;
 
     private float targetCoinsTotal;
 
