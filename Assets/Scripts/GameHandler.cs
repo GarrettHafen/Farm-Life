@@ -48,21 +48,14 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float moveAmount = 5f;
+        float moveAmount = 3f;
         float edgeSize = 10f;
 
         HandleManualMovement(moveAmount);
         HandleScreenEdges(edgeSize, moveAmount);
         HandleZoom();
 
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            SaveSystem.SavePlayer();
-            Debug.Log("Save Complete");
-        }else if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadData(SaveSystem.LoadPlayer());
-        }
+        
 
         if(autoSaveTimer < autoSaveInterval)
         {

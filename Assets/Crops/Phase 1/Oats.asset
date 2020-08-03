@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 7200
   cropCost: 405
   cropReward: 1215
-  expReward: 1350
+  expReward: 600
   cropName: Oats
   reqLvl: 21
   seedIsOnGround: 0

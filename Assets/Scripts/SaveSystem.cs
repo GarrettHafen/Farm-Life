@@ -8,6 +8,10 @@ public static class SaveSystem
     public static void SavePlayer()
     {
         BinaryFormatter formatter = new BinaryFormatter();
+        if (!Directory.Exists(Application.persistentDataPath + "/saves"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+        }
         string folderPath = Application.persistentDataPath + "/saves";
         string path;
         string tempPath = "";
@@ -54,6 +58,7 @@ public static class SaveSystem
 
     public static PlayerData LoadPlayer()
     {
+        
         string folderPath = Application.persistentDataPath + "/saves";
         string path;
         DateTime temp2 = new DateTime(2000, 1, 1);

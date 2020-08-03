@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 7200
   cropCost: 405
   cropReward: 1215
-  expReward: 1350
+  expReward: 600
   cropName: Orange Pepper
   reqLvl: 23
   seedIsOnGround: 0

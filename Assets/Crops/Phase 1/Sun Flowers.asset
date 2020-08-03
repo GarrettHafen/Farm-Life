@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 2700
   cropCost: 135
   cropReward: 405
-  expReward: 450
+  expReward: 350
   cropName: Sun Flower
   reqLvl: 20
   seedIsOnGround: 0
