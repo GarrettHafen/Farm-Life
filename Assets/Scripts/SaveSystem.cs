@@ -18,7 +18,7 @@ public static class SaveSystem
         var info = new DirectoryInfo(folderPath);
         FileInfo[] files = info.GetFiles();
         DateTime temp2 = new DateTime(3000, 1, 1);
-
+        // create rotating save system
         if(files.Length < 1)
         {
             path = Application.persistentDataPath + "/saves/save1.farm";
@@ -65,6 +65,7 @@ public static class SaveSystem
         string tempPath = "";
         var info = new DirectoryInfo(folderPath);
         FileInfo[] files = info.GetFiles();
+        //get most recent save
         foreach (System.IO.FileInfo thingy in files)
         {
             DateTime temp1 = System.IO.File.GetLastWriteTime(thingy.ToString());

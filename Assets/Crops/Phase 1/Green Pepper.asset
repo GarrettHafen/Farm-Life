@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 300
   cropCost: 15
   cropReward: 45
-  expReward: 50
+  expReward: 20
   cropName: Green Pepper
   reqLvl: 7
   seedIsOnGround: 0

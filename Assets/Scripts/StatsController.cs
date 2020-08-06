@@ -28,6 +28,8 @@ public class StatsController : MonoBehaviour
     public Image fill;
     public Color color;
 
+    private QueueSystem queue;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,9 @@ public class StatsController : MonoBehaviour
 
 
         GetCurrentFill(currentEXP, 0f, expToNextLevel[playerLevel]);
+
+        queue = new QueueSystem(this);
+        queue.StartLoop();
     }
 
     // Update is called once per frame
@@ -68,16 +73,30 @@ public class StatsController : MonoBehaviour
     {
         
         targetCoinsTotal = currentCoins + coinsToAdd;
-        if(targetCoinsTotal > 999999999f)
+        
+        if (targetCoinsTotal > 999999999f)
         {
             targetCoinsTotal = 999999999f;
         }
         else
         {
-            StartCoroutine(CountUpToTarget(GetSpeed(coinsToAdd)));
+            //StartCoroutine(CountUpToTarget(GetSpeed(coinsToAdd)));
+            //StartCoroutine(Coroutine2(coinsToAdd));
+            int speed = GetSpeed(coinsToAdd);
+            queue.EnqueueAction(CountUpToTarget(currentCoins, targetCoinsTotal, speed));
+            //queue.EnqueueWait(.5f);
+
         }
-        
+        currentCoins += coinsToAdd;
+
     }
+
+    /*IEnumerator Coroutine2(int coinsToAdd)
+    {
+        yield return CountUpToTarget(GetSpeed(coinsToAdd));
+
+        //Coroutine1 is now finished and you can use its result
+    }*/
 
     public bool RemoveCoins(int coinsToRemove)
     {
@@ -95,20 +114,20 @@ public class StatsController : MonoBehaviour
         }
     }
 
-    IEnumerator CountUpToTarget(int speed)
+    IEnumerator CountUpToTarget(float currentCoinsCU, float targetCoinsTotalCU, int speedCU)
     {
 
-        while (currentCoins < targetCoinsTotal)
+        while (currentCoinsCU < targetCoinsTotalCU)
         {
-            currentCoins += speed;
-            currentCoins = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal);
-            if(currentCoins < 1000000)
+            currentCoinsCU += speedCU;
+            //currentCoinsCU = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal); dont remember why we needed this clamp.....
+            if(currentCoinsCU < 1000000)
             {
-                coinsText.text = currentCoins + " coins";
+                coinsText.text = currentCoinsCU + " coins";
             }
             else
             {
-                coinsText.text = currentCoins.ToString();
+                coinsText.text = currentCoinsCU.ToString();
             }
             yield return null;
         }    

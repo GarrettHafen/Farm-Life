@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 300
   cropCost: 15
   cropReward: 45
-  expReward: 50
-  cropName: Blackberry
+  expReward: 20
+  cropName: Blackberries
   reqLvl: 8
   seedIsOnGround: 0

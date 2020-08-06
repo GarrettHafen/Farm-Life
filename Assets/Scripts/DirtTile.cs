@@ -53,25 +53,24 @@ public class DirtTile : MonoBehaviour
 
 	void PlantSeed (Crop c, PlayerInteraction player, DirtTile dirt)
 	{
-		if (StatsController.instance.RemoveCoins(c.asset.cropCost)) {
-			if (dirt.crop.asset != null)
-			{
+		if (dirt.crop.asset != null && dirt.crop.state != CropState.Seed)
+		{
 				Debug.Log("Crop not seed, can't plan't.");
 				return;
 			}
-			Debug.Log("Planting " + c.GetName());
-			crop = c;
-			crop.state = CropState.Planted;
-
-			UpdateSprite();
-
-
-			player.SetCrop(new Crop(c.asset));
+		if (!StatsController.instance.RemoveCoins(c.asset.cropCost))
+		{
+			//poor message
+			return;
         }
-        else
-        {
-			//add red hand or wiggle or something
-        }
+		//Debug.Log("Planting " + c.GetName());
+		crop = c;
+		crop.state = CropState.Planted;
+
+		UpdateSprite();
+
+
+		player.SetCrop(new Crop(c.asset));
 	}
 
 	void HarvestCrop (PlayerInteraction player)
@@ -94,10 +93,12 @@ public class DirtTile : MonoBehaviour
 
 	void Plow ()
 	{
-		Debug.Log("Plowing...");
-		StatsController.instance.RemoveCoins(5);
-		overlay.sprite = null;
-		needsPlowing = false;
+		//Debug.Log("Plowing...");
+		if (StatsController.instance.RemoveCoins(5))
+		{
+			overlay.sprite = null;
+			needsPlowing = false;
+        }
 	}
 
 	public void UpdateSprite ()

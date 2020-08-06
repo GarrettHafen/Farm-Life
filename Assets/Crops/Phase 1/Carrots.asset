@@ -21,6 +21,6 @@ MonoBehaviour:
   cropCost: 5
   cropReward: 15
   expReward: 10
-  cropName: Carrot
+  cropName: Carrots
   reqLvl: 2
   seedIsOnGround: 0

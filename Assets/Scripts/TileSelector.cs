@@ -98,11 +98,10 @@ public class TileSelector : MonoBehaviour
     private void ActivatePlot(int intendedPlotPosition)
     {
         // activate plot at plot position
-
-        plots[intendedPlotPosition].SetActive(true);
-
-        //add EXP
-        StatsController.instance.RemoveCoins(5);
+        if (StatsController.instance.RemoveCoins(5))
+        {
+            plots[intendedPlotPosition].SetActive(true);
+        }
     }
 
     private void PlacePlot(Vector3 plotPosition)

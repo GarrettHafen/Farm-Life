@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 2700
   cropCost: 135
   cropReward: 405
-  expReward: 350
-  cropName: Kidney Bean
+  expReward: 100
+  cropName: Kidney Beans
   reqLvl: 17
   seedIsOnGround: 0

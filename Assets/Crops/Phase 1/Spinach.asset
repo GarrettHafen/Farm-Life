@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 7200
   cropCost: 405
   cropReward: 1215
-  expReward: 600
+  expReward: 250
   cropName: Spinach
   reqLvl: 24
   seedIsOnGround: 0

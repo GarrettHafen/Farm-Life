@@ -73,37 +73,44 @@ public class PlayerInteraction : MonoBehaviour
 			}
 		}
 		// define target by what is under mouse
-		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
-		hit = Physics2D.Raycast(mousePosition, left, 0.1f, LayerMask.NameToLayer("Plots"));
-		if (hit.collider != null)
+		if (!GameHandler.instance.overMenu)
 		{
-			if (hit.collider.gameObject.Equals(target))
+			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
+			hit = Physics2D.Raycast(mousePosition, left, 0.1f, LayerMask.NameToLayer("Plots"));
+			if (hit.collider != null)
 			{
-				MapController.instance.overMap = true;
-			}
-			else {
-				if (target != null)
+				if (hit.collider.gameObject.Equals(target))
 				{
-					timer = target.GetComponent<TimerController>();
-					timer.slider.gameObject.SetActive(false);
+					MapController.instance.overMap = true;
 				}
-				target = hit.collider.gameObject;
-				MapController.instance.overMap = true;
+				else
+				{
+					if (target != null)
+					{
+						timer = target.GetComponent<TimerController>();
+						timer.slider.gameObject.SetActive(false);
+					}
+					target = hit.collider.gameObject;
+					MapController.instance.overMap = true;
+				}
 			}
-        }
-        else
-        {
-			/*------------------------------------------------------------
-			 ------------------------------------------------------------
-			------------------------------------------------------------
-			bade code alert - kicks off every frame, debug deslect and its constantly going, is that bad?
-			------------------------------------------------------------
-			------------------------------------------------------------
-			------------------------------------------------------------*/
+			else
+			{
+				/*------------------------------------------------------------
+				 ------------------------------------------------------------
+				------------------------------------------------------------
+				bade code alert - kicks off every frame, debug deslect and its constantly going, is that bad?
+				------------------------------------------------------------
+				------------------------------------------------------------
+				------------------------------------------------------------*/
 
-			Deselect();
-		}
+				Deselect();
+			}
+		}else
+            {
+				Deselect();
+            }
 	}
 
 	public void SetCrop(Crop c)

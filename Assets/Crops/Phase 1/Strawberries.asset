@@ -21,6 +21,6 @@ MonoBehaviour:
   cropCost: 5
   cropReward: 15
   expReward: 10
-  cropName: Strawberry
+  cropName: Strawberries
   reqLvl: 4
   seedIsOnGround: 0

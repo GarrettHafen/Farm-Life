@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 900
   cropCost: 45
   cropReward: 135
-  expReward: 150
+  expReward: 45
   cropName: Mint
   reqLvl: 15
   seedIsOnGround: 0

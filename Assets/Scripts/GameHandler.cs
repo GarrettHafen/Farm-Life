@@ -15,7 +15,7 @@ public class GameHandler : MonoBehaviour
     public Transform manualMovementTransform;
 
     private float autoSaveTimer;
-    private int autoSaveInterval = 70;
+    private int autoSaveInterval = 60;
 
     private Vector3 cameraFollowPostion;
 
@@ -31,6 +31,8 @@ public class GameHandler : MonoBehaviour
 
     private List<CropAsset> loadCropList = new List<CropAsset>();
 
+
+
     //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
     //the planting pointer will be dependant on which seed is selected
     public Texture2D plowPointer, defaultPointer, harvestPointer, plantingPointer;
@@ -42,6 +44,8 @@ public class GameHandler : MonoBehaviour
         instance = this;
         cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
         cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
+
+       
 
     }
 
@@ -184,6 +188,7 @@ public class GameHandler : MonoBehaviour
 
     public void LoadData(PlayerData data)
     {
+
         StatsController.instance.SetLvl(data.level);
         StatsController.instance.SetCoins(data.coins);
         StatsController.instance.SetExp(data.exp);
@@ -211,12 +216,17 @@ public class GameHandler : MonoBehaviour
         {
             if(data.activeCrops[i] != null)
             {
-                for(int j = 0; j < cropsList.Count; j++)
+                for (int j = 0; j < cropsList.Count; j++)
                 {
-                    if(data.activeCrops[i] == cropsList[j].cropName)
+                    if (cropsList[j] != null)
                     {
-                        loadCropList.Add(cropsList[j]);
+                        if (data.activeCrops[i] == cropsList[j].cropName)
+                        {
+                            loadCropList.Add(cropsList[j]);
+                            //return;
+                        }
                     }
+                    
                 }
             }
             else
@@ -244,6 +254,7 @@ public class GameHandler : MonoBehaviour
                 dirt.UpdateSprite();
             }
         }
+
         Debug.Log("Data Loaded");
     }
 
