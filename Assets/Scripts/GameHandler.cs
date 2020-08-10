@@ -15,7 +15,7 @@ public class GameHandler : MonoBehaviour
     public Transform manualMovementTransform;
 
     private float autoSaveTimer;
-    private int autoSaveInterval = 60;
+    private int autoSaveInterval = 180;
 
     private Vector3 cameraFollowPostion;
 
@@ -68,8 +68,10 @@ public class GameHandler : MonoBehaviour
         else
         {
             SaveSystem.SavePlayer();
-            Debug.Log("Save Complete");
+            Debug.Log("Auto Save Complete");
             autoSaveTimer = 0;
+            MenuController.instance.notificationBar.SetActive(false);
+            MenuController.instance.AnimateNotifcation("Auto Save Complete", Color.white);
         }
 
 
@@ -104,6 +106,8 @@ public class GameHandler : MonoBehaviour
         {
             edgeScrolling = !edgeScrolling;
             Debug.Log("Edge Scroll enabled: " + edgeScrolling);
+            MenuController.instance.notificationBar.SetActive(false);
+            MenuController.instance.AnimateNotifcation("", Color.white);
         }
         if (edgeScrolling)
         {
@@ -256,6 +260,8 @@ public class GameHandler : MonoBehaviour
         }
 
         Debug.Log("Data Loaded");
+        MenuController.instance.notificationBar.SetActive(false);
+        MenuController.instance.AnimateNotifcation("Load Complete", Color.white);
     }
 
     private float CalcTimePassed(float currentGrowthTime, DateTime oldTime, float cropTimeTotal, DirtTile dirt)
@@ -279,12 +285,7 @@ public class GameHandler : MonoBehaviour
     }
 
 
-    //do we want to save on quit just yet?
-    /*void OnApplicationQuit()
-    {
-        SaveSystem.SavePlayer();
-        Debug.Log("Save Complete");
-    }*/
+    
 
 
 

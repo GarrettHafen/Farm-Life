@@ -77,6 +77,9 @@ public class Crop
 		}
 
 		Debug.LogError("WHAT?!");
+        MenuController.instance.notificationBar.SetActive(false);
+		MenuController.instance.AnimateNotifcation("Seed State Error", Color.red);
+
 		return asset.seedSprite;
 	}
 

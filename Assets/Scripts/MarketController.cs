@@ -119,6 +119,7 @@ public class MarketController : MonoBehaviour
                 cropTimeList[cellNumber].gameObject.SetActive(true);
                 cropExpList[cellNumber].text = GameHandler.instance.cropsList[i].expReward.ToString();
                 cropExpList[cellNumber].gameObject.SetActive(true);
+                cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
                 cropImageList[cellNumber].sprite = GameHandler.instance.cropsList[i].iconSprite;
                 cropImageList[cellNumber].gameObject.SetActive(true);
                 cropAssetList.Add(GameHandler.instance.cropsList[i]);
@@ -132,6 +133,7 @@ public class MarketController : MonoBehaviour
                 cropYieldList[cellNumber].gameObject.SetActive(false);
                 cropTimeList[cellNumber].gameObject.SetActive(false);
                 cropExpList[cellNumber].gameObject.SetActive(false);
+                cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
                 cropImageList[cellNumber].gameObject.SetActive(false);
                 cellNumber++;
             }

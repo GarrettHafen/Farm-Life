@@ -38,8 +38,11 @@ public class DirtTile : MonoBehaviour
 				if (!needsPlowing)
 					PlantSeed(c, player, dirt);
 				else
+				{
 					Debug.Log("Ground needs plowing!");
-
+					MenuController.instance.notificationBar.SetActive(false);
+					MenuController.instance.AnimateNotifcation("Ground needs plowing!", Color.red);
+				}
 				return;
 
 			}else if(t.toolType == ToolType.Harvest && dirt.crop.HasCrop())
@@ -56,8 +59,10 @@ public class DirtTile : MonoBehaviour
 		if (dirt.crop.asset != null && dirt.crop.state != CropState.Seed)
 		{
 				Debug.Log("Crop not seed, can't plan't.");
-				return;
-			}
+			MenuController.instance.notificationBar.SetActive(false);
+			MenuController.instance.AnimateNotifcation("Can't Plant Seed", Color.red);
+			return;
+		}
 		if (!StatsController.instance.RemoveCoins(c.asset.cropCost))
 		{
 			//poor message

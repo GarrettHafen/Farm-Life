@@ -104,6 +104,8 @@ public class StatsController : MonoBehaviour
         if(targetCoinsTotal < 0)
         {
             Debug.Log("cant do that you poor fool");
+            MenuController.instance.notificationBar.SetActive(false);
+            MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red);
             return false;
         }
         else
@@ -202,7 +204,7 @@ public class StatsController : MonoBehaviour
         //Debug.Log("maximumOffset " + maximumOffset + " = maximum: " + maximum + " - minimum: " + minimum);
         float fillAmount = currentOffset / maximumOffset;
         //Debug.Log("FillAmount " + fillAmount + " = currentOffset: " + currentOffset + " / maximumOffset: " + maximumOffset);
-        mask.fillAmount = fillAmount;
+        fill.fillAmount = fillAmount;
 
         fill.color = color;
     }

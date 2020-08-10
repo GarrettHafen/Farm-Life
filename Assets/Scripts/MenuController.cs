@@ -7,13 +7,17 @@ public class MenuController : MonoBehaviour
 {
     public static MenuController instance;
     public GameObject menuToAnimate;
+    public GameObject notificationBar;
+    public Text notifcationText;
     public Texture2D plow;
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
+    public Color errorRed = new Color(255, 255, 255); 
 
     public SpriteRenderer overlay;
 
     public GameObject settingsMenu;
+    public GameObject saveOrQuitPanel;
 
 
     // Start is called before the first frame update
@@ -43,6 +47,13 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    public void AnimateNotifcation(string notifyText, Color color)
+    {
+        notifcationText.text = notifyText;
+        notifcationText.color = color;
+        notificationBar.SetActive(true);
+
+    }
 
     public void SetCursor(Texture2D cursorToBe)
     {
@@ -87,14 +98,45 @@ public class MenuController : MonoBehaviour
     public void CloseSettings()
     {
         settingsMenu.SetActive(false);
+        saveOrQuitPanel.SetActive(false);
     }
     public void SaveGame()
     {
         SaveSystem.SavePlayer();
         Debug.Log("Save Complete");
+        notificationBar.SetActive(false);
+        AnimateNotifcation("Save Complete", Color.white);
     }
     public void LoadGame()
     {
         GameHandler.instance.LoadData(SaveSystem.LoadPlayer());
+    }
+
+    public void SaveOrExitGame()
+    {
+        //save and quit or exit without saving
+        CloseSettings();
+        saveOrQuitPanel.SetActive(true);
+    }
+    public void QuitGame()
+    {
+        //actually quit the game
+        Application.Quit();
+    }
+    public void SaveAndExit()
+    {
+        StartCoroutine(ExecuteAfterTime(1));
+    }
+    //do we want to save on quit just yet?
+    /*void OnApplicationQuit()
+    {
+        SaveSystem.SavePlayer();
+        Debug.Log("Save Complete");
+    }*/
+
+    IEnumerator ExecuteAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        QuitGame();
     }
 }
