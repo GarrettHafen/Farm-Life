@@ -10180,7 +10180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14173192, g: 0.8584906, b: 0.29558307, a: 0.8039216}
+  m_Color: {r: 0.14117645, g: 0.40677816, b: 0.85882354, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -11914,7 +11914,7 @@ MonoBehaviour:
   errorRed: {r: 255, g: 34, b: 34, a: 1}
   overlay: {fileID: 0}
   settingsMenu: {fileID: 1226873532}
-  saveOrQuitPanel: {fileID: 0}
+  saveOrQuitPanel: {fileID: 321810779}
 --- !u!114 &1048818190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11934,7 +11934,7 @@ MonoBehaviour:
   current: 0
   mask: {fileID: 1262186741}
   fill: {fileID: 920720050}
-  color: {r: 0.14117648, g: 0.85882354, b: 0.29411766, a: 0.67058825}
+  color: {r: 0.14117648, g: 0.40784314, b: 0.85882354, a: 1}
 --- !u!114 &1048818191
 MonoBehaviour:
   m_ObjectHideFlags: 0
