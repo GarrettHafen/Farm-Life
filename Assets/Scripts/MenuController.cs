@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
@@ -19,13 +20,16 @@ public class MenuController : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject saveOrQuitPanel;
 
-
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
+        DontDestroyOnLoad(instance);
         //ResetTool();
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
+        
+        //SceneManager.LoadScene("LandingPage");
+        
     }
 
     // Update is called once per frame
@@ -127,16 +131,16 @@ public class MenuController : MonoBehaviour
     {
         StartCoroutine(ExecuteAfterTime(1));
     }
-    //do we want to save on quit just yet?
-    /*void OnApplicationQuit()
-    {
-        SaveSystem.SavePlayer();
-        Debug.Log("Save Complete");
-    }*/
 
     IEnumerator ExecuteAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
         QuitGame();
+    }
+
+    public void MuteAudio()
+    {
+        GameMaster.instance.MuteAudio();
+        //mute sounds
     }
 }

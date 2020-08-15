@@ -26,7 +26,6 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         instance = this;
-        
         halfHeight = Camera.main.orthographicSize;
         halfWidth = halfHeight * Camera.main.aspect;
         bottomLeftLimit = theMap.localBounds.min + new Vector3(halfWidth, halfHeight, 0f);

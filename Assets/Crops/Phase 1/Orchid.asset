@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: 18aa2f9331b045d4bb908f64f017d507, type: 3}
   cropTimer: 7200
   cropCost: 405
-  cropReward: 1215
-  expReward: 250
+  cropReward: 600
+  expReward: 70
   cropName: Orchid
   reqLvl: 25
   seedIsOnGround: 0

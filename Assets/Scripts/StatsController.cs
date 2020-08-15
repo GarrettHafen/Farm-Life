@@ -34,6 +34,7 @@ public class StatsController : MonoBehaviour
     void Start()
     {
         instance = this;
+        DontDestroyOnLoad(instance);
         SetupExp();
         UpdateStats();
 
@@ -155,17 +156,17 @@ public class StatsController : MonoBehaviour
     private int GetSpeed(int coins)
     {
         int speed = 1;
-        if (coins < 100)
+        if (coins < 25)
         {
             speed = 1;
         }
-        else if (coins >= 100 && coins < 1000)
+        else if (coins >= 25 && coins < 100)
         {
             speed = 5;
         }
-        else if (coins >= 1000)
+        else if (coins >= 100)
         {
-            speed = 1000;
+            speed = 100;
         }
         return speed;
     }

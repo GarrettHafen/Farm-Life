@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: 205954f862138064f9e28faddf1f14c6, type: 3}
   cropTimer: 7200
   cropCost: 405
-  cropReward: 1215
-  expReward: 250
+  cropReward: 600
+  expReward: 70
   cropName: Spinach
   reqLvl: 24
   seedIsOnGround: 0

@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: a9a67364278b2984bb16ef80334c4c43, type: 3}
   cropTimer: 900
   cropCost: 45
-  cropReward: 135
-  expReward: 45
+  cropReward: 65
+  expReward: 15
   cropName: Celery
   reqLvl: 12
   seedIsOnGround: 0

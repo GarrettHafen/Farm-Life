@@ -32,6 +32,7 @@ public class TileSelector : MonoBehaviour
         //testing
 
         instance = this;
+        DontDestroyOnLoad(instance);
         SetupGrid();
 
         

@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: d3c7ec1773b28e84b9c58392cbb98f7b, type: 3}
   cropTimer: 60
   cropCost: 5
-  cropReward: 15
-  expReward: 10
+  cropReward: 8
+  expReward: 3
   cropName: Pumpkin
   reqLvl: 3
   seedIsOnGround: 0

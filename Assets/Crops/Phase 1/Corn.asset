@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: 71b06d491d88ac842ba994b6a6651188, type: 3}
   cropTimer: 60
   cropCost: 5
-  cropReward: 15
-  expReward: 10
+  cropReward: 8
+  expReward: 3
   cropName: Corn
   reqLvl: 1
   seedIsOnGround: 0

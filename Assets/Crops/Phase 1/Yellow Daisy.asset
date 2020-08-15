@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: c530f92faadea1e4184c716e35eff692, type: 3}
   cropTimer: 2700
   cropCost: 135
-  cropReward: 405
-  expReward: 100
+  cropReward: 200
+  expReward: 30
   cropName: Yellow Daisy
   reqLvl: 16
   seedIsOnGround: 0

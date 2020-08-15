@@ -31,6 +31,9 @@ public class GameHandler : MonoBehaviour
 
     private List<CropAsset> loadCropList = new List<CropAsset>();
 
+    public bool landingPageOpen = true;
+    public GameObject landingPage;
+
 
 
     //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
@@ -42,6 +45,7 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         instance = this;
+        DontDestroyOnLoad(instance);
         cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
         cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
 
@@ -59,19 +63,21 @@ public class GameHandler : MonoBehaviour
         HandleScreenEdges(edgeSize, moveAmount);
         HandleZoom();
 
-        
 
-        if(autoSaveTimer < autoSaveInterval)
+        if (!landingPageOpen)
         {
-            autoSaveTimer += Time.deltaTime;
-        }
-        else
-        {
-            SaveSystem.SavePlayer();
-            Debug.Log("Auto Save Complete");
-            autoSaveTimer = 0;
-            MenuController.instance.notificationBar.SetActive(false);
-            MenuController.instance.AnimateNotifcation("Auto Save Complete", Color.white);
+            if (autoSaveTimer < autoSaveInterval)
+            {
+                autoSaveTimer += Time.deltaTime;
+            }
+            else
+            {
+                SaveSystem.SavePlayer();
+                Debug.Log("Auto Save Complete");
+                autoSaveTimer = 0;
+                MenuController.instance.notificationBar.SetActive(false);
+                MenuController.instance.AnimateNotifcation("Auto Save Complete", Color.white);
+            }
         }
 
 

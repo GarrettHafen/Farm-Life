@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 900
   cropCost: 45
   cropReward: 135
-  expReward: 45
+  expReward: 15
   cropName: Yellow Tulip
   reqLvl: 14
   seedIsOnGround: 0

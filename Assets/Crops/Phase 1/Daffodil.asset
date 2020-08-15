@@ -19,8 +19,8 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: cbcd8c52a2790444eb2f425872c24b82, type: 3}
   cropTimer: 900
   cropCost: 45
-  cropReward: 135
-  expReward: 45
+  cropReward: 65
+  expReward: 15
   cropName: Daffodil
   reqLvl: 11
   seedIsOnGround: 0
