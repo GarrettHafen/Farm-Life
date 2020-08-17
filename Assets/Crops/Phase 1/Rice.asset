@@ -18,9 +18,9 @@ MonoBehaviour:
   doneSprite: {fileID: 21300000, guid: d9ee46f85180a2f40aa1b5358a4642c3, type: 3}
   iconSprite: {fileID: 21300000, guid: eaad5aee365a7fc4fbcced9eac791df2, type: 3}
   cropTimer: 2700
-  cropCost: 135
-  cropReward: 200
-  expReward: 30
+  cropCost: 80
+  cropReward: 92
+  expReward: 2
   cropName: Rice
   reqLvl: 18
   seedIsOnGround: 0

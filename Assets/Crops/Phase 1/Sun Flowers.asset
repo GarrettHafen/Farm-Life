@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: a76038cb20adfd944ae310286ce2ad4a, type: 3}
   iconSprite: {fileID: 21300000, guid: 6ccd10ce24a6ec64a866d831a90914fe, type: 3}
-  cropTimer: 2700
-  cropCost: 135
-  cropReward: 200
-  expReward: 30
+  cropTimer: 21600
+  cropCost: 200
+  cropReward: 250
+  expReward: 2
   cropName: Sun Flowers
   reqLvl: 20
   seedIsOnGround: 0

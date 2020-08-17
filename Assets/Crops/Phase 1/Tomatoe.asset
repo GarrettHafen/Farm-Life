@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 839b1c752eb17cf4e92d5a1f0ec3158f, type: 3}
   iconSprite: {fileID: 21300000, guid: 5c72fe3d3164bc24392ca440343cd8c1, type: 3}
-  cropTimer: 60
+  cropTimer: 300
   cropCost: 5
-  cropReward: 8
-  expReward: 3
+  cropReward: 12
+  expReward: 1
   cropName: Tomato
   reqLvl: 5
   seedIsOnGround: 0

@@ -41,7 +41,7 @@ public class DirtTile : MonoBehaviour
 				{
 					Debug.Log("Ground needs plowing!");
 					MenuController.instance.notificationBar.SetActive(false);
-					MenuController.instance.AnimateNotifcation("Ground needs plowing!", Color.red);
+					MenuController.instance.AnimateNotifcation("Ground needs plowing!", Color.red, "Error");
 				}
 				return;
 
@@ -60,7 +60,7 @@ public class DirtTile : MonoBehaviour
 		{
 				Debug.Log("Crop not seed, can't plan't.");
 			MenuController.instance.notificationBar.SetActive(false);
-			MenuController.instance.AnimateNotifcation("Can't Plant Seed", Color.red);
+			MenuController.instance.AnimateNotifcation("Can't Plant Seed", Color.red, "Error");
 			return;
 		}
 		if (!StatsController.instance.RemoveCoins(c.asset.cropCost))
@@ -73,7 +73,7 @@ public class DirtTile : MonoBehaviour
 		crop.state = CropState.Planted;
 
 		UpdateSprite();
-
+		FindObjectOfType<AudioManager>().PlaySound("Seed");
 
 		player.SetCrop(new Crop(c.asset));
 	}
@@ -87,6 +87,7 @@ public class DirtTile : MonoBehaviour
 			crop = new Crop(null);
 			needsPlowing = true;
 			AddDirt();
+			FindObjectOfType<AudioManager>().PlaySound("Harvest");
 		}
 	}
 
@@ -101,9 +102,12 @@ public class DirtTile : MonoBehaviour
 		//Debug.Log("Plowing...");
 		if (StatsController.instance.RemoveCoins(5))
 		{
+			//	if plots should cost money...
 			overlay.sprite = null;
 			needsPlowing = false;
-        }
+			FindObjectOfType<AudioManager>().PlaySound("Plow");
+		}
+		
 	}
 
 	public void UpdateSprite ()

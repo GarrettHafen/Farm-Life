@@ -34,7 +34,6 @@ public class StatsController : MonoBehaviour
     void Start()
     {
         instance = this;
-        DontDestroyOnLoad(instance);
         SetupExp();
         UpdateStats();
 
@@ -106,7 +105,7 @@ public class StatsController : MonoBehaviour
         {
             Debug.Log("cant do that you poor fool");
             MenuController.instance.notificationBar.SetActive(false);
-            MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red);
+            MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red,"No Money");
             return false;
         }
         else
@@ -182,6 +181,7 @@ public class StatsController : MonoBehaviour
 
                 playerLevel++;
                 levelText.text = playerLevel.ToString();
+                FindObjectOfType<AudioManager>().PlaySound("Level Up");
             }
         }
         if (playerLevel >= maxLevel)

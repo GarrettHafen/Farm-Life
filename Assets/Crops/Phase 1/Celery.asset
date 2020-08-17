@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 5faac82c4dcd16745b26d68376332539, type: 3}
   iconSprite: {fileID: 21300000, guid: a9a67364278b2984bb16ef80334c4c43, type: 3}
-  cropTimer: 900
-  cropCost: 45
-  cropReward: 65
-  expReward: 15
+  cropTimer: 14400
+  cropCost: 75
+  cropReward: 113
+  expReward: 2
   cropName: Celery
   reqLvl: 12
   seedIsOnGround: 0

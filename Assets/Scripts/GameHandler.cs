@@ -45,7 +45,6 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         instance = this;
-        DontDestroyOnLoad(instance);
         cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
         cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
 
@@ -76,7 +75,7 @@ public class GameHandler : MonoBehaviour
                 Debug.Log("Auto Save Complete");
                 autoSaveTimer = 0;
                 MenuController.instance.notificationBar.SetActive(false);
-                MenuController.instance.AnimateNotifcation("Auto Save Complete", Color.white);
+                MenuController.instance.AnimateNotifcation("Auto Save Complete", Color.white, "Null");
             }
         }
 
@@ -113,7 +112,7 @@ public class GameHandler : MonoBehaviour
             edgeScrolling = !edgeScrolling;
             Debug.Log("Edge Scroll enabled: " + edgeScrolling);
             MenuController.instance.notificationBar.SetActive(false);
-            MenuController.instance.AnimateNotifcation("", Color.white);
+            MenuController.instance.AnimateNotifcation("Edge Scrolling Enabled", Color.white, "Error");
         }
         if (edgeScrolling)
         {
@@ -267,7 +266,7 @@ public class GameHandler : MonoBehaviour
 
         Debug.Log("Data Loaded");
         MenuController.instance.notificationBar.SetActive(false);
-        MenuController.instance.AnimateNotifcation("Load Complete", Color.white);
+        MenuController.instance.AnimateNotifcation("Load Complete", Color.white, "Null");
     }
 
     private float CalcTimePassed(float currentGrowthTime, DateTime oldTime, float cropTimeTotal, DirtTile dirt)

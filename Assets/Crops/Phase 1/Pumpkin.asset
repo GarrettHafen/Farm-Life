@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: b5e2444c202323f4ab6618bcaae99132, type: 3}
   iconSprite: {fileID: 21300000, guid: d3c7ec1773b28e84b9c58392cbb98f7b, type: 3}
-  cropTimer: 60
-  cropCost: 5
-  cropReward: 8
-  expReward: 3
+  cropTimer: 900
+  cropCost: 15
+  cropReward: 23
+  expReward: 1
   cropName: Pumpkin
   reqLvl: 3
   seedIsOnGround: 0

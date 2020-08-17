@@ -32,7 +32,6 @@ public class TileSelector : MonoBehaviour
         //testing
 
         instance = this;
-        DontDestroyOnLoad(instance);
         SetupGrid();
 
         
@@ -99,10 +98,15 @@ public class TileSelector : MonoBehaviour
     private void ActivatePlot(int intendedPlotPosition)
     {
         // activate plot at plot position
+
+        //if plots should cost money.... still on the fence
         if (StatsController.instance.RemoveCoins(5))
         {
             plots[intendedPlotPosition].SetActive(true);
+            FindObjectOfType<AudioManager>().PlaySound("Plow");
         }
+        //plots[intendedPlotPosition].SetActive(true);
+        //FindObjectOfType<AudioManager>().PlaySound("Plow");
     }
 
     private void PlacePlot(Vector3 plotPosition)

@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: e1f40f3ad86eb134394806976563b961, type: 3}
   iconSprite: {fileID: 21300000, guid: f530a3081cc60cd41a409eec1c804787, type: 3}
-  cropTimer: 300
-  cropCost: 15
-  cropReward: 25
-  expReward: 7
+  cropTimer: 2700
+  cropCost: 45
+  cropReward: 68
+  expReward: 1
   cropName: Broccoli
   reqLvl: 9
   seedIsOnGround: 0

@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 7eeef5e86c50b8e4b9b92b78468830a5, type: 3}
   iconSprite: {fileID: 21300000, guid: 794c5417524378a4599e42ff99ebc705, type: 3}
-  cropTimer: 900
+  cropTimer: 1800
   cropCost: 45
-  cropReward: 135
-  expReward: 15
+  cropReward: 79
+  expReward: 3
   cropName: Yellow Tulip
   reqLvl: 14
   seedIsOnGround: 0

@@ -24,7 +24,6 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         instance = this;
-        DontDestroyOnLoad(instance);
         //ResetTool();
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
         
@@ -48,14 +47,16 @@ public class MenuController : MonoBehaviour
         else
         {
             menuToAnimate.SetActive(true);
+            FindObjectOfType<AudioManager>().PlaySound("Click");
         }
     }
 
-    public void AnimateNotifcation(string notifyText, Color color)
+    public void AnimateNotifcation(string notifyText, Color color, string sound)
     {
         notifcationText.text = notifyText;
         notifcationText.color = color;
         notificationBar.SetActive(true);
+        FindObjectOfType<AudioManager>().PlaySound(sound);
 
     }
 
@@ -80,39 +81,45 @@ public class MenuController : MonoBehaviour
                 //reseting the market tool causing every other s
             }
             else { 
-                ResetTool(); 
+                ResetTool();
+                FindObjectOfType<AudioManager>().PlaySound("Click");
             }
 
         }
         else
         {
             PlayerInteraction.instance.SetTool(t);
+            FindObjectOfType<AudioManager>().PlaySound("Click");
         }
     }
-    public void SetSeed(SeedBarrel c)
+    public void SetSeed(SeedBarrel c)//not used?
     {
         Crop tempCrop = c.crop;
         PlayerInteraction.instance.SetCrop(new Crop(tempCrop.asset));
+        FindObjectOfType<AudioManager>().PlaySound("Seed");
     }
 
     public void OpenSettings()
     {
         settingsMenu.SetActive(true);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
     public void CloseSettings()
     {
         settingsMenu.SetActive(false);
         saveOrQuitPanel.SetActive(false);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
     public void SaveGame()
     {
         SaveSystem.SavePlayer();
         Debug.Log("Save Complete");
         notificationBar.SetActive(false);
-        AnimateNotifcation("Save Complete", Color.white);
+        AnimateNotifcation("Save Complete", Color.white, "Manual Save");
     }
     public void LoadGame()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Click");
         GameHandler.instance.LoadData(SaveSystem.LoadPlayer());
     }
 
@@ -121,14 +128,17 @@ public class MenuController : MonoBehaviour
         //save and quit or exit without saving
         CloseSettings();
         saveOrQuitPanel.SetActive(true);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
     public void QuitGame()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Click");
         //actually quit the game
         Application.Quit();
     }
     public void SaveAndExit()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Click");
         StartCoroutine(ExecuteAfterTime(1));
     }
 
@@ -140,6 +150,7 @@ public class MenuController : MonoBehaviour
 
     public void MuteAudio()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Click");
         GameMaster.instance.MuteAudio();
         //mute sounds
     }

@@ -53,12 +53,14 @@ public class MarketController : MonoBehaviour
         coinText.text = StatsController.instance.GetCoins().ToString();
         lvlText.text = StatsController.instance.GetLvl().ToString();
         PopulateMarket();
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
 
     public void DeactivateMarket()
     {
         marketOpen = false;
         market.SetActive(false);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
 
     public void RaisePageNumber()
@@ -82,6 +84,7 @@ public class MarketController : MonoBehaviour
         pageNumber += 9;
         cellNumber = 0;
         PopulateMarket();
+        FindObjectOfType<AudioManager>().PlaySound("Page Turn");
     }
 
     public void LowerPageNumber()
@@ -92,6 +95,7 @@ public class MarketController : MonoBehaviour
             pageNumber -= 9;
             cellNumber = 0;
             PopulateMarket();
+            FindObjectOfType<AudioManager>().PlaySound("Page Turn");
         }
         forwardButton.SetActive(true);
     }
@@ -147,6 +151,7 @@ public class MarketController : MonoBehaviour
     public void SetSeed(int cropNumber)
     {
         PlayerInteraction.instance.SetCrop(new Crop(cropAssetList[cropNumber]));
+        FindObjectOfType<AudioManager>().PlaySound("Buy Button");
 
     }
 

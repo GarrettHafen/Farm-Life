@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 23bffe1e18444854784d3f512678cc98, type: 3}
   iconSprite: {fileID: 21300000, guid: 67ab3515bb70f1544bb47b16e292adc4, type: 3}
-  cropTimer: 7200
-  cropCost: 405
-  cropReward: 600
-  expReward: 70
+  cropTimer: 43200
+  cropCost: 145
+  cropReward: 167
+  expReward: 3
   cropName: Red Poppy
   reqLvl: 22
   seedIsOnGround: 0

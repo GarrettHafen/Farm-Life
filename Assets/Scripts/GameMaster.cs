@@ -58,11 +58,14 @@ public class GameMaster : MonoBehaviour
 
     public void MuteAudio()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Click");
         audioThingy2.mute = !audioThingy2.mute;
+        AudioManager.instance.Mute();
     }
 
     public void ExitGame()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Click");
         Application.Quit();
     }
 
@@ -72,11 +75,13 @@ public class GameMaster : MonoBehaviour
         MenuController.instance.LoadGame();
         GameHandler.instance.landingPage.SetActive(false);
         GameHandler.instance.landingPageOpen = false;
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
 
     public void NewGame()
     {
         GameHandler.instance.landingPage.SetActive(false);
         GameHandler.instance.landingPageOpen = false;
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
 }

@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.109996796, y: -0.08000183}
-  m_SizeDelta: {x: 0.2199974, y: 0.15999985}
+  m_AnchoredPosition: {x: 0.11249924, y: -0.08000183}
+  m_SizeDelta: {x: 0.225, y: 0.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2543406379426354976
 CanvasRenderer:
@@ -293,7 +293,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 9, y: 9}
+    oldSize: {x: 1.1688311, y: 1.1688311}
     newSize: {x: 1.0666667, y: 1.05}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -357,7 +357,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -5.3150015, y: -0.08}
+  m_AnchoredPosition: {x: -9.71, y: -0.08}
   m_SizeDelta: {x: 24.01, y: 24.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4133555378021533175
@@ -432,7 +432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.87, y: 10.34}
+  m_AnchoredPosition: {x: -0.14, y: 10.34}
   m_SizeDelta: {x: 50.37, y: 8.81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1812355155498150701
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.338
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -529,8 +529,8 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.338, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0.1, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8112459662862662247

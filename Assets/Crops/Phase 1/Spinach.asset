@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 8619b7985906c58449da761fe252d151, type: 3}
   iconSprite: {fileID: 21300000, guid: 205954f862138064f9e28faddf1f14c6, type: 3}
-  cropTimer: 7200
-  cropCost: 405
-  cropReward: 600
-  expReward: 70
+  cropTimer: 600
+  cropCost: 18
+  cropReward: 24
+  expReward: 3
   cropName: Spinach
   reqLvl: 24
   seedIsOnGround: 0

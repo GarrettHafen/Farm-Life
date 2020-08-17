@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 4daa8611d64fa4746a44bf84eaa01ea3, type: 3}
   iconSprite: {fileID: 21300000, guid: 18aa2f9331b045d4bb908f64f017d507, type: 3}
-  cropTimer: 7200
-  cropCost: 405
-  cropReward: 600
-  expReward: 70
+  cropTimer: 3600
+  cropCost: 60
+  cropReward: 90
+  expReward: 3
   cropName: Orchid
   reqLvl: 25
   seedIsOnGround: 0

@@ -17,10 +17,10 @@ MonoBehaviour:
   deadSprite: {fileID: 0}
   doneSprite: {fileID: 21300000, guid: 51ff474d6d23d7248831beea47ba6111, type: 3}
   iconSprite: {fileID: 21300000, guid: cbcd8c52a2790444eb2f425872c24b82, type: 3}
-  cropTimer: 900
-  cropCost: 45
-  cropReward: 65
-  expReward: 15
+  cropTimer: 7200
+  cropCost: 75
+  cropReward: 113
+  expReward: 2
   cropName: Daffodil
   reqLvl: 11
   seedIsOnGround: 0
