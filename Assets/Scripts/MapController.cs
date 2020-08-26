@@ -11,6 +11,13 @@ public class MapController : MonoBehaviour
     {
         instance = this;
     }
+    private void Update()
+    {
+        if (!overMap)
+        {
+            MenuController.instance.previewObstructed = true;
+        }
+    }
 
     private void OnMouseOver()
     {

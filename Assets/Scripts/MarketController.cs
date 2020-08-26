@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MarketController : MonoBehaviour
 {
+    public static MarketController instance;
     public GameObject market;
     private bool marketOpen;
     public Text coinText;
@@ -28,7 +29,8 @@ public class MarketController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
+        instance = this;
     }
 
     // Update is called once per frame
@@ -42,6 +44,11 @@ public class MarketController : MonoBehaviour
         {
             backButton.SetActive(true);
         }
+    }
+
+    public void Test()
+    {
+        Debug.Log("test");
     }
 
     public void ActivateMarket()
@@ -152,6 +159,7 @@ public class MarketController : MonoBehaviour
     {
         PlayerInteraction.instance.SetCrop(new Crop(cropAssetList[cropNumber]));
         FindObjectOfType<AudioManager>().PlaySound("Buy Button");
+        MenuController.instance.hasSeed = true;
 
     }
 

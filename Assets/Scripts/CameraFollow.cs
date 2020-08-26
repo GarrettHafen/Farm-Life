@@ -1,10 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    //brackeys code
+    
+
+
+    /* old code monkey code, jittery and starts wierd. 
     private Camera myCamera;
     private Func<Vector3> GetCameraFollowPositionFunc;
     private Func<float> GetCameraZoomFunc;
@@ -34,7 +38,7 @@ public class CameraFollow : MonoBehaviour
     void Update()
     {
         HandleMovement();
-        HandleZoom();
+        //HandleZoom();
         
     }
 
@@ -85,6 +89,6 @@ public class CameraFollow : MonoBehaviour
                 myCamera.orthographicSize = cameraZoom;
             }
         }
-    }
+    }*/
 
 }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 public class GameHandler : MonoBehaviour
 {
@@ -45,8 +41,8 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         instance = this;
-        cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
-        cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
+        //cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
+        //cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
 
        
 
@@ -55,13 +51,15 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        /*
         float moveAmount = 3f;
         float edgeSize = 10f;
-
+        
         HandleManualMovement(moveAmount);
         HandleScreenEdges(edgeSize, moveAmount);
         HandleZoom();
-
+        */
 
         if (!landingPageOpen)
         {
@@ -79,10 +77,13 @@ public class GameHandler : MonoBehaviour
             }
         }
 
+        
+
 
 
     }
 
+    /* old code
     private void HandleZoom()
     {
         float zoomChangeAmount = .25f;
@@ -184,6 +185,7 @@ public class GameHandler : MonoBehaviour
             zoom = 5f;
         }
     }
+    */
 
     //disable and enable gameplay if mouse is hovered over menu
     public void DisableTool()
@@ -289,7 +291,7 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-
+    
     
 
 

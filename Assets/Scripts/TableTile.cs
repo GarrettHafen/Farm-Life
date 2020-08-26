@@ -21,7 +21,7 @@ public class TableTile : MonoBehaviour
 	{
 		player.SetCrop(crop);
 		crop = c;
-		player.SetTool(tool);
+		//player.SetTool(tool);
 		tool = t;
 
 		if (tool != null)

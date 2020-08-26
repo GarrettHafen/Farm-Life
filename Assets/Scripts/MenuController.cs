@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor.Experimental.UIElements.GraphView;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class MenuController : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class MenuController : MonoBehaviour
     public GameObject menuToAnimate;
     public GameObject notificationBar;
     public Text notifcationText;
-    public Texture2D plow;
+    //public Texture2D plow;
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
     public Color errorRed = new Color(255, 255, 255); 
@@ -20,22 +22,54 @@ public class MenuController : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject saveOrQuitPanel;
 
+    //variables to handle preview
+    private Transform mouseyThingy = null;
+    private SpriteRenderer mouseyThingySprite;
+    public bool previewObstructed = false;
+    public bool previewActive;
+    private Grid grid;
+    public GameObject preview;
+    public GameObject placeablePreview;
+    public float xOffset, yOffset;
+
+    public Tool plow;
+    public bool plowActive = false;
+    public bool hasSeed = false;
+
+    public Image handIndicator;
+    public GameObject handIndicatorParent;
+
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
+
         //ResetTool();
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
-        
-        //SceneManager.LoadScene("LandingPage");
-        
+
+        grid = Grid.FindObjectOfType<Grid>();
+       
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (mouseyThingy != null)
+        {
+            if (mouseyThingy.gameObject.activeInHierarchy)
+            {
+                //using grid to provide for isometric design 
+                Vector3 screenToWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
+                Vector3Int worldToCell = grid.WorldToCell(screenToWorld);
+                mouseyThingy.position = new Vector3(grid.GetCellCenterWorld(worldToCell).x + xOffset, grid.GetCellCenterWorld(worldToCell).y + yOffset, 9f);
+                //placeablePreview for when we need to place animals, trees or decorations. 
+            }
+        }
+
     }
+
+    
 
     public void AnimateMenu()
     {
@@ -65,26 +99,21 @@ public class MenuController : MonoBehaviour
         Cursor.SetCursor(cursorToBe, hotSpot, cursorMode);
     }
 
+    /*
     public void ResetTool()
     {
         Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
         PlayerInteraction.instance.SetTool(null);
+        MarketController.instance.hasSeed = false;
     }
 
+    
     public void SetTool(Tool t)
     {
         if (PlayerInteraction.instance.GetTool() == t)
         {
-            if (PlayerInteraction.instance.GetTool().toolType == ToolType.Market)
-            {
-                //this excellent but inelegant code is to prevent buying different seeds one after another from
-                //reseting the market tool causing every other s
-            }
-            else { 
-                ResetTool();
-                FindObjectOfType<AudioManager>().PlaySound("Click");
-            }
-
+            ResetTool();
+            FindObjectOfType<AudioManager>().PlaySound("Click");
         }
         else
         {
@@ -92,12 +121,14 @@ public class MenuController : MonoBehaviour
             FindObjectOfType<AudioManager>().PlaySound("Click");
         }
     }
+   
     public void SetSeed(SeedBarrel c)//not used?
     {
         Crop tempCrop = c.crop;
         PlayerInteraction.instance.SetCrop(new Crop(tempCrop.asset));
         FindObjectOfType<AudioManager>().PlaySound("Seed");
     }
+    */
 
     public void OpenSettings()
     {
@@ -154,4 +185,79 @@ public class MenuController : MonoBehaviour
         GameMaster.instance.MuteAudio();
         //mute sounds
     }
+
+    public void ActivatePreview()
+    {
+        
+        mouseyThingy = ((GameObject)preview).transform;
+        mouseyThingy.gameObject.SetActive(true);
+        preview.SetActive(true);
+        previewActive = true;
+    }
+    public void DestroyPreview()
+    {
+        if (mouseyThingy)
+        {
+            mouseyThingy.gameObject.SetActive(false);
+            previewActive = false;
+            preview.SetActive(false);
+        }
+    }
+
+    public bool GetMouseyThingy()
+    {
+        if (mouseyThingy != null)
+        {
+            if (mouseyThingy.gameObject.activeInHierarchy)
+            {
+                return true;
+            }
+            else return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public Vector3 GetMouseyThingyPosition()
+    {
+        return mouseyThingy.position;
+    }
+    public void SetPreviewColor(Sprite color)
+    {
+        mouseyThingySprite = preview.GetComponent<SpriteRenderer>();
+
+        mouseyThingySprite.sprite = color;
+    }
+
+    public void ActivatePlow()
+    {
+        plowActive = !plowActive;
+    }
+    public void DeactivatePlow()
+    {
+        plowActive = false;
+
+    }
+    public void DisplayInventory()
+    {
+        handIndicatorParent.SetActive(true);
+
+        if (MenuController.instance.plowActive)
+        {
+            handIndicator.sprite = MenuController.instance.plow.sprite;
+        }
+        else if (hasSeed)
+        {
+            handIndicator.sprite = PlayerInteraction.instance.GetCrop().asset.iconSprite;
+        }
+    }
+
+    public void ClearHand()
+    {
+        handIndicatorParent.SetActive(false);
+        hasSeed = false;
+        plowActive = false;
+    }
+
 }

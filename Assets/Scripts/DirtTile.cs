@@ -15,8 +15,6 @@ public class DirtTile : MonoBehaviour
 	public string onGroundLayer;
 	public string normalCropLayer;
 
-	public bool hasCrow = false;
-
 	private void Start()
 	{
 		//for testing if the sprites worked 6/29/2020
@@ -25,33 +23,37 @@ public class DirtTile : MonoBehaviour
 		instance = this;
 	}
 
-	public void Interact (Crop c, Tool t, PlayerInteraction player, DirtTile dirt)
+	public void Interact (Crop c, /*Tool t, */PlayerInteraction player, DirtTile dirt)
 	{
-		if (t != null)
+		if (MenuController.instance.hasSeed && c.HasCrop())
 		{
-			if (t.toolType == ToolType.Plow && needsPlowing)
+			if (!needsPlowing)
+				PlantSeed(c, player, dirt);
+			else
 			{
-				Plow();
-
-			}else if(t.toolType == ToolType.Market && c.HasCrop())
-            {
-				if (!needsPlowing)
-					PlantSeed(c, player, dirt);
-				else
-				{
-					Debug.Log("Ground needs plowing!");
-					MenuController.instance.notificationBar.SetActive(false);
-					MenuController.instance.AnimateNotifcation("Ground needs plowing!", Color.red, "Error");
-				}
-				return;
-
-			}else if(t.toolType == ToolType.Harvest && dirt.crop.HasCrop())
-            {
-				HarvestCrop(player);
-            }
-
+				Debug.Log("Ground needs plowing!");
+				MenuController.instance.notificationBar.SetActive(false);
+				MenuController.instance.AnimateNotifcation("Ground needs plowing!", Color.red, "Error");
+			}
 			return;
+
 		}
+		if (/*t.toolType == ToolType.Plow &&*/ needsPlowing)
+		{
+			Plow();
+
+		}
+        else if (!needsPlowing && !dirt.crop.HasCrop())
+        {
+			
+			MarketController.instance.ActivateMarket();
+        }
+		else if (/*t.toolType == ToolType.Harvest &&*/ dirt.crop.HasCrop() && dirt.crop.state == CropState.Done)
+		{
+			HarvestCrop(player);
+		}
+
+		return;
 	}
 
 	void PlantSeed (Crop c, PlayerInteraction player, DirtTile dirt)
@@ -88,6 +90,10 @@ public class DirtTile : MonoBehaviour
 			needsPlowing = true;
 			AddDirt();
 			FindObjectOfType<AudioManager>().PlaySound("Harvest");
+            if (PlayerInteraction.instance.timer.gameObject.activeInHierarchy)
+            {
+				PlayerInteraction.instance.timer.slider.gameObject.SetActive(false);
+            }
 		}
 	}
 

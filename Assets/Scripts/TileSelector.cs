@@ -12,8 +12,8 @@ public class TileSelector : MonoBehaviour
     public GridLayout grid;
 
     public Tilemap tilemapGround;
-    private List<Vector3> availablePlaces;
-    private List<Vector3Int> localPlaces;
+    private List<Vector3> availablePlaces; //transform
+    private List<Vector3Int> localPlaces; //grid
     private int intendedPlotPosition;
     public List<int> currentPlotPositionsActive = new List<int>();
 
@@ -26,24 +26,23 @@ public class TileSelector : MonoBehaviour
 
     void Start() //-----------------------------------------------------------------------
     {
-        //testing
-
-
-        //testing
-
         instance = this;
         SetupGrid();
 
         
 
-        for (int i = 0; i < availablePlaces.Count; i++)
-        {
-            PlacePlot(availablePlaces[i]);
+        //for (int i = 0; i < availablePlaces.Count; i++)
+        //{
+        //    PlacePlot(availablePlaces[i]);
 
-        }
+        //}
         
         //used for writing info to a file
         //WriteGridToFile();
+    }
+    private void Update()
+    {
+        
     }
 
     public void GetPlotPosition()
@@ -109,19 +108,19 @@ public class TileSelector : MonoBehaviour
         //FindObjectOfType<AudioManager>().PlaySound("Plow");
     }
 
-    private void PlacePlot(Vector3 plotPosition)
+    public void PlacePlot(Vector3 plotPosition)
     {
         //this is for creating all the plots and setting them as inactive until the player wants to activate them.
         /*GOOD STUFF DON'T DELETE*/
 
-        //add .5 for some reason i don't understand
-        plotPosition.y += .5f;
+        //minus .25 for some reason i don't understand
+        plotPosition.y -= .25f;
         GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); //changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
         //GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject; // this code wouldn't build?
         //tempPlot.transform.position = plotPosition; // related to the above line
         tempPlot.name = "Plot: " + num;
         num++;
-        tempPlot.SetActive(false);
+        tempPlot.SetActive(true);
         tempPlot.transform.SetParent(plotParent.transform);
         plots.Add(tempPlot);
 
@@ -130,7 +129,6 @@ public class TileSelector : MonoBehaviour
 
 
     }
-
 
     private void SetupGrid()
     {
@@ -141,7 +139,7 @@ public class TileSelector : MonoBehaviour
         int i = 0;
         for (int xx = 0; xx < tilemapGround.cellBounds.xMax; xx++)
         {
-            for (int yy = 0; yy >= tilemapGround.cellBounds.yMin; yy--)
+            for (int yy = 0; yy > tilemapGround.cellBounds.yMin; yy--)
             {
                 Vector3Int localPlace = (new Vector3Int(xx, yy, (int)tilemapGround.transform.position.y));
                 Vector3 place = tilemapGround.CellToLocal(localPlace);
@@ -153,6 +151,7 @@ public class TileSelector : MonoBehaviour
                 }
             }
         }
+        Debug.Log("Grid Setup Complete");
     }
 
     private void WriteGridToFile()
@@ -174,14 +173,35 @@ public class TileSelector : MonoBehaviour
             count++;
             writer.WriteLine("Available place #" + count + ": " + element);
         }
-        count = 0;
-        foreach(GameObject element in plots)
+        //count = 0;
+        /* obsolete
+         * foreach(GameObject element in plots)
         {
             count++;
             writer.WriteLine("Plot: " + count + " at loctaion: " + element.transform.position);
         }
+        */
         writer.Close();
         Debug.Log("file created");
         /*--------------------------------------------------------------------*/
     }
+
+
+    /*
+    private void GetPreviewArea()
+    {
+        //get mouse position
+        Vector3 mousePos = Input.mousePosition;
+        int tempAvailablePlace;
+        
+
+
+        DetectCollisions();
+    }
+
+    private void DetectCollisions()
+    {
+
+    }
+    */
 }
