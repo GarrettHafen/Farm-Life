@@ -36,6 +36,9 @@ public class MenuController : MonoBehaviour
     public bool plowActive = false;
     public bool hasSeed = false;
 
+    public bool fireTool = false;
+    public Sprite fireToolSprite;
+
     public Image handIndicator;
     public GameObject handIndicatorParent;
 
@@ -251,6 +254,10 @@ public class MenuController : MonoBehaviour
         {
             handIndicator.sprite = PlayerInteraction.instance.GetCrop().asset.iconSprite;
         }
+        else if (fireTool)
+        {
+            handIndicator.sprite = fireToolSprite;
+        }
     }
 
     public void ClearHand()
@@ -258,6 +265,12 @@ public class MenuController : MonoBehaviour
         handIndicatorParent.SetActive(false);
         hasSeed = false;
         plowActive = false;
+        fireTool = false;
+    }
+
+    public void SetFireTool()
+    {
+        fireTool = !fireTool;
     }
 
 }

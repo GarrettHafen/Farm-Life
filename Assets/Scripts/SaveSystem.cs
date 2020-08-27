@@ -35,9 +35,9 @@ public static class SaveSystem
         }
         else
         {
-            foreach (System.IO.FileInfo thingy in files)
+            foreach (FileInfo thingy in files)
             {
-                DateTime temp1 = System.IO.File.GetLastWriteTime(thingy.ToString());
+                DateTime temp1 = File.GetLastWriteTime(thingy.ToString());
                 if (temp1 < temp2)
                 {
                     temp2 = temp1;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameHandler : MonoBehaviour
 {
@@ -204,6 +205,70 @@ public class GameHandler : MonoBehaviour
         StatsController.instance.SetCoins(data.coins);
         StatsController.instance.SetExp(data.exp);
         StatsController.instance.UpdateStats();
+
+        //destroy all objects, clear plots array
+        if (TileSelector.instance.plots.Count > 0)
+        {
+            DirtTile.instance.DestroyPlots();
+            TileSelector.instance.num = 0;
+        }
+        
+
+        //instantiate plots, add to array, set details
+        for (int i = 0; i < data.numActive; i++)
+        {
+            Vector3 newPlotPosition = new Vector3(data.plotPositionX[i], data.plotPositionY[i], 9);
+            TileSelector.instance.PlacePlot(newPlotPosition);
+            //PlacePlot should add to new array.
+
+            //get dirt object of newly instantiated plot
+            DirtTile dirt = TileSelector.instance.plots[i].GetComponent<DirtTile>();
+            if (data.activeCropNames[i] != null) //if activeCropNames is null, add blank crop
+            {
+                for (int j = 0; j < cropsList.Count; j++) // loop through entire crops list
+                {
+                    if (cropsList[j] != null) // if crops list item is null, might could remove when list = 100
+                    {
+                        if (data.activeCropNames[i] == cropsList[j].cropName) // if strings match, add as new crop
+                        {
+                            dirt.crop = new Crop(cropsList[j]);
+
+                            //calc time that has passed since save and apply to growth timer
+                            dirt.crop.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, dirt.crop.asset.cropTimer, dirt));
+                            //set crop state and update sprites
+                            dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
+                            dirt.crop.GetCropSprite();
+                            dirt.UpdateSprite();
+
+                            //set needs plowing
+                            dirt.needsPlowing = data.needsPlowing[i];
+                            break; // this might be needed for performance because the list
+                        }
+                    }
+                }
+            }
+            else
+            {
+                    
+                dirt.crop = new Crop(null);
+                dirt.crop.SetGrowthLvl(data.activeTimers[i]);
+                dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
+                dirt.needsPlowing = data.needsPlowing[i];
+                if (dirt.needsPlowing)// if needs plowing is true, then show fallow
+                {
+                    dirt.AddDirt();
+                }
+            }
+        }
+
+        //instantiate trees, add to array, set details
+
+        //instantiate animals, add to array, set details
+
+        //instantiate decor, add to array, set details
+
+
+        /* old code
         //deactivate all current plots
         for (int j = 0; j < TileSelector.instance.currentPlotPositionsActive.Count; j++)
         {
@@ -265,6 +330,7 @@ public class GameHandler : MonoBehaviour
                 dirt.UpdateSprite();
             }
         }
+        */
 
         Debug.Log("Data Loaded");
         MenuController.instance.notificationBar.SetActive(false);

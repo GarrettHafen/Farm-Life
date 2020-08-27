@@ -20,11 +20,14 @@ public class PlayerInteraction : MonoBehaviour
 
     public GameObject mouseyCompanion;
 	public SpriteRenderer mouseyCompanionImage;
-	public Sprite harvestToolSprite, marketToolSprite, plowToolSprite;
+	public Sprite harvestToolSprite, marketToolSprite, plowToolSprite, fireToolSprite;
 	public float mouseyOffset;
 
 	public Sprite redPreview;
 	public Sprite greenPreview;
+
+	//public GameObject plot;
+
 
 
 	private void Start()
@@ -133,7 +136,7 @@ public class PlayerInteraction : MonoBehaviour
 					mouseyCompanionImage.sprite = plowToolSprite;
 					mouseyCompanion.gameObject.SetActive(true);
 				}
-                if (!temp.needsPlowing && !MenuController.instance.hasSeed && temp.crop.state == CropState.Seed)
+                if (!temp.needsPlowing && !MenuController.instance.hasSeed && temp.crop.state == CropState.Seed && !MenuController.instance.fireTool)
                 {
 					//display market tool
 					Vector3 m = Input.mousePosition;
@@ -149,8 +152,16 @@ public class PlayerInteraction : MonoBehaviour
 					Vector3 p = Camera.main.ScreenToWorldPoint(m);
 					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
 					mouseyCompanionImage.sprite = crop.asset.iconSprite;
-                    //mouseyCompanionImage.sprite.pixelsPerUnit = 3500f;
 					mouseyCompanion.gameObject.SetActive(true);
+				}
+                if (MenuController.instance.fireTool)
+                {
+                    //display destroy icon
+					Vector3 m = Input.mousePosition;
+					Vector3 p = Camera.main.ScreenToWorldPoint(m);
+					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
+					mouseyCompanion.gameObject.SetActive(true);
+					mouseyCompanionImage.sprite = fireToolSprite;
 				}
 			}
         }
@@ -182,6 +193,7 @@ public class PlayerInteraction : MonoBehaviour
 						timer.slider.gameObject.SetActive(false);
                     }
 					target = hit.collider.gameObject;
+					mouseyCompanionImage.sprite = null;
 					MapController.instance.overMap = true;
 				}
 			}
@@ -201,6 +213,8 @@ public class PlayerInteraction : MonoBehaviour
             {
 				Deselect();
             }
+
+        
 	}
 
 	public void SetCrop(Crop c)

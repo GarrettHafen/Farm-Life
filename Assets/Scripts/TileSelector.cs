@@ -14,14 +14,14 @@ public class TileSelector : MonoBehaviour
     public Tilemap tilemapGround;
     private List<Vector3> availablePlaces; //transform
     private List<Vector3Int> localPlaces; //grid
-    private int intendedPlotPosition;
-    public List<int> currentPlotPositionsActive = new List<int>();
+    private int intendedPlotPosition; //obsolete
+    public List<int> currentPlotPositionsActive = new List<int>(); //obsolete
 
     public GameObject plot;
     public List<GameObject> plots;
     public GameObject plotParent;
-    private int num = 0;
-    //public bool plowActive;
+    public int num = 0;
+
 
 
     void Start() //-----------------------------------------------------------------------
@@ -42,7 +42,13 @@ public class TileSelector : MonoBehaviour
     }
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            foreach(GameObject thingy in plots)
+            {
+                Debug.Log(thingy);
+            }
+        }
     }
 
     public void GetPlotPosition()

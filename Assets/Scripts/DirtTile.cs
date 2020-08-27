@@ -43,7 +43,7 @@ public class DirtTile : MonoBehaviour
 			Plow();
 
 		}
-        else if (!needsPlowing && !dirt.crop.HasCrop())
+        else if (!needsPlowing && !dirt.crop.HasCrop() && !MenuController.instance.fireTool)
         {
 			
 			MarketController.instance.ActivateMarket();
@@ -52,6 +52,11 @@ public class DirtTile : MonoBehaviour
 		{
 			HarvestCrop(player);
 		}
+        else if (MenuController.instance.fireTool)
+        {
+            //need confirmation message
+			DestroyPlot(dirt);
+        }
 
 		return;
 	}
@@ -97,7 +102,7 @@ public class DirtTile : MonoBehaviour
 		}
 	}
 
-	void AddDirt()
+	public void AddDirt()
 	{
 		overlay.sprite = fallowed;
 		overlay.sortingLayerName = onGroundLayer;
@@ -155,5 +160,38 @@ public class DirtTile : MonoBehaviour
 			Plow();
         }
     }
+
+    public void DestroyPlot(DirtTile plotToDestroy)
+    {
+		overlay.sprite = null;
+		needsPlowing = false;
+        crop = new Crop(null);
+        foreach(GameObject plot in TileSelector.instance.plots)
+        {
+            if (plot.Equals(plotToDestroy.gameObject))
+            {
+				TileSelector.instance.plots.Remove(plot);
+				Debug.Log("element removed");
+				break;
+            }
+        }
+		Object.Destroy(plotToDestroy.gameObject);
+    }
+	public void DestroyPlots()
+	{
+		overlay.sprite = null;
+		needsPlowing = false;
+		crop = new Crop(null);
+		int temp = TileSelector.instance.plots.Count;
+		foreach (GameObject plot in TileSelector.instance.plots)
+		{
+			Object.Destroy(plot);
+			
+		}
+		for(int i = 0; i < temp; i++)
+        {
+			TileSelector.instance.plots.Remove(TileSelector.instance.plots[i]);
+        }
+	}
 
 }
