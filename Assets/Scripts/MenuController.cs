@@ -28,7 +28,10 @@ public class MenuController : MonoBehaviour
     public bool previewObstructed = false;
     public bool previewActive;
     private Grid grid;
-    public GameObject preview;
+    public GameObject preview4x4;
+    public GameObject preview1x1;
+    public GameObject preview2x1;
+    public GameObject previewParent;
     public GameObject placeablePreview;
     public float xOffset, yOffset;
 
@@ -41,6 +44,8 @@ public class MenuController : MonoBehaviour
 
     public Image handIndicator;
     public GameObject handIndicatorParent;
+
+    public bool hasTree = false;
 
     // Start is called before the first frame update
     void Start()
@@ -102,37 +107,6 @@ public class MenuController : MonoBehaviour
         Cursor.SetCursor(cursorToBe, hotSpot, cursorMode);
     }
 
-    /*
-    public void ResetTool()
-    {
-        Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
-        PlayerInteraction.instance.SetTool(null);
-        MarketController.instance.hasSeed = false;
-    }
-
-    
-    public void SetTool(Tool t)
-    {
-        if (PlayerInteraction.instance.GetTool() == t)
-        {
-            ResetTool();
-            FindObjectOfType<AudioManager>().PlaySound("Click");
-        }
-        else
-        {
-            PlayerInteraction.instance.SetTool(t);
-            FindObjectOfType<AudioManager>().PlaySound("Click");
-        }
-    }
-   
-    public void SetSeed(SeedBarrel c)//not used?
-    {
-        Crop tempCrop = c.crop;
-        PlayerInteraction.instance.SetCrop(new Crop(tempCrop.asset));
-        FindObjectOfType<AudioManager>().PlaySound("Seed");
-    }
-    */
-
     public void OpenSettings()
     {
         settingsMenu.SetActive(true);
@@ -189,13 +163,14 @@ public class MenuController : MonoBehaviour
         //mute sounds
     }
 
-    public void ActivatePreview()
+    public void ActivatePreview(GameObject preview)
     {
         
         mouseyThingy = ((GameObject)preview).transform;
         mouseyThingy.gameObject.SetActive(true);
         preview.SetActive(true);
         previewActive = true;
+        previewParent.SetActive(true);
     }
     public void DestroyPreview()
     {
@@ -203,7 +178,7 @@ public class MenuController : MonoBehaviour
         {
             mouseyThingy.gameObject.SetActive(false);
             previewActive = false;
-            preview.SetActive(false);
+            previewParent.SetActive(false);
         }
     }
 
@@ -226,7 +201,7 @@ public class MenuController : MonoBehaviour
     {
         return mouseyThingy.position;
     }
-    public void SetPreviewColor(Sprite color)
+    public void SetPreviewColor(Sprite color, GameObject preview)
     {
         mouseyThingySprite = preview.GetComponent<SpriteRenderer>();
 
@@ -244,6 +219,7 @@ public class MenuController : MonoBehaviour
     }
     public void DisplayInventory()
     {
+        handIndicator.sprite = null;
         handIndicatorParent.SetActive(true);
 
         if (MenuController.instance.plowActive)
@@ -258,12 +234,17 @@ public class MenuController : MonoBehaviour
         {
             handIndicator.sprite = fireToolSprite;
         }
+        else if (hasTree)
+        {
+            handIndicator.sprite = PlayerInteraction.instance.GetTree().asset.treeIconSprite;
+        }
     }
 
     public void ClearHand()
     {
         handIndicatorParent.SetActive(false);
         hasSeed = false;
+        hasTree = false;
         plowActive = false;
         fireTool = false;
     }

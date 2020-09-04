@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +21,8 @@ public class MarketController : MonoBehaviour
     public List<CropAsset> cropAssetList;
     public List<Image> cropLockedList;
 
+    public List<TreeAsset> treeAssetList;
+
     public GameObject cropCell;
     private int pageNumber;
     private int cellNumber = 0;
@@ -26,6 +30,8 @@ public class MarketController : MonoBehaviour
     
     public GameObject backButton;
     public GameObject forwardButton;
+
+    public MarketState marketState;
 
     // Start is called before the first frame update
     void Start()
@@ -89,7 +95,6 @@ public class MarketController : MonoBehaviour
             10  82  83  84  85  86  87  88  89  90*/
 
         pageNumber += 9;
-        cellNumber = 0;
         PopulateMarket();
         FindObjectOfType<AudioManager>().PlaySound("Page Turn");
     }
@@ -100,7 +105,6 @@ public class MarketController : MonoBehaviour
         if(pageNumber > 1)
         { 
             pageNumber -= 9;
-            cellNumber = 0;
             PopulateMarket();
             FindObjectOfType<AudioManager>().PlaySound("Page Turn");
         }
@@ -110,56 +114,128 @@ public class MarketController : MonoBehaviour
     public void PopulateMarket()
     {
         cropAssetList.Clear();
+        treeAssetList.Clear();
+        cellNumber = 0;
         forwardButton.SetActive(true);
         //based on page number, populate those crops on the market page.
         //should always start with one
         //------------------------need to eventually handle unavialable crops due to level------------------------
         for (int i = pageNumber; i < pageNumber + 9; i++)
         {
-
-            if (GameHandler.instance.cropsList[i] != null && GameHandler.instance.cropsList[i].reqLvl <= StatsController.instance.GetLvl())
-            {
-                cropLockedList[cellNumber].gameObject.SetActive(false);
-                cropNameList[cellNumber].text = GameHandler.instance.cropsList[i].cropName;
-                cropNameList[cellNumber].gameObject.SetActive(true);
-                cropCostList[cellNumber].text = GameHandler.instance.cropsList[i].cropCost.ToString();
-                cropCostList[cellNumber].gameObject.SetActive(true);
-                cropYieldList[cellNumber].text = GameHandler.instance.cropsList[i].cropReward.ToString();
-                cropYieldList[cellNumber].gameObject.SetActive(true);
-                cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.cropsList[i].cropTimer);
-                cropTimeList[cellNumber].gameObject.SetActive(true);
-                cropExpList[cellNumber].text = GameHandler.instance.cropsList[i].expReward.ToString();
-                cropExpList[cellNumber].gameObject.SetActive(true);
-                cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
-                cropImageList[cellNumber].sprite = GameHandler.instance.cropsList[i].iconSprite;
-                cropImageList[cellNumber].gameObject.SetActive(true);
-                cropAssetList.Add(GameHandler.instance.cropsList[i]);
-                cellNumber++;
-            }
-            else
-            {
-                cropLockedList[cellNumber].gameObject.SetActive(true);
-                cropNameList[cellNumber].gameObject.SetActive(false);
-                cropCostList[cellNumber].gameObject.SetActive(false);
-                cropYieldList[cellNumber].gameObject.SetActive(false);
-                cropTimeList[cellNumber].gameObject.SetActive(false);
-                cropExpList[cellNumber].gameObject.SetActive(false);
-                cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
-                cropImageList[cellNumber].gameObject.SetActive(false);
-                cellNumber++;
+            switch (marketState) {
+                case MarketState.Crop:
+                    {
+                        if (GameHandler.instance.cropsList[i] != null && GameHandler.instance.cropsList[i].reqLvl <= StatsController.instance.GetLvl())
+                        {
+                            cropLockedList[cellNumber].gameObject.SetActive(false);
+                            cropNameList[cellNumber].text = GameHandler.instance.cropsList[i].cropName;
+                            cropNameList[cellNumber].gameObject.SetActive(true);
+                            cropCostList[cellNumber].text = GameHandler.instance.cropsList[i].cropCost.ToString();
+                            cropCostList[cellNumber].gameObject.SetActive(true);
+                            cropYieldList[cellNumber].text = GameHandler.instance.cropsList[i].cropReward.ToString();
+                            cropYieldList[cellNumber].gameObject.SetActive(true);
+                            cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.cropsList[i].cropTimer);
+                            cropTimeList[cellNumber].gameObject.SetActive(true);
+                            cropExpList[cellNumber].text = GameHandler.instance.cropsList[i].expReward.ToString();
+                            cropExpList[cellNumber].gameObject.SetActive(true);
+                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
+                            cropImageList[cellNumber].sprite = GameHandler.instance.cropsList[i].iconSprite;
+                            cropImageList[cellNumber].gameObject.SetActive(true);
+                            cropAssetList.Add(GameHandler.instance.cropsList[i]);
+                            cellNumber++;
+                        }
+                        else
+                        {
+                            cropLockedList[cellNumber].gameObject.SetActive(true);
+                            
+                            if(GameHandler.instance.cropsList[i] == null)// this code probably only applies to an incomplete croplist
+                            {
+                                cropNameList[cellNumber].gameObject.SetActive(false);
+                            }
+                            else
+                            {
+                                cropNameList[cellNumber].gameObject.SetActive(true);
+                                cropNameList[cellNumber].text = "Unlocked at lvl: " + GameHandler.instance.cropsList[i].reqLvl.ToString();
+                            }
+                            
+                            cropCostList[cellNumber].gameObject.SetActive(false);
+                            cropYieldList[cellNumber].gameObject.SetActive(false);
+                            cropTimeList[cellNumber].gameObject.SetActive(false);
+                            cropExpList[cellNumber].gameObject.SetActive(false);
+                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
+                            cropImageList[cellNumber].gameObject.SetActive(false);
+                            cellNumber++;
+                        }
+                        if (GameHandler.instance.cropsList[pageNumber + 9] == null || GameHandler.instance.cropsList[pageNumber + 9].reqLvl > StatsController.instance.GetLvl())
+                        {
+                            forwardButton.SetActive(false);
+                        }
+                        break;
+                    }
+                case MarketState.Tree:
+                    {
+                        //populate tree stuff
+                        if (GameHandler.instance.treeList[i] != null && GameHandler.instance.treeList[i].reqLvl <= StatsController.instance.GetLvl())
+                        {
+                            cropLockedList[cellNumber].gameObject.SetActive(false);
+                            cropNameList[cellNumber].text = GameHandler.instance.treeList[i].name;
+                            cropNameList[cellNumber].gameObject.SetActive(true);
+                            cropCostList[cellNumber].text = GameHandler.instance.treeList[i].treeCost.ToString();
+                            cropCostList[cellNumber].gameObject.SetActive(true);
+                            cropYieldList[cellNumber].text = GameHandler.instance.treeList[i].treeReward.ToString();
+                            cropYieldList[cellNumber].gameObject.SetActive(true);
+                            cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.treeList[i].treeTimer);
+                            cropTimeList[cellNumber].gameObject.SetActive(true);
+                            cropExpList[cellNumber].text = GameHandler.instance.treeList[i].expReward.ToString();
+                            cropExpList[cellNumber].gameObject.SetActive(true);
+                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
+                            cropImageList[cellNumber].sprite = GameHandler.instance.treeList[i].treeIconSprite;
+                            cropImageList[cellNumber].gameObject.SetActive(true);
+                            treeAssetList.Add(GameHandler.instance.treeList[i]);
+                            cellNumber++;
+                        }
+                        else
+                        {
+                            cropLockedList[cellNumber].gameObject.SetActive(true);
+                            cropNameList[cellNumber].gameObject.SetActive(true);
+                            cropNameList[cellNumber].text = "Unlocked at lvl: " + GameHandler.instance.treeList[i].reqLvl.ToString();
+                            cropCostList[cellNumber].gameObject.SetActive(false);
+                            cropYieldList[cellNumber].gameObject.SetActive(false);
+                            cropTimeList[cellNumber].gameObject.SetActive(false);
+                            cropExpList[cellNumber].gameObject.SetActive(false);
+                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
+                            cropImageList[cellNumber].gameObject.SetActive(false);
+                            cellNumber++;
+                        }
+                        if (GameHandler.instance.treeList[pageNumber + 9] == null || GameHandler.instance.treeList[pageNumber + 9].reqLvl > StatsController.instance.GetLvl())
+                        {
+                            forwardButton.SetActive(false);
+                        }
+                        break;
+                    }
             }
         }
-        if (GameHandler.instance.cropsList[pageNumber+9] == null || GameHandler.instance.cropsList[pageNumber + 9].reqLvl > StatsController.instance.GetLvl())
-        {
-            forwardButton.SetActive(false);
-        }
+        
     }
 
-    public void SetSeed(int cropNumber)
+    public void SetSeed(int cropNumber)//sets trees and animals etc also
     {
-        PlayerInteraction.instance.SetCrop(new Crop(cropAssetList[cropNumber]));
+        switch (marketState)
+        {
+            case MarketState.Crop:
+                {
+                    PlayerInteraction.instance.SetCrop(new Crop(cropAssetList[cropNumber]));
+                    MenuController.instance.hasSeed = true;
+                    break;
+                }
+            case MarketState.Tree:
+                {
+                    PlayerInteraction.instance.SetTree(new Tree(treeAssetList[cropNumber]));
+                    MenuController.instance.hasTree = true;
+                    break;
+                }
+        }
         FindObjectOfType<AudioManager>().PlaySound("Buy Button");
-        MenuController.instance.hasSeed = true;
 
     }
 
@@ -192,14 +268,42 @@ public class MarketController : MonoBehaviour
                 return (minutes + " Minutes");
             }
         }
-        else
+       else
         { 
             return timeInSeconds + " Seconds";
             
         }
-
-        
-        
-
     }
+
+    public void SetMarketState(string input)
+    {
+        switch (input)
+        {
+            case "Crop":
+                marketState = MarketState.Crop;
+                pageNumber = 1;
+                break;
+            case "Tree":
+                marketState = MarketState.Tree;
+                pageNumber = 1;
+                break;
+        }
+        FindObjectOfType<AudioManager>().PlaySound("Click");
+    }
+
+    public void ComingSoon()
+    {
+        MenuController.instance.notificationBar.SetActive(false);
+        MenuController.instance.AnimateNotifcation("Coming Soon", Color.white, "Manual Save");
+        FindObjectOfType<AudioManager>().PlaySound("Click");
+    }
+}
+
+public enum MarketState
+{
+    Crop,
+    Tree,
+    Animal,
+    Decoration,
+    Expansion
 }

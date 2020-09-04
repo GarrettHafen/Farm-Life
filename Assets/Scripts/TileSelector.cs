@@ -18,9 +18,17 @@ public class TileSelector : MonoBehaviour
     public List<int> currentPlotPositionsActive = new List<int>(); //obsolete
 
     public GameObject plot;
+    public GameObject baseTree;
     public List<GameObject> plots;
+    public List<GameObject> trees;
     public GameObject plotParent;
-    public int num = 0;
+    public GameObject treeParent;
+    public int plotNum = 0;
+    public int treeNum = 0;
+
+    public Tree tree;
+
+    public float treeOffset;
 
 
 
@@ -124,14 +132,32 @@ public class TileSelector : MonoBehaviour
         GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); //changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
         //GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject; // this code wouldn't build?
         //tempPlot.transform.position = plotPosition; // related to the above line
-        tempPlot.name = "Plot: " + num;
-        num++;
+        tempPlot.name = "Plot: " + plotNum;
+        plotNum++;
         tempPlot.SetActive(true);
         tempPlot.transform.SetParent(plotParent.transform);
         plots.Add(tempPlot);
+    }
 
+    public void PlantTree(Vector3 mousePosition, Tree t, PlayerInteraction player)
+    {
+        Debug.Log("mouse: " + mousePosition);
+        Debug.Log("preview: " + MenuController.instance.preview1x1.transform.position);
+        mousePosition.y += 0.16f;
+        mousePosition.x += 0.023f;
+        GameObject tempTree = (GameObject)Instantiate(baseTree, mousePosition, transform.rotation);
+        tempTree.name = t.asset.name + treeNum;
+        treeNum++;
+        Debug.Log("Tree Planted: " + t.asset.name);
+        tempTree.SetActive(true);
+        tempTree.transform.SetParent(treeParent.transform);
+        trees.Add(tempTree);
+        tree = t;
+        player.SetTree(new Tree(t.asset));
+        TreeTile treeTile = tempTree.GetComponent<TreeTile>();
+        treeTile.tree = t;
 
-
+        FindObjectOfType<AudioManager>().PlaySound("Plow");
 
 
     }
@@ -192,22 +218,5 @@ public class TileSelector : MonoBehaviour
         /*--------------------------------------------------------------------*/
     }
 
-
-    /*
-    private void GetPreviewArea()
-    {
-        //get mouse position
-        Vector3 mousePos = Input.mousePosition;
-        int tempAvailablePlace;
-        
-
-
-        DetectCollisions();
-    }
-
-    private void DetectCollisions()
-    {
-
-    }
-    */
+    
 }

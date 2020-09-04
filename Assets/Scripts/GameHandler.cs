@@ -25,12 +25,13 @@ public class GameHandler : MonoBehaviour
     public Tool PlowTool;
 
     public List<CropAsset> cropsList;
+    public List<TreeAsset> treeList;
 
     private List<CropAsset> loadCropList = new List<CropAsset>();
 
     public bool landingPageOpen = true;
     public GameObject landingPage;
-
+    public GameObject baseTree;
 
 
     //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
@@ -210,7 +211,7 @@ public class GameHandler : MonoBehaviour
         if (TileSelector.instance.plots.Count > 0)
         {
             DirtTile.instance.DestroyPlots();
-            TileSelector.instance.num = 0;
+            TileSelector.instance.plotNum = 0;
         }
         
 

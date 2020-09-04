@@ -17,14 +17,17 @@ public class PlayerInteraction : MonoBehaviour
 	private Crop crop;
 	[SerializeField]
 	private Tool tool;
+	[SerializeField]
+	private Tree tree;
 
-    public GameObject mouseyCompanion;
+
+	public GameObject mouseyCompanion;
 	public SpriteRenderer mouseyCompanionImage;
 	public Sprite harvestToolSprite, marketToolSprite, plowToolSprite, fireToolSprite;
 	public float mouseyOffset;
 
-	public Sprite redPreview;
-	public Sprite greenPreview;
+	public Sprite redPreview4x4, greenPreview4x4, redPreview1x1, greenPreview1x1;
+
 
 	//public GameObject plot;
 
@@ -68,16 +71,31 @@ public class PlayerInteraction : MonoBehaviour
 					{
 						Debug.Log("cant place plot");
 						//error code
-						return;
+						//return;
 					}
+                    if(MenuController.instance.hasTree && !MenuController.instance.previewObstructed)
+                    {
+                        if (StatsController.instance.RemoveCoins(tree.GetCost()))
+                        {
+							TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this);
+                        }
+                    }
+					return;
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
+				Debug.Log("dirt: " + dirt);
 				if (dirt != null)
 				{					
 					dirt.Interact(crop, /*tool,*/ this, dirt);
 				}
-                //animal code
-                //tree code
+				//animal code
+				//tree code
+				TreeTile treeTile = target.GetComponent<TreeTile>();
+				Debug.Log("tree" + treeTile);
+                if(treeTile != null)
+                {
+					treeTile.Interact(tree, treeTile, this);
+                }
                 //decor code
 			}
 		}else if (Input.GetMouseButton(1))
@@ -90,81 +108,107 @@ public class PlayerInteraction : MonoBehaviour
 		//if plow tool active, display 4x4 preview
 		if (MenuController.instance.plowActive)
 		{
+			GameObject preview = MenuController.instance.preview4x4;
             if (!MenuController.instance.GetMouseyThingy())
             {
-				MenuController.instance.ActivatePreview();
+				MenuController.instance.ActivatePreview(preview);
             }
             if (MenuController.instance.previewObstructed)
             {
-				MenuController.instance.SetPreviewColor(redPreview);
+				MenuController.instance.SetPreviewColor(redPreview4x4, preview);
             }
             else
             {
-				MenuController.instance.SetPreviewColor(greenPreview);
+				MenuController.instance.SetPreviewColor(greenPreview4x4, preview);
             }
 		}
+        //display tree and preview
+        if(MarketController.instance.marketState == MarketState.Tree && MenuController.instance.hasTree)
+        {
+			GameObject preview = MenuController.instance.preview1x1;
+			if (!MenuController.instance.GetMouseyThingy())
+			{
+				MenuController.instance.ActivatePreview(preview);
+			}
+			if (MenuController.instance.previewObstructed)
+			{
+				MenuController.instance.SetPreviewColor(redPreview1x1, preview);
+			}
+			else
+			{
+				MenuController.instance.SetPreviewColor(greenPreview1x1, preview);
+			}
+		}
+
+        //display animal and preview
+
+        //display decoration and preview
 
 		//display timer if hovered over target
 		if (target != null && !MenuController.instance.previewActive)
 		{
-			DirtTile temp = target.GetComponent<DirtTile>();
-			if (temp)//code to prevent random errors when game starts
+			DirtTile tempDirt = target.GetComponent<DirtTile>();
+			if (tempDirt)//code to prevent random errors when game starts
 			{
-				if (temp.crop.HasCrop())
+				if (tempDirt.crop.HasCrop())
 				{
-					timer = temp.GetComponent<TimerController>();
+					timer = tempDirt.GetComponent<TimerController>();
 					timer.slider.gameObject.SetActive(true);
-					timer.SetTime(temp.crop.GetGrowthLvl());
-					timer.SetSprite(temp.crop.asset.iconSprite);
+					timer.SetTime(tempDirt.crop.GetGrowthLvl());
+					timer.SetSprite(tempDirt.crop.asset.iconSprite);
 
 				}
-                if(temp.crop.state == CropState.Done)
+                if(tempDirt.crop.state == CropState.Done)
                 {
 					//display harvest tool
-					Vector3 m = Input.mousePosition;
-					Vector3 p = Camera.main.ScreenToWorldPoint(m);
-					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
-					mouseyCompanionImage.sprite = harvestToolSprite;
-					mouseyCompanion.gameObject.SetActive(true);
+					DisplayMouseyCompanion(harvestToolSprite);
 				}
-                if (temp.needsPlowing)
+                if (tempDirt.needsPlowing)
                 {
 					//display plow tool
-					Vector3 m = Input.mousePosition;
-					Vector3 p = Camera.main.ScreenToWorldPoint(m);
-					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
-					mouseyCompanionImage.sprite = plowToolSprite;
-					mouseyCompanion.gameObject.SetActive(true);
+					DisplayMouseyCompanion(plowToolSprite);
+
+
 				}
-                if (!temp.needsPlowing && !MenuController.instance.hasSeed && temp.crop.state == CropState.Seed && !MenuController.instance.fireTool)
+                if (!tempDirt.needsPlowing && !MenuController.instance.hasSeed && tempDirt.crop.state == CropState.Seed && !MenuController.instance.fireTool)
                 {
 					//display market tool
-					Vector3 m = Input.mousePosition;
-					Vector3 p = Camera.main.ScreenToWorldPoint(m);
-					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
-					mouseyCompanionImage.sprite = marketToolSprite;
-					mouseyCompanion.gameObject.SetActive(true);
+					DisplayMouseyCompanion(marketToolSprite);
 				}
                 if (MenuController.instance.hasSeed)
                 {
                     //display seed to be planted
-					Vector3 m = Input.mousePosition;
-					Vector3 p = Camera.main.ScreenToWorldPoint(m);
-					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
-					mouseyCompanionImage.sprite = crop.asset.iconSprite;
-					mouseyCompanion.gameObject.SetActive(true);
+					DisplayMouseyCompanion(crop.asset.iconSprite);
 				}
                 if (MenuController.instance.fireTool)
                 {
                     //display destroy icon
-					Vector3 m = Input.mousePosition;
-					Vector3 p = Camera.main.ScreenToWorldPoint(m);
-					mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
-					mouseyCompanion.gameObject.SetActive(true);
-					mouseyCompanionImage.sprite = fireToolSprite;
+					DisplayMouseyCompanion(fireToolSprite);
 				}
 			}
-        }
+			TreeTile tempTree = target.GetComponent<TreeTile>();
+			if (tempTree)//code to prevent random errors when game starts
+			{
+				if (tempTree.tree.HasTree())
+				{
+					timer = tempTree.GetComponent<TimerController>();
+					timer.slider.gameObject.SetActive(true);
+					timer.SetTime(tempTree.tree.GetGrowthLvl());
+					timer.SetSprite(tempTree.tree.asset.treeIconSprite);
+
+				}
+				if (tempTree.tree.treeState == TreeState.Done)
+				{
+					//display harvest tool
+					DisplayMouseyCompanion(harvestToolSprite);
+				}
+				if (MenuController.instance.fireTool)
+				{
+					//display destroy icon
+					DisplayMouseyCompanion(fireToolSprite);
+				}
+			}
+		}
         else
         {
 			//default cursor. maybe
@@ -222,26 +266,29 @@ public class PlayerInteraction : MonoBehaviour
 		crop = c;
 		MenuController.instance.DisplayInventory();
 	}
-
-	/*
-    public void SetTool(Tool t)
-	{
-		tool = t;
-		DisplayInventory();
-		SetCrop(new Crop(null));
-		
-	}
-	public Tool GetTool()
+    public void SetTree(Tree t)
     {
-		return tool;
+		tree = t;
+		MenuController.instance.DisplayInventory();
     }
-    */
 	public Crop GetCrop()
     {
 		return crop;
     }
 
-    
+    public Tree GetTree()
+    {
+		return tree;
+    }
+
+    private void DisplayMouseyCompanion(Sprite sprite)
+    {
+		Vector3 m = Input.mousePosition;
+		Vector3 p = Camera.main.ScreenToWorldPoint(m);
+		mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
+		mouseyCompanionImage.sprite = sprite;
+		mouseyCompanion.gameObject.SetActive(true);
+	}
 
 	
 
@@ -256,6 +303,7 @@ public class PlayerInteraction : MonoBehaviour
 				timer.slider.gameObject.SetActive(false);
 			}
 			target = null;
+            timer = null;
         }
 
 	}
