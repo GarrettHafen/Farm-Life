@@ -34,18 +34,12 @@ public class GameHandler : MonoBehaviour
     public GameObject baseTree;
 
 
-    //plow pointer will be a hoe, default will be a gloved hand, harvest will be a scythe
-    //the planting pointer will be dependant on which seed is selected
-    public Texture2D plowPointer, defaultPointer, harvestPointer, plantingPointer;
-    //might not need all of these
+    TreeAsset tempTree;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-        //cameraFollowPostion = new Vector3(cameraFollowPostion.x + 4.5f, cameraFollowPostion.y + .5f, cameraFollowPostion.z);
-        //cameraFollow.Setup(() => cameraFollowPostion, () => zoom);
-
        
 
     }
@@ -53,15 +47,6 @@ public class GameHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        /*
-        float moveAmount = 3f;
-        float edgeSize = 10f;
-        
-        HandleManualMovement(moveAmount);
-        HandleScreenEdges(edgeSize, moveAmount);
-        HandleZoom();
-        */
 
         if (!landingPageOpen)
         {
@@ -85,109 +70,7 @@ public class GameHandler : MonoBehaviour
 
     }
 
-    /* old code
-    private void HandleZoom()
-    {
-        float zoomChangeAmount = .25f;
-        if (Input.GetKey(KeyCode.KeypadPlus))
-        {
-            zoom -= zoomChangeAmount;
-        }
-        if (Input.GetKey(KeyCode.KeypadMinus))
-        {
-            zoom += zoomChangeAmount;
-        }
-
-        if(Input.mouseScrollDelta.y > 0){
-            zoom -= zoomChangeAmount;
-        }
-        if(Input.mouseScrollDelta.y < 0)
-        {
-            zoom += zoomChangeAmount;
-        }
-        zoom = Mathf.Clamp(zoom, .5f, 5f);
-    }
-
-    private void HandleScreenEdges(float edgeSize, float moveAmount)
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            edgeScrolling = !edgeScrolling;
-            Debug.Log("Edge Scroll enabled: " + edgeScrolling);
-            MenuController.instance.notificationBar.SetActive(false);
-            MenuController.instance.AnimateNotifcation("Edge Scrolling Enabled", Color.white, "Error");
-        }
-        if (edgeScrolling)
-        {
-            if (Input.mousePosition.x > Screen.width - edgeSize)
-            {
-                cameraFollowPostion.x += moveAmount * Time.deltaTime;
-            }
-            if (Input.mousePosition.x < edgeSize)
-            {
-                cameraFollowPostion.x -= moveAmount * Time.deltaTime;
-            }
-            if (Input.mousePosition.y > Screen.height - edgeSize)
-            {
-                cameraFollowPostion.y += moveAmount * Time.deltaTime;
-            }
-            if (Input.mousePosition.y < edgeSize)
-            {
-                cameraFollowPostion.y -= moveAmount * Time.deltaTime;
-            }
-        }
-    }
-
-    private void HandleManualMovement(float moveAmount)
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            if (!CameraController.instance.atTopEdge) { 
-            cameraFollowPostion.y += moveAmount * Time.deltaTime;
-            }
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            if (!CameraController.instance.atBottomEdge)
-            {
-                cameraFollowPostion.y -= moveAmount * Time.deltaTime;
-            }
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            if (!CameraController.instance.atRightEdge)
-            {
-                cameraFollowPostion.x += moveAmount * Time.deltaTime;
-            }
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            if (!CameraController.instance.atLeftEdge)
-            {
-                cameraFollowPostion.x -= moveAmount * Time.deltaTime;
-            }
-        }
-    }
-
-    // for zoom buttons (obsolete)
-    public void ZoomIn()
-    {
-        zoom -= 1f;
-        if (zoom < .5f)
-        {
-            zoom = .5f;
-        }
-    }
-
-    public void ZoomOut()
-    {
-        zoom += 1f;
-        if (zoom > 5f)
-        {
-            zoom = 5f;
-        }
-    }
-    */
+    
 
     //disable and enable gameplay if mouse is hovered over menu
     public void DisableTool()
@@ -213,13 +96,18 @@ public class GameHandler : MonoBehaviour
             DirtTile.instance.DestroyPlots();
             TileSelector.instance.plotNum = 0;
         }
+        if (TileSelector.instance.trees.Count > 0)
+        {
+            TreeTile.instance.DestroyTrees();
+            TileSelector.instance.treeNum = 0;
+        }
         
 
         //instantiate plots, add to array, set details
-        for (int i = 0; i < data.numActive; i++)
+        for (int i = 0; i < data.cropsActive; i++)
         {
             Vector3 newPlotPosition = new Vector3(data.plotPositionX[i], data.plotPositionY[i], 9);
-            TileSelector.instance.PlacePlot(newPlotPosition);
+            TileSelector.instance.PlacePlot(newPlotPosition, new Vector3(0,0,0));
             //PlacePlot should add to new array.
 
             //get dirt object of newly instantiated plot
@@ -238,7 +126,7 @@ public class GameHandler : MonoBehaviour
                             dirt.crop.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, dirt.crop.asset.cropTimer, dirt));
                             //set crop state and update sprites
                             dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
-                            dirt.crop.GetCropSprite();
+                            dirt.crop.GetCropSprite();// ************************i don't know what this line does ************************
                             dirt.UpdateSprite();
 
                             //set needs plowing
@@ -263,6 +151,27 @@ public class GameHandler : MonoBehaviour
         }
 
         //instantiate trees, add to array, set details
+        
+        for (int i = 0; i < data.activeTreeNames.Length; i++) {
+            for (int j = 0; j < treeList.Count; j++)
+            {
+                if (data.activeTreeNames[i] == treeList[j].treeName)
+                {
+                    tempTree = treeList[j];
+                    break;
+                }
+            }
+        }
+        for(int i = 0; i < data.treesActive; i++)
+        {
+            Vector3 newTreePosition = new Vector3(data.treePositionX[i], data.treePositionY[i], 9);
+            TileSelector.instance.PlantTree(newTreePosition, new Tree(tempTree), PlayerInteraction.instance, new Vector3(0, 0, 0));
+            TreeTile treeTile = TileSelector.instance.trees[i].GetComponent<TreeTile>();
+            treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
+            treeTile.tree.treeState = treeTile.tree.GetState(data.activeTreeStates[i]);
+            treeTile.UpdateTreeSprite();
+
+        }
 
         //instantiate animals, add to array, set details
 
@@ -357,9 +266,27 @@ public class GameHandler : MonoBehaviour
             return temp + currentGrowthTime;
         }
     }
+    private float CalcTimePassed(float currentGrowthTime, DateTime oldTime, float cropTimeTotal)
+    {
+        float newTime;
+        TimeSpan difference = System.DateTime.Now.Subtract(oldTime);
+        newTime = (float)difference.TotalSeconds; // number of seconds that have passed since the save to the load.
+        //need to determine how many seconds from when the crop was planted, to the save, then add that to the difference
+        // from there need to figure out based on the growth time total, where its at. if its greater than 1, then its full grown. 
+        //and to future proof, need to also save the difference between new time and growth time to factor in weathering in the future. 
+        if (newTime >= cropTimeTotal)
+        {
+            return 1f;
+        }
+        else
+        {
+            float temp = newTime / cropTimeTotal;
+            return temp + currentGrowthTime;
+        }
+    }
 
-    
-    
+
+
 
 
 

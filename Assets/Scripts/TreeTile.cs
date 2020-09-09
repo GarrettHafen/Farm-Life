@@ -31,9 +31,13 @@ public class TreeTile : MonoBehaviour
 
     public void Interact(Tree t, TreeTile treeTile, PlayerInteraction player)
     {
-        if(treeTile.tree.HasTree() && treeTile.tree.treeState == TreeState.Done)
+        if(treeTile.tree.HasTree() && treeTile.tree.treeState == TreeState.Done && !MenuController.instance.fireTool)
         {
             HarvestTree(player);
+        }
+        if (MenuController.instance.fireTool)
+        {
+            treeTile.DestroyTree(treeTile);
         }
 
         //sell
@@ -63,7 +67,18 @@ public class TreeTile : MonoBehaviour
         Object.Destroy(treeToDestroy.gameObject);
     }
 
-    
+    public void DestroyTrees()
+    {
+        int temp = TileSelector.instance.trees.Count;
+        foreach (GameObject tree in TileSelector.instance.trees)
+        {
+            Object.Destroy(tree);
+        }
+        for(int i = 0; i < temp; i++)
+        {
+            TileSelector.instance.trees.Remove(TileSelector.instance.trees[i]);
+        }
+    }
 
     public void UpdateTreeSprite()
     {

@@ -122,13 +122,13 @@ public class TileSelector : MonoBehaviour
         //FindObjectOfType<AudioManager>().PlaySound("Plow");
     }
 
-    public void PlacePlot(Vector3 plotPosition)
+    public void PlacePlot(Vector3 plotPosition, Vector3 offset)
     {
         //this is for creating all the plots and setting them as inactive until the player wants to activate them.
         /*GOOD STUFF DON'T DELETE*/
 
         //minus .25 for some reason i don't understand
-        plotPosition.y -= .25f;
+        plotPosition.y -= offset.y;//.25f;
         GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); //changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
         //GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject; // this code wouldn't build?
         //tempPlot.transform.position = plotPosition; // related to the above line
@@ -139,16 +139,14 @@ public class TileSelector : MonoBehaviour
         plots.Add(tempPlot);
     }
 
-    public void PlantTree(Vector3 mousePosition, Tree t, PlayerInteraction player)
+    public void PlantTree(Vector3 mousePosition, Tree t, PlayerInteraction player, Vector3 offset)
     {
-        Debug.Log("mouse: " + mousePosition);
-        Debug.Log("preview: " + MenuController.instance.preview1x1.transform.position);
-        mousePosition.y += 0.16f;
-        mousePosition.x += 0.023f;
+        mousePosition.y += offset.y;//0.16f
+        mousePosition.x += offset.x; //0.023f;
         GameObject tempTree = (GameObject)Instantiate(baseTree, mousePosition, transform.rotation);
         tempTree.name = t.asset.name + treeNum;
         treeNum++;
-        Debug.Log("Tree Planted: " + t.asset.name);
+        //Debug.Log("Tree Planted: " + t.asset.name);
         tempTree.SetActive(true);
         tempTree.transform.SetParent(treeParent.transform);
         trees.Add(tempTree);
@@ -156,6 +154,7 @@ public class TileSelector : MonoBehaviour
         player.SetTree(new Tree(t.asset));
         TreeTile treeTile = tempTree.GetComponent<TreeTile>();
         treeTile.tree = t;
+        treeTile.UpdateTreeSprite();
 
         FindObjectOfType<AudioManager>().PlaySound("Plow");
 

@@ -13,54 +13,95 @@ public class PlayerData
     public int[] activePlots;           // **old code** becomes array of active plots with a size of numActive      
     public float[] plotPositionX;       // x position of a plot
     public float[] plotPositionY;       // y position of a plot
-    public string[] activeCropNames;        // current crop name attached to plot
+    public string[] activeCropNames;    // current crop name attached to plot
     public float[] activeTimers;        // current growth timer of the crop attached to a plot
     public string[] activeCropsStates;  // current crop state of the crop attached to a plot
     public bool[] needsPlowing;         // list of bools for if a plot needs plowing, to fix a bug where fallow plots were plowed on load
     public DateTime savedTime;          // time when the game is saved, used to calculate time passed when game is loaded
 
+    public int[] activeTrees;
+    public float[] treePositionX;
+    public float[] treePositionY;
+    public string[] activeTreeNames;
+    public float[] activeTreeTimers;
+    public string[] activeTreeStates;
 
     //private int numActive = TileSelector.instance.currentPlotPositionsActive.Count; // old count of plots currently existing, based on TileSelector.plots[] 
-    public int numActive; 
+    public int cropsActive;
+    public int treesActive;
     
 
     public PlayerData ()
     {
-        int counter = 0; //needed for the for each loop, seems dumb....
-        numActive = TileSelector.instance.plots.Count;
+
         savedTime = DateTime.Now;
         level = StatsController.instance.GetLvl();
         exp = StatsController.instance.GetExp();
         coins = StatsController.instance.GetCoins();
 
+
+        //save data for crops
+        int cropsCounter = 0; //needed for the for each loop, seems dumb....
+        cropsActive = TileSelector.instance.plots.Count;
+        
         //set size of arrays
-        plotPositionX = new float[numActive];
-        plotPositionY = new float[numActive];
-        activeCropNames = new string[numActive];
-        activeTimers = new float[numActive];
-        activeCropsStates = new string[numActive];
-        needsPlowing = new bool[numActive];
+        plotPositionX = new float[cropsActive];
+        plotPositionY = new float[cropsActive];
+        activeCropNames = new string[cropsActive];
+        activeTimers = new float[cropsActive];
+        activeCropsStates = new string[cropsActive];
+        needsPlowing = new bool[cropsActive];
 
         //----------------plots Array----------------
         foreach (GameObject plot in TileSelector.instance.plots)
         {
-            plotPositionX[counter] = plot.transform.position.x;
-            plotPositionY[counter] = plot.transform.position.y;
+            plotPositionX[cropsCounter] = plot.transform.position.x;
+            plotPositionY[cropsCounter] = plot.transform.position.y;
             DirtTile dirt = plot.GetComponent<DirtTile>();
             if (dirt.crop.HasCrop())
             {
-                activeCropNames[counter] = dirt.crop.GetName();
-                activeTimers[counter] = dirt.crop.GetGrowthLvl();
+                activeCropNames[cropsCounter] = dirt.crop.GetName();
+                activeTimers[cropsCounter] = dirt.crop.GetGrowthLvl();
             }
             else
             {
-                activeCropNames[counter] = null;
-                activeTimers[counter] = -1f;
+                activeCropNames[cropsCounter] = null;
+                activeTimers[cropsCounter] = -1f;
             }
-            activeCropsStates[counter] = dirt.crop.GetState();
-            needsPlowing[counter] = dirt.needsPlowing;
-            counter++;
+            activeCropsStates[cropsCounter] = dirt.crop.GetState();
+            needsPlowing[cropsCounter] = dirt.needsPlowing;
+            cropsCounter++;
         }
+
+        //save data for trees
+        int treeCounter = 0;
+        treesActive = TileSelector.instance.trees.Count;
+        treePositionX = new float[treesActive];
+        treePositionY = new float[treesActive];
+        activeTreeNames = new string[treesActive];
+        activeTreeTimers = new float[treesActive];
+        activeTreeStates = new string[treesActive];
+
+        foreach(GameObject tree in TileSelector.instance.trees)
+        {
+            treePositionX[treeCounter] = tree.transform.position.x;
+            treePositionY[treeCounter] = tree.transform.position.y;
+            TreeTile treeTile = tree.GetComponent<TreeTile>();
+            if (treeTile.tree.HasTree())
+            {
+                activeTreeNames[treeCounter] = treeTile.tree.GetName();
+                activeTreeTimers[treeCounter] = treeTile.tree.GetGrowthLvl();
+            }
+            else
+            {
+                activeTreeNames[treeCounter] = null;
+                activeTreeTimers[treeCounter] = -1f;
+            }
+            activeTreeStates[treeCounter] = treeTile.tree.GetState();
+            treeCounter++;
+        }
+
+
 
         /* old code based on all plots intialized at start
         activePlots = new int[numActive];

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 560a7e2c5b4744ea9be66238caf2547c, type: 3}
-  m_Name: Cashew Tree
+  m_Name: Orange Tree
   m_EditorClassIdentifier: 
   treePlantedSprite: {fileID: 0}
-  treeGrowingSprite: {fileID: 0}
-  treeDoneSprite: {fileID: 0}
-  treeIconSprite: {fileID: 21300000, guid: 0f6e17dbc62ca4383aab0da174626cd4, type: 3}
-  treeTimer: 0
-  treeCost: 0
-  treeReward: 0
-  expReward: 0
-  treeName: Cashew Tree
+  treeGrowingSprite: {fileID: 21300000, guid: a060009dcf07f42b498c25f502bd5503, type: 3}
+  treeDoneSprite: {fileID: 21300000, guid: 43caefb45693c4631843b40c38a4838e, type: 3}
+  treeIconSprite: {fileID: 21300000, guid: 42c31227d6a014e2ab102e3f05e77646, type: 3}
+  treeTimer: 60
+  treeCost: 15
+  treeReward: 15
+  expReward: 15
+  treeName: Orange Tree
   reqLvl: 16

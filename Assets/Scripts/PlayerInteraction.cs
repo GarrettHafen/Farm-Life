@@ -61,7 +61,7 @@ public class PlayerInteraction : MonoBehaviour
 						//TileSelector.instance.GetPlotPosition();
 						if (StatsController.instance.RemoveCoins(5))
 						{
-							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition());
+							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), new Vector3(0, .25f, 0));
 							FindObjectOfType<AudioManager>().PlaySound("Plow");
 							StatsController.instance.AddExp(1);
 						}
@@ -77,7 +77,7 @@ public class PlayerInteraction : MonoBehaviour
                     {
                         if (StatsController.instance.RemoveCoins(tree.GetCost()))
                         {
-							TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this);
+							TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this, new Vector3(0.023f, 0.16f, 0));
                         }
                     }
 					return;
@@ -197,16 +197,20 @@ public class PlayerInteraction : MonoBehaviour
 					timer.SetSprite(tempTree.tree.asset.treeIconSprite);
 
 				}
-				if (tempTree.tree.treeState == TreeState.Done)
+                if (tempTree.tree.treeState == TreeState.Done)
 				{
 					//display harvest tool
 					DisplayMouseyCompanion(harvestToolSprite);
 				}
-				if (MenuController.instance.fireTool)
+                if (MenuController.instance.fireTool)
 				{
 					//display destroy icon
 					DisplayMouseyCompanion(fireToolSprite);
-				}
+                }
+                if(tempTree.tree.treeState == TreeState.Growing)
+                {
+					DisplayMouseyCompanion(null);
+                }
 			}
 		}
         else
@@ -283,7 +287,12 @@ public class PlayerInteraction : MonoBehaviour
 
     private void DisplayMouseyCompanion(Sprite sprite)
     {
-		Vector3 m = Input.mousePosition;
+        if(sprite == null)
+        {
+			mouseyCompanion.gameObject.SetActive(false);
+        }
+
+        Vector3 m = Input.mousePosition;
 		Vector3 p = Camera.main.ScreenToWorldPoint(m);
 		mouseyCompanion.transform.position = new Vector3(p.x, p.y + mouseyOffset, 10);
 		mouseyCompanionImage.sprite = sprite;

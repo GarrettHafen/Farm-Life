@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1971380426617152160}
   - component: {fileID: 3744062483512545987}
   - component: {fileID: 3105974467514238910}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 6031062369613586760}
   - component: {fileID: 6929726225339875204}
   - component: {fileID: 2764312592643539207}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 1873584318800654343}
   - component: {fileID: 6807089652308013969}
   - component: {fileID: 3768332758433636518}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5855506437288844043}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children:
   - {fileID: 8036852602222243630}
@@ -292,9 +292,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 29622895
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &6807089652308013969
 MonoBehaviour:
@@ -537,7 +537,7 @@ GameObject:
   - component: {fileID: 8916755244110544172}
   - component: {fileID: 8808475027438431571}
   - component: {fileID: 3865561701855362091}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: CropIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -609,7 +609,7 @@ GameObject:
   - component: {fileID: 8036852602222243630}
   - component: {fileID: 6505006010462913417}
   - component: {fileID: 6283639612605162501}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Timer
   m_TagString: Timer
   m_Icon: {fileID: 0}

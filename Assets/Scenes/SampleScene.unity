@@ -19428,8 +19428,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 29622895
+  m_SortingLayer: 1
   m_SortingOrder: 5
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -22076,10 +22076,6 @@ MonoBehaviour:
   landingPage: {fileID: 1587324098}
   baseTree: {fileID: 6923840453652975470, guid: d67797e16616d47358f8cd61912a8777,
     type: 3}
-  plowPointer: {fileID: 2800000, guid: c1c50e8465d60a549a4e5c5c1e46a435, type: 3}
-  defaultPointer: {fileID: 2800000, guid: c1c50e8465d60a549a4e5c5c1e46a435, type: 3}
-  harvestPointer: {fileID: 0}
-  plantingPointer: {fileID: 0}
 --- !u!4 &1843866708
 Transform:
   m_ObjectHideFlags: 0
@@ -49508,6 +49504,11 @@ PrefabInstance:
         type: 3}
       propertyPath: panSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2885818966721382829, guid: 8311abb5c3481ca468ee50ed678a0b0e,
+        type: 3}
+      propertyPath: minSize
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8311abb5c3481ca468ee50ed678a0b0e, type: 3}

@@ -188,10 +188,13 @@ public class DirtTile : MonoBehaviour
 			Object.Destroy(plot);
 			
 		}
+		TileSelector.instance.plots.Clear();
+
+        /* broken for some reason
 		for(int i = 0; i < temp; i++)
         {
 			TileSelector.instance.plots.Remove(TileSelector.instance.plots[i]);
-        }
+        }*/
 	}
 
 }

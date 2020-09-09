@@ -53,7 +53,7 @@ public class MenuController : MonoBehaviour
         instance = this;
 
         //ResetTool();
-        Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
+        //Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
 
         grid = Grid.FindObjectOfType<Grid>();
        

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditorInternal;
+using UnityEngine;
 
 [System.Serializable]
 public class Tree
@@ -94,7 +95,51 @@ public class Tree
         return asset.treePlantedSprite;
     }
 
-    
+    public string GetState()
+    {
+        string saveState = "Growing";
+        switch (treeState)
+        {
+            case TreeState.Planted:
+                saveState = "Planted";
+                break;
+            case TreeState.Growing:
+                saveState = "Growing";
+                break;
+            case TreeState.Done:
+                saveState = "Done";
+                break;
+        }
+        return saveState;
+    }
+    public TreeState GetState(string state)
+    {
+        TreeState loadedState = TreeState.Growing;
+        switch (state)
+        {
+            case "Planted":
+                loadedState = TreeState.Planted;
+                break;
+            case "Growing":
+                loadedState = TreeState.Growing;
+                break;
+            case "Done":
+                loadedState = TreeState.Done;
+                break;
+        }
+
+
+        return loadedState;
+    }
+    public string GetName()
+    {
+        if (asset == null)
+            return null;
+
+        return asset.name;
+    }
+
+
 }
 
 public enum TreeState
