@@ -224,14 +224,16 @@ public class MarketController : MonoBehaviour
         {
             case MarketState.Crop:
                 {
-                    PlayerInteraction.instance.SetCrop(new Crop(cropAssetList[cropNumber]));
                     MenuController.instance.hasSeed = true;
+                    PlayerInteraction.instance.SetCrop(new Crop(cropAssetList[cropNumber]));
+                    
                     break;
                 }
             case MarketState.Tree:
                 {
-                    PlayerInteraction.instance.SetTree(new Tree(treeAssetList[cropNumber]));
                     MenuController.instance.hasTree = true;
+                    PlayerInteraction.instance.SetTree(new Tree(treeAssetList[cropNumber]));
+                    
                     break;
                 }
         }

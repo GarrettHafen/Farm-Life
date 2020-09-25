@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,10 @@ public class PlayerInteraction : MonoBehaviour
 	public static PlayerInteraction instance;
 
 	public GameObject target = null;
+	public GameObject tempTarget;
 
 	public TimerController timer;
+	public QueueProgressThingy timerThingy;
 
 	RaycastHit2D hit;
 
@@ -23,11 +26,12 @@ public class PlayerInteraction : MonoBehaviour
 
 	public GameObject mouseyCompanion;
 	public SpriteRenderer mouseyCompanionImage;
-	public Sprite harvestToolSprite, marketToolSprite, plowToolSprite, fireToolSprite;
+	public Sprite harvestToolSprite, marketToolSprite, plowToolSprite, fireToolSprite, basketToolSprite;
 	public float mouseyOffset;
 
 	public Sprite redPreview4x4, greenPreview4x4, redPreview1x1, greenPreview1x1;
 
+	public QueueStuffSystem stuffQueue;
 
 	//public GameObject plot;
 
@@ -42,12 +46,18 @@ public class PlayerInteraction : MonoBehaviour
 		mouseyCompanionImage = mouseyCompanion.GetComponent<SpriteRenderer>();
 		mouseyCompanion.gameObject.SetActive(false);
 
-
+		stuffQueue = new QueueStuffSystem(this);
+		stuffQueue.StartLoop();
 
 	}
 
 	private void Update()
 	{
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+			Debug.Log(target);	
+        }
+
         //when clicking on something, do something based on what is clicked on
 		if (Input.GetMouseButtonDown(0))
 		{
@@ -64,12 +74,13 @@ public class PlayerInteraction : MonoBehaviour
 							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), new Vector3(0, .25f, 0));
 							FindObjectOfType<AudioManager>().PlaySound("Plow");
 							StatsController.instance.AddExp(1);
+							//stuffQueue.EnqueueAction(ProgressBarQueue("NewPlot"));
 						}
 						return;
 					}
 					else
 					{
-						Debug.Log("cant place plot");
+						//Debug.Log("cant place plot"); is triggering any time you click on the map
 						//error code
 						//return;
 					}
@@ -83,12 +94,14 @@ public class PlayerInteraction : MonoBehaviour
 					return;
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
-				Debug.Log("dirt: " + dirt);
 				if (dirt != null)
 				{					
-					dirt.Interact(crop, /*tool,*/ this, dirt);
+					dirt.Interact(crop, this, dirt);
 				}
+
 				//animal code
+
+
 				//tree code
 				TreeTile treeTile = target.GetComponent<TreeTile>();
 				Debug.Log("tree" + treeTile);
@@ -129,6 +142,7 @@ public class PlayerInteraction : MonoBehaviour
 			if (!MenuController.instance.GetMouseyThingy())
 			{
 				MenuController.instance.ActivatePreview(preview);
+				MenuController.instance.previewObstructed = false;
 			}
 			if (MenuController.instance.previewObstructed)
 			{
@@ -200,7 +214,7 @@ public class PlayerInteraction : MonoBehaviour
                 if (tempTree.tree.treeState == TreeState.Done)
 				{
 					//display harvest tool
-					DisplayMouseyCompanion(harvestToolSprite);
+					DisplayMouseyCompanion(basketToolSprite);
 				}
                 if (MenuController.instance.fireTool)
 				{
@@ -225,9 +239,13 @@ public class PlayerInteraction : MonoBehaviour
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
 			hit = Physics2D.Raycast(mousePosition, left, 0.1f, LayerMask.NameToLayer("Plots"));
-			if (hit.collider != null && hit.collider.tag != "Bound")
+			if (hit.collider != null)
 			{
-				if (hit.collider.gameObject.Equals(target))
+				if(hit.collider.name == "OverlaySprite")
+                {
+					target = hit.collider.gameObject.transform.parent.gameObject;
+                }
+				else if (hit.collider.gameObject.Equals(target))
 				{
                     //this code fixed a bug where when hovering over a plot, it was considered "not the map"
 					MapController.instance.overMap = true;
@@ -305,7 +323,7 @@ public class PlayerInteraction : MonoBehaviour
 	{
 		if (target != null)
 		{
-			Debug.Log("deselect code: s" + target);
+			Debug.Log("deselect code: " + target.name);
 			if (timer != null)
 			{
 				timer = target.GetComponent<TimerController>();
@@ -316,6 +334,62 @@ public class PlayerInteraction : MonoBehaviour
         }
 
 	}
-	
 
+	public IEnumerator ProgressBarQueue(string function)
+    {
+		timerThingy.slider.gameObject.SetActive(true);
+		float time = 0;
+		while(time < 300)
+        {
+			//float time = timerThingy.GetTime() + Time.deltaTime;
+			//var percent = time / 5f;
+			//timerThingy.SetTime(Mathf.Lerp(0, 1, percent));
+			//Debug.Log(timerThingy.GetTime());
+
+			time += Time.deltaTime;
+			Debug.Log(time);
+			
+        }
+        switch (function)	
+		{
+			case "Plow":
+				{
+					DirtTile.instance.Plow();
+					break;
+				}
+			case "NewPlot":
+				{
+					TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), new Vector3(0, .25f, 0));
+					FindObjectOfType<AudioManager>().PlaySound("Plow");
+					StatsController.instance.AddExp(1);
+					break;
+				}
+        }
+		timerThingy.slider.gameObject.SetActive(false);
+		yield return null;
+    }
+
+
+	public void DestroyStuff()
+    {
+		DirtTile dirt = tempTarget.GetComponent<DirtTile>();
+		if(dirt != null)
+        {
+			DirtTile.instance.DestroyPlot(dirt);
+        }
+		TreeTile treeTile = tempTarget.GetComponent<TreeTile>();
+		if(treeTile != null)
+        {
+			TreeTile.instance.DestroyTree(treeTile);
+        }
+    }
+
+	public void SetTempTarget()
+    {
+		tempTarget = target;
+    }
+	public void ClearTemptTarget()
+    {
+		tempTarget = null;
+    }
 }

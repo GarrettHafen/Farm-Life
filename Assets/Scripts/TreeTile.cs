@@ -37,7 +37,8 @@ public class TreeTile : MonoBehaviour
         }
         if (MenuController.instance.fireTool)
         {
-            treeTile.DestroyTree(treeTile);
+            MenuController.instance.OpenFireMenu();
+            //treeTile.DestroyTree(treeTile);
         }
 
         //sell
@@ -54,7 +55,7 @@ public class TreeTile : MonoBehaviour
         
     }
 
-    void DestroyTree(TreeTile treeToDestroy)
+    public void DestroyTree(TreeTile treeToDestroy)
     {
         foreach(GameObject tree in TileSelector.instance.trees)
         {
@@ -65,6 +66,8 @@ public class TreeTile : MonoBehaviour
             }
         }
         Object.Destroy(treeToDestroy.gameObject);
+
+        FindObjectOfType<AudioManager>().PlaySound("Destroy");
     }
 
     public void DestroyTrees()
@@ -74,10 +77,8 @@ public class TreeTile : MonoBehaviour
         {
             Object.Destroy(tree);
         }
-        for(int i = 0; i < temp; i++)
-        {
-            TileSelector.instance.trees.Remove(TileSelector.instance.trees[i]);
-        }
+        TileSelector.instance.trees.Clear();
+        
     }
 
     public void UpdateTreeSprite()

@@ -26,6 +26,7 @@ public class GameHandler : MonoBehaviour
 
     public List<CropAsset> cropsList;
     public List<TreeAsset> treeList;
+    public List<Tree> loadTreeList;
 
     private List<CropAsset> loadCropList = new List<CropAsset>();
 
@@ -34,9 +35,9 @@ public class GameHandler : MonoBehaviour
     public GameObject baseTree;
 
 
-    TreeAsset tempTree;
 
     // Start is called before the first frame update
+    // this is a test
     void Start()
     {
         instance = this;
@@ -157,7 +158,7 @@ public class GameHandler : MonoBehaviour
             {
                 if (data.activeTreeNames[i] == treeList[j].treeName)
                 {
-                    tempTree = treeList[j];
+                    loadTreeList.Add(new Tree(treeList[j]));
                     break;
                 }
             }
@@ -165,9 +166,9 @@ public class GameHandler : MonoBehaviour
         for(int i = 0; i < data.treesActive; i++)
         {
             Vector3 newTreePosition = new Vector3(data.treePositionX[i], data.treePositionY[i], 9);
-            TileSelector.instance.PlantTree(newTreePosition, new Tree(tempTree), PlayerInteraction.instance, new Vector3(0, 0, 0));
+            TileSelector.instance.PlantTree(newTreePosition, loadTreeList[i], PlayerInteraction.instance, new Vector3(0, 0, 0));
             TreeTile treeTile = TileSelector.instance.trees[i].GetComponent<TreeTile>();
-            treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
+            treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTreeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
             treeTile.tree.treeState = treeTile.tree.GetState(data.activeTreeStates[i]);
             treeTile.UpdateTreeSprite();
 
@@ -177,70 +178,6 @@ public class GameHandler : MonoBehaviour
 
         //instantiate decor, add to array, set details
 
-
-        /* old code
-        //deactivate all current plots
-        for (int j = 0; j < TileSelector.instance.currentPlotPositionsActive.Count; j++)
-        {
-            DirtTile dirt = TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[j]].GetComponent<DirtTile>();
-            dirt.crop = null;
-            TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[j]].SetActive(false);
-
-        }
-
-        TileSelector.instance.currentPlotPositionsActive.Clear();
-        //----------------plots Array----------------
-        for (int i = 0; i < data.activePlots.Length; i++)
-        {
-            //activate plots based on loadData
-            TileSelector.instance.currentPlotPositionsActive.Add(data.activePlots[i]); // will this work if list is empty?
-            TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].SetActive(true);
-        }
-
-        //----------------crops/timers Array----------------
-        for(int i = 0; i < data.activeCrops.Length; i++)
-        {
-            if(data.activeCrops[i] != null)
-            {
-                for (int j = 0; j < cropsList.Count; j++)
-                {
-                    if (cropsList[j] != null)
-                    {
-                        if (data.activeCrops[i] == cropsList[j].cropName)
-                        {
-                            loadCropList.Add(cropsList[j]);
-                            //return;
-                        }
-                    }
-                    
-                }
-            }
-            else
-            {
-                loadCropList.Add(cropsList[0]);
-            }
-        }
-        //attach crops to the plots
-        for(int i = 0; i < TileSelector.instance.currentPlotPositionsActive.Count; i++)
-        {
-            DirtTile dirt = TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].GetComponent<DirtTile>();
-            if (loadCropList[i].name != "Blank")
-            {
-                dirt.crop = new Crop(loadCropList[i]);
-                dirt.crop.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, dirt.crop.asset.cropTimer, dirt));
-                dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
-                dirt.crop.GetCropSprite();
-                dirt.UpdateSprite();
-            }
-            else
-            {
-                dirt.crop = new Crop(null);
-                dirt.crop.state = CropState.Seed;
-                dirt.crop.GetCropSprite();
-                dirt.UpdateSprite();
-            }
-        }
-        */
 
         Debug.Log("Data Loaded");
         MenuController.instance.notificationBar.SetActive(false);

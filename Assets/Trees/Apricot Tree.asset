@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Apricot Tree
   m_EditorClassIdentifier: 
   treePlantedSprite: {fileID: 0}
-  treeGrowingSprite: {fileID: 0}
-  treeDoneSprite: {fileID: 0}
+  treeGrowingSprite: {fileID: 21300000, guid: 4cee04a94fa0c4386ae4c2df49564057, type: 3}
+  treeDoneSprite: {fileID: 21300000, guid: 7cc001de6f2f84365b4cffebf73d5638, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 89ed8fd73d7f347f5b709ed4a7cf5416, type: 3}
-  treeTimer: 0
-  treeCost: 0
-  treeReward: 0
-  expReward: 0
+  treeTimer: 60
+  treeCost: 15
+  treeReward: 15
+  expReward: 15
   treeName: Apricot Tree
   reqLvl: 30

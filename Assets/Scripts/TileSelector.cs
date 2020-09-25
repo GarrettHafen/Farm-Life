@@ -144,14 +144,14 @@ public class TileSelector : MonoBehaviour
         mousePosition.y += offset.y;//0.16f
         mousePosition.x += offset.x; //0.023f;
         GameObject tempTree = (GameObject)Instantiate(baseTree, mousePosition, transform.rotation);
-        tempTree.name = t.asset.name + treeNum;
+        tempTree.name = t.asset.name + " " + treeNum;
         treeNum++;
         //Debug.Log("Tree Planted: " + t.asset.name);
         tempTree.SetActive(true);
         tempTree.transform.SetParent(treeParent.transform);
         trees.Add(tempTree);
         tree = t;
-        player.SetTree(new Tree(t.asset));
+        //player.SetTree(new Tree(t.asset));
         TreeTile treeTile = tempTree.GetComponent<TreeTile>();
         treeTile.tree = t;
         treeTile.UpdateTreeSprite();

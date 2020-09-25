@@ -67,6 +67,13 @@ public class StatsController : MonoBehaviour
         {
             AddExp(500);
         }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            SetLvl(60);
+            SetExp(45318);
+            SetCoins(5000);
+            UpdateStats();
+        }
     }
 
     public void AddCoins(int coinsToAdd)

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Cherry Tree
   m_EditorClassIdentifier: 
   treePlantedSprite: {fileID: 0}
-  treeGrowingSprite: {fileID: 0}
-  treeDoneSprite: {fileID: 0}
+  treeGrowingSprite: {fileID: 21300000, guid: 5b785e9c6f48647a18b23f4283f50339, type: 3}
+  treeDoneSprite: {fileID: 21300000, guid: f80ad4be5367f4f0abf367b8a91428dc, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 593ec8e2124df45edb1562341ea8b368, type: 3}
-  treeTimer: 0
-  treeCost: 0
-  treeReward: 0
-  expReward: 0
+  treeTimer: 60
+  treeCost: 15
+  treeReward: 15
+  expReward: 15
   treeName: Cherry Tree
   reqLvl: 58

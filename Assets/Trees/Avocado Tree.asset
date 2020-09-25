@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Avocado Tree
   m_EditorClassIdentifier: 
   treePlantedSprite: {fileID: 0}
-  treeGrowingSprite: {fileID: 0}
-  treeDoneSprite: {fileID: 0}
+  treeGrowingSprite: {fileID: 21300000, guid: 5bbac8187d8e540318ab8648635d2555, type: 3}
+  treeDoneSprite: {fileID: 21300000, guid: 918d2252766de4a1aa1df0efc34ab496, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 923721fa496a34558b162992a935dca0, type: 3}
-  treeTimer: 0
-  treeCost: 0
-  treeReward: 0
-  expReward: 0
-  treeName: Avacado Tree
+  treeTimer: 60
+  treeCost: 15
+  treeReward: 15
+  expReward: 15
+  treeName: Avocado Tree
   reqLvl: 48

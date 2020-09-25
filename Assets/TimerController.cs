@@ -8,13 +8,6 @@ public class TimerController : MonoBehaviour
     public Slider slider;
     public Image timerSprite;
 
-    public void SetMaxTime(int time)
-    {
-        slider.maxValue = time; 
-        //needed?
-
-    }
-
     public void SetTime(float time)
     {
         slider.value = time;

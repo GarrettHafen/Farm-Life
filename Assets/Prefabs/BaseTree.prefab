@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.67058825, g: 0.9716981, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -85,6 +86,7 @@ GameObject:
   - component: {fileID: 5950185735634549026}
   - component: {fileID: 5602227061177288363}
   - component: {fileID: 2834122758719391600}
+  - component: {fileID: 6570603015360404018}
   m_Layer: 0
   m_Name: OverlaySprite
   m_TagString: Untagged
@@ -121,6 +123,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -168,6 +171,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5a6f6fc6881c4d629301de9156f0014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &6570603015360404018
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853142779039363167}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.34230527, y: 0.32928595}
+      - {x: 0.2978368, y: 0.37696245}
+      - {x: 0.24478914, y: 0.41944784}
+      - {x: 0.17550717, y: 0.48214865}
+      - {x: -0.02353681, y: 0.47731823}
+      - {x: -0.1097258, y: 0.4703774}
+      - {x: -0.14731234, y: 0.43618676}
+      - {x: -0.18233185, y: 0.4335985}
+      - {x: -0.25658098, y: 0.421991}
+      - {x: -0.31065184, y: 0.38601887}
+      - {x: -0.38563627, y: 0.31997833}
+      - {x: -0.43733293, y: 0.18826093}
+      - {x: -0.43809414, y: 0.05066434}
+      - {x: -0.37921116, y: -0.028518744}
+      - {x: -0.16744629, y: -0.140742}
+      - {x: -0.096381284, y: -0.1780651}
+      - {x: -0.07199019, y: -0.22821292}
+      - {x: -0.1276533, y: -0.27612165}
+      - {x: -0.13590465, y: -0.3180554}
+      - {x: -0.040897466, y: -0.3210592}
+      - {x: -0.0038822526, y: -0.32232535}
+      - {x: 0.062321708, y: -0.32290018}
+      - {x: 0.10282232, y: -0.33031476}
+      - {x: 0.10928495, y: -0.32080537}
+      - {x: 0.06379405, y: -0.24305472}
+      - {x: 0.05304967, y: -0.20551881}
+      - {x: 0.14388287, y: -0.13243683}
+      - {x: 0.18797116, y: -0.093162686}
+      - {x: 0.31481278, y: -0.056135397}
+      - {x: 0.37798616, y: 0.037443385}
+      - {x: 0.40343997, y: 0.22563814}
+      - {x: 0.39029014, y: 0.30703303}
 --- !u!1 &4812422654755840918
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,6 +288,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -279,7 +340,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1873584318800654343
 Canvas:
@@ -395,6 +456,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -594,6 +656,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

@@ -19,6 +19,6 @@ MonoBehaviour:
   treeTimer: 60
   treeCost: 15
   treeReward: 15
-  expReward: 15
+  expReward: 500
   treeName: Orange Tree
   reqLvl: 16

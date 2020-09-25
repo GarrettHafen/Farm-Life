@@ -38,10 +38,13 @@ public class DirtTile : MonoBehaviour
 			return;
 
 		}
-		if (/*t.toolType == ToolType.Plow &&*/ needsPlowing)
+		if (needsPlowing)
 		{
-			Plow();
-
+			if (StatsController.instance.RemoveCoins(5))
+			{
+				//PlayerInteraction.instance.stuffQueue.EnqueueAction(PlayerInteraction.instance.ProgressBarQueue("Plow"));
+				Plow();
+			}
 		}
         else if (!needsPlowing && !dirt.crop.HasCrop() && !MenuController.instance.fireTool)
         {
@@ -54,8 +57,9 @@ public class DirtTile : MonoBehaviour
 		}
         else if (MenuController.instance.fireTool)
         {
-            //need confirmation message
-			DestroyPlot(dirt);
+			//need confirmation message
+			//DestroyPlot(dirt);
+			MenuController.instance.OpenFireMenu();
         }
 
 		return;
@@ -108,16 +112,15 @@ public class DirtTile : MonoBehaviour
 		overlay.sortingLayerName = onGroundLayer;
 	}
 
-	void Plow ()
+	public void Plow ()
 	{
 		//Debug.Log("Plowing...");
-		if (StatsController.instance.RemoveCoins(5))
-		{
+		
 			//	if plots should cost money...
 			overlay.sprite = null;
 			needsPlowing = false;
 			FindObjectOfType<AudioManager>().PlaySound("Plow");
-		}
+		
 		
 	}
 
@@ -176,7 +179,9 @@ public class DirtTile : MonoBehaviour
             }
         }
 		Object.Destroy(plotToDestroy.gameObject);
-    }
+		FindObjectOfType<AudioManager>().PlaySound("Destroy");
+
+	}
 	public void DestroyPlots()
 	{
 		overlay.sprite = null;

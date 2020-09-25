@@ -47,6 +47,8 @@ public class MenuController : MonoBehaviour
 
     public bool hasTree = false;
 
+    public GameObject fireMenu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -211,6 +213,7 @@ public class MenuController : MonoBehaviour
     public void ActivatePlow()
     {
         plowActive = !plowActive;
+        previewObstructed = false;
     }
     public void DeactivatePlow()
     {
@@ -254,4 +257,14 @@ public class MenuController : MonoBehaviour
         fireTool = !fireTool;
     }
 
+    public void OpenFireMenu()
+    {
+        fireMenu.gameObject.SetActive(true);
+        PlayerInteraction.instance.SetTempTarget();
+    }
+    public void CloseFireMenu()
+    {
+        fireMenu.gameObject.SetActive(false);
+        PlayerInteraction.instance.ClearTemptTarget();
+    }
 }
