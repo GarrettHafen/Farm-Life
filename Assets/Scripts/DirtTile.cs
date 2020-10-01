@@ -166,15 +166,11 @@ public class DirtTile : MonoBehaviour
 
     public void DestroyPlot(DirtTile plotToDestroy)
     {
-		overlay.sprite = null;
-		needsPlowing = false;
-        crop = new Crop(null);
         foreach(GameObject plot in TileSelector.instance.plots)
         {
             if (plot.Equals(plotToDestroy.gameObject))
             {
 				TileSelector.instance.plots.Remove(plot);
-				Debug.Log("element removed");
 				break;
             }
         }
