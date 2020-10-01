@@ -25,7 +25,7 @@ public class Tree
         if (growthLevel >= 1f)
         {
             treeState = TreeState.Done;
-            Debug.Log("tree is done");
+            //Debug.Log("tree is done");
             return true;
         }
         /*else if (growthLevel <= 1f && growthLevel >= .5f)

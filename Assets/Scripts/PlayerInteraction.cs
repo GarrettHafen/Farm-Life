@@ -53,10 +53,6 @@ public class PlayerInteraction : MonoBehaviour
 
 	private void Update()
 	{
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-			Debug.Log(target);	
-        }
 
         //when clicking on something, do something based on what is clicked on
 		if (Input.GetMouseButtonDown(0))
@@ -104,7 +100,7 @@ public class PlayerInteraction : MonoBehaviour
 
 				//tree code
 				TreeTile treeTile = target.GetComponent<TreeTile>();
-				Debug.Log("tree" + treeTile);
+				//Debug.Log("tree" + treeTile);
                 if(treeTile != null)
                 {
 					treeTile.Interact(tree, treeTile, this);
@@ -118,8 +114,8 @@ public class PlayerInteraction : MonoBehaviour
         }
 
 
-		//if plow tool active, display 4x4 preview
-		if (MenuController.instance.plowActive)
+        //if plow tool active, display 4x4 preview
+        if (MenuController.instance.plowActive)
 		{
 			GameObject preview = MenuController.instance.preview4x4;
             if (!MenuController.instance.GetMouseyThingy())
@@ -200,6 +196,7 @@ public class PlayerInteraction : MonoBehaviour
 					DisplayMouseyCompanion(fireToolSprite);
 				}
 			}
+			
 			TreeTile tempTree = target.GetComponent<TreeTile>();
 			if (tempTree)//code to prevent random errors when game starts
 			{
@@ -239,46 +236,36 @@ public class PlayerInteraction : MonoBehaviour
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
 			hit = Physics2D.Raycast(mousePosition, left, 0.1f, LayerMask.NameToLayer("Plots"));
-			if (hit.collider != null)
+			if (hit.collider != null && !hit.collider.CompareTag("Bound"))
 			{
-				if(hit.collider.name == "OverlaySprite")
-                {
-					target = hit.collider.gameObject.transform.parent.gameObject;
-                }
-				else if (hit.collider.gameObject.Equals(target))
+				if (hit.collider.gameObject == target || hit.collider.name == "OverlaySprite")
 				{
-                    //this code fixed a bug where when hovering over a plot, it was considered "not the map"
+					//this code fixed a bug where when hovering over a plot, it was considered "not the map"
 					MapController.instance.overMap = true;
 				}
 				else
-				{
-					if (target != null)
+                {
+					Deselect();
+					if (hit.collider.name == "OverlaySprite")
 					{
-                        //if hovered over a plot or animal or tree, need detection later
-						timer = target.GetComponent<TimerController>();
-						timer.slider.gameObject.SetActive(false);
-                    }
-					target = hit.collider.gameObject;
+						target = hit.collider.gameObject.transform.parent.gameObject;
+					}
+					else
+					{
+						target = hit.collider.gameObject;
+					}
 					mouseyCompanionImage.sprite = null;
 					MapController.instance.overMap = true;
 				}
-			}
-			else
-			{
-				/*------------------------------------------------------------
-				 ------------------------------------------------------------
-				------------------------------------------------------------
-				bad code alert - kicks off every frame, debug deslect and its constantly going, is that bad?
-				------------------------------------------------------------
-				------------------------------------------------------------
-				------------------------------------------------------------*/
-
-				Deselect();
-			}
-		}else
-            {
-				Deselect();
             }
+            else
+            {
+				if(target != null)
+                {
+					Deselect();
+                }
+            }
+		}
 
         
 	}
@@ -331,6 +318,7 @@ public class PlayerInteraction : MonoBehaviour
 			}
 			target = null;
             timer = null;
+			
         }
 
 	}
