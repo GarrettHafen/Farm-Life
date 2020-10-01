@@ -51,7 +51,7 @@ public class DirtTile : MonoBehaviour
 			
 			MarketController.instance.ActivateMarket();
         }
-		else if (/*t.toolType == ToolType.Harvest &&*/ dirt.crop.HasCrop() && dirt.crop.state == CropState.Done)
+		else if (/*t.toolType == ToolType.Harvest &&*/ dirt.crop.HasCrop() && dirt.crop.state == CropState.Done && !MenuController.instance.fireTool)
 		{
 			HarvestCrop(player);
 		}
