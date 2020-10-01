@@ -16,9 +16,9 @@ MonoBehaviour:
   treeGrowingSprite: {fileID: 21300000, guid: 332b783a299c44dbdada2a3d18d102fd, type: 3}
   treeDoneSprite: {fileID: 21300000, guid: da3ea4776dd324f548c6d11dbc0b26ad, type: 3}
   treeIconSprite: {fileID: 21300000, guid: badf86f7fd20443f193ef602b9b69359, type: 3}
-  treeTimer: 60
+  treeTimer: 3600
   treeCost: 15
-  treeReward: 15
-  expReward: 15
+  treeReward: 5
+  expReward: 2
   treeName: Walnut Tree
   reqLvl: 40

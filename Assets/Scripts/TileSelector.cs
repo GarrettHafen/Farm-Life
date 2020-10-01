@@ -50,13 +50,7 @@ public class TileSelector : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            foreach(GameObject thingy in plots)
-            {
-                Debug.Log(thingy);
-            }
-        }
+        
     }
 
     public void GetPlotPosition()

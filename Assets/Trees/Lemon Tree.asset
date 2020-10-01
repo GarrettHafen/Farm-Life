@@ -16,9 +16,9 @@ MonoBehaviour:
   treeGrowingSprite: {fileID: 21300000, guid: c70513834f2ed4de78e0fbf788abe607, type: 3}
   treeDoneSprite: {fileID: 21300000, guid: 7980e39dd9b2e4588b52677efccf15b7, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 65f525729026443b8bd118557efb68d1, type: 3}
-  treeTimer: 60
+  treeTimer: 3600
   treeCost: 15
-  treeReward: 15
-  expReward: 15
+  treeReward: 5
+  expReward: 2
   treeName: Lemon Tree
   reqLvl: 24
