@@ -1,13 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CollisionController : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    /* 
+     * to lazy to remove this script from every object 
+     * its attached to. for now it just doesn't do anything, 
+     * see PreviewCollisionController for updated script
+    */
+
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.name != "Grid" && collision.name != "OverlaySprite")
         {
             MenuController.instance.previewObstructed = true;
-            Debug.Log("collision: " + collision.name);
+
         }
     }
 
@@ -15,5 +22,7 @@ public class CollisionController : MonoBehaviour
     {
         MenuController.instance.previewObstructed = false;
 
-    }
+    }*/
+
+    
 }

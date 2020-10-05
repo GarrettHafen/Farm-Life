@@ -63,7 +63,7 @@ public class StatsController : MonoBehaviour
         }*/else if (Input.GetKeyDown(KeyCode.J))
         {
             AddExp(75);
-        }/*else if (Input.GetKeyDown(KeyCode.K))
+        }else if (Input.GetKeyDown(KeyCode.K))
         {
             AddExp(500);
         }
@@ -73,7 +73,7 @@ public class StatsController : MonoBehaviour
             SetExp(45318);
             SetCoins(5000);
             UpdateStats();
-        }*/
+        }
     }
 
     public void AddCoins(int coinsToAdd)
