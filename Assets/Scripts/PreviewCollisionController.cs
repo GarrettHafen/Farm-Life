@@ -32,7 +32,7 @@ public class PreviewCollisionController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(listOfCollisions.Count);
+        //Debug.Log(listOfCollisions.Count);
         if (listOfCollisions.Count == 0)
         {
             MenuController.instance.previewObstructed = false;
@@ -40,11 +40,6 @@ public class PreviewCollisionController : MonoBehaviour
         else
         {
             MenuController.instance.previewObstructed = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            //stop
         }
     }
 }
