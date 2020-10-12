@@ -6,7 +6,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 [RequireComponent(typeof(SpriteRenderer))]
 public class DepthSortByY : MonoBehaviour
-{
+{/*
     private const int IsometricRanchPerYUnit = 100;
 
     // Update is called once per frame
@@ -15,4 +15,5 @@ public class DepthSortByY : MonoBehaviour
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         renderer.sortingOrder = -(int)(transform.position.y * IsometricRanchPerYUnit);
     }
+*/
 }

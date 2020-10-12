@@ -33,6 +33,9 @@ public class PlayerInteraction : MonoBehaviour
 
 	public QueueStuffSystem stuffQueue;
 
+	public Vector3 plotOffset;
+	public Vector3 treeOffset;
+
 	//public GameObject plot;
 
 
@@ -57,7 +60,7 @@ public class PlayerInteraction : MonoBehaviour
         //when clicking on something, do something based on what is clicked on
 		if (Input.GetMouseButtonDown(0))
 		{
-			if (!GameHandler.instance.overMenu && MapController.instance.overMap /*&& tool != null*/)
+			if (!GameHandler.instance.overMenu && MapController.instance.overMap)
 			{
 				if (target == null)
 				{
@@ -67,7 +70,7 @@ public class PlayerInteraction : MonoBehaviour
 						//TileSelector.instance.GetPlotPosition();
 						if (StatsController.instance.RemoveCoins(5))
 						{
-							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), new Vector3(0, .25f, 0));
+							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), plotOffset);
 							FindObjectOfType<AudioManager>().PlaySound("Plow");
 							StatsController.instance.AddExp(1);
 							//stuffQueue.EnqueueAction(ProgressBarQueue("NewPlot"));
@@ -84,7 +87,7 @@ public class PlayerInteraction : MonoBehaviour
                     {
                         if (StatsController.instance.RemoveCoins(tree.GetCost()))
                         {
-							TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this, new Vector3(0.023f, 0.16f, 0));
+							TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this, treeOffset);
                         }
                     }
 					return;
@@ -307,21 +310,21 @@ public class PlayerInteraction : MonoBehaviour
 
 	
 
-	void Deselect()
+	public void Deselect()
 	{
 		if (target != null)
 		{
-			Debug.Log("deselect code: " + target.name);
+			//Debug.Log("deselect code: " + target.name);
 			if (timer != null)
 			{
 				timer = target.GetComponent<TimerController>();
 				timer.slider.gameObject.SetActive(false);
 			}
 			target = null;
+			tempTarget = null;
             timer = null;
 			
         }
-
 	}
 
 	public IEnumerator ProgressBarQueue(string function)

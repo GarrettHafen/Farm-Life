@@ -38,7 +38,7 @@ public class DirtTile : MonoBehaviour
 			return;
 
 		}
-		if (needsPlowing)
+		if (needsPlowing && !MenuController.instance.fireTool)
 		{
 			if (StatsController.instance.RemoveCoins(5))
 			{

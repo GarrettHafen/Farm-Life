@@ -2269,9 +2269,9 @@ GameObject:
   m_Component:
   - component: {fileID: 145419672}
   - component: {fileID: 145419676}
-  - component: {fileID: 145419675}
   - component: {fileID: 145419674}
   - component: {fileID: 145419673}
+  - component: {fileID: 145419675}
   m_Layer: 0
   m_Name: 1x1Preview
   m_TagString: Untagged
@@ -2352,7 +2352,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 145419671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4bfb20552ed64b909cc2bd50da2e68c, type: 3}
+  m_Script: {fileID: 11500000, guid: 74750e147a33a024881e431a685bee4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &145419676
@@ -6085,7 +6085,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 689.1, y: -461}
-  m_SizeDelta: {x: 541.9, y: 168.8}
+  m_SizeDelta: {x: 541.9, y: 168.79999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &504175431
 MonoBehaviour:
@@ -6158,12 +6158,12 @@ MonoBehaviour:
   m_Padding:
     m_Left: 35
     m_Right: 0
-    m_Top: -28
+    m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 3
   m_StartCorner: 2
   m_StartAxis: 0
-  m_CellSize: {x: 111.27, y: 225}
+  m_CellSize: {x: 111.27, y: 106}
   m_Spacing: {x: 8.2, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 5
@@ -12741,6 +12741,17 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1048818189}
+        m_MethodName: DestroyPreview
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1048818189}
         m_MethodName: ActivatePlow
         m_Mode: 1
         m_Arguments:
@@ -18642,12 +18653,12 @@ MonoBehaviour:
   sounds:
   - name: Plow
     clip: {fileID: 8300000, guid: 59d0a3b77519642cd986663a4ae79bc1, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: Harvest
     clip: {fileID: 8300000, guid: 751323f2c3ae2426fb33ddf90778c430, type: 3}
-    volume: 0.75
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: Manual Save
@@ -18667,27 +18678,27 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Page Turn
     clip: {fileID: 8300000, guid: be031e531fc5d42fda1000f41cabb95e, type: 3}
-    volume: 0.75
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: No Money
     clip: {fileID: 8300000, guid: b8855a49167a14b59a8a44d08ba7fdb7, type: 3}
-    volume: 0.75
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: Seed
     clip: {fileID: 8300000, guid: 9950c4f8eb3b44241b450b2c135da070, type: 3}
-    volume: 0.75
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: Error
     clip: {fileID: 8300000, guid: 389035e82825746eca66a2a7f2084f2b, type: 3}
-    volume: 0.75
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: Level Up
     clip: {fileID: 8300000, guid: 6966b636342c245aebd2578a01a0567d, type: 3}
-    volume: 0.75
+    volume: 0.5
     pitch: 0
     source: {fileID: 0}
   - name: Destroy
@@ -23464,10 +23475,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 16a419604a80d4bee86e0dcda4f96b32, type: 2}
   - {fileID: 0}
   loadTreeList: []
-  landingPageOpen: 0
+  landingPageOpen: 1
   landingPage: {fileID: 1587324098}
   baseTree: {fileID: 6923840453652975470, guid: d67797e16616d47358f8cd61912a8777,
     type: 3}
+  devMode: 0
 --- !u!4 &1843866708
 Transform:
   m_ObjectHideFlags: 0
@@ -23509,7 +23521,6 @@ MonoBehaviour:
   tree:
     asset: {fileID: 0}
     treeState: 0
-  treeOffset: 0.2
 --- !u!114 &1843866710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23545,6 +23556,8 @@ MonoBehaviour:
   greenPreview4x4: {fileID: 21300000, guid: 9e81b8cc5b60b4dbf900d98205973f6c, type: 3}
   redPreview1x1: {fileID: 21300000, guid: 6843bfb94ea82423196d7c8fb3e8b8c7, type: 3}
   greenPreview1x1: {fileID: 21300000, guid: fc6d81bfca2c94b2ab651dd4760c1a79, type: 3}
+  plotOffset: {x: 0, y: 0.5, z: 0}
+  treeOffset: {x: 0.023, y: -0.26, z: 0}
 --- !u!1 &1844282913
 GameObject:
   m_ObjectHideFlags: 0
@@ -51159,9 +51172,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1797655692444377584}
   - component: {fileID: 5444175501658356488}
-  - component: {fileID: 4955195849227715553}
   - component: {fileID: 4955195849227715551}
   - component: {fileID: 4955195849227715552}
+  - component: {fileID: 4955195849227715553}
   m_Layer: 0
   m_Name: 4x4Preview
   m_TagString: Untagged
@@ -51228,7 +51241,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4955195849227715550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4bfb20552ed64b909cc2bd50da2e68c, type: 3}
+  m_Script: {fileID: 11500000, guid: 74750e147a33a024881e431a685bee4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &5444175501658356488
@@ -51267,8 +51280,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 29622895
+  m_SortingLayer: 1
   m_SortingOrder: 5
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

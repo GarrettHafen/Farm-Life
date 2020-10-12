@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Coconut Tree
   m_EditorClassIdentifier: 
   treePlantedSprite: {fileID: 0}
-  treeGrowingSprite: {fileID: 21300000, guid: f429e0c47090c434ca7a38dfa705db36, type: 3}
+  treeGrowingSprite: {fileID: 21300000, guid: 7558e5a958e334d5f8dad5f7bbb3f5dd, type: 3}
   treeDoneSprite: {fileID: 21300000, guid: 4978e70f1577e4a8fac532a5fc911df2, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 1e435a466684f4f8ea6462d5735098c9, type: 3}
   treeTimer: 3600

@@ -28,8 +28,6 @@ public class TileSelector : MonoBehaviour
 
     public Tree tree;
 
-    public float treeOffset;
-
 
 
     void Start() //-----------------------------------------------------------------------

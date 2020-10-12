@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
-  m_Name: Tomatoe
+  m_Name: Tomato
   m_EditorClassIdentifier: 
   seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
   sproutSprite: {fileID: 21300000, guid: a642c67c357b23743af7290a6ffa8aa0, type: 3}

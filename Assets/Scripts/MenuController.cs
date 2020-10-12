@@ -264,4 +264,9 @@ public class MenuController : MonoBehaviour
         fireMenu.gameObject.SetActive(false);
         PlayerInteraction.instance.ClearTemptTarget();
     }
+
+    public void ForceDeselect()
+    {
+        PlayerInteraction.instance.Deselect();
+    }
 }

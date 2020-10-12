@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lemon Tree
   m_EditorClassIdentifier: 
   treePlantedSprite: {fileID: 0}
-  treeGrowingSprite: {fileID: 21300000, guid: c70513834f2ed4de78e0fbf788abe607, type: 3}
+  treeGrowingSprite: {fileID: 21300000, guid: 7558e5a958e334d5f8dad5f7bbb3f5dd, type: 3}
   treeDoneSprite: {fileID: 21300000, guid: 7980e39dd9b2e4588b52677efccf15b7, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 65f525729026443b8bd118557efb68d1, type: 3}
   treeTimer: 3600

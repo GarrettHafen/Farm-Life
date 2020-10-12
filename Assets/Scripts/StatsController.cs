@@ -67,7 +67,7 @@ public class StatsController : MonoBehaviour
         {
             AddExp(500);
         }
-        else if (Input.GetKeyDown(KeyCode.L))
+        else if (Input.GetKeyDown(KeyCode.L) && GameHandler.instance.devMode)
         {
             SetLvl(60);
             SetExp(45318);

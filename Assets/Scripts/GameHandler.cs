@@ -34,6 +34,7 @@ public class GameHandler : MonoBehaviour
     public GameObject landingPage;
     public GameObject baseTree;
 
+    public bool devMode;
 
 
 
@@ -78,10 +79,12 @@ public class GameHandler : MonoBehaviour
     public void DisableTool()
     {
         overMenu = true;
+        PlayerInteraction.instance.Deselect();
     }
     public void EnableTool()
     {
         overMenu = false;
+
     }
 
     public void LoadData(PlayerData data)

@@ -60,7 +60,6 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.67058825, g: 0.9716981, b: 0, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -123,7 +122,6 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -184,7 +182,7 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -196,38 +194,40 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.34230527, y: 0.32928595}
-      - {x: 0.2978368, y: 0.37696245}
+    - - {x: 0.34230527, y: 0.32928598}
+      - {x: 0.2978368, y: 0.37696242}
       - {x: 0.24478914, y: 0.41944784}
       - {x: 0.17550717, y: 0.48214865}
       - {x: -0.02353681, y: 0.47731823}
       - {x: -0.1097258, y: 0.4703774}
-      - {x: -0.14731234, y: 0.43618676}
-      - {x: -0.18233185, y: 0.4335985}
+      - {x: -0.14731234, y: 0.4361868}
+      - {x: -0.18233185, y: 0.43359852}
       - {x: -0.25658098, y: 0.421991}
       - {x: -0.31065184, y: 0.38601887}
-      - {x: -0.38563627, y: 0.31997833}
-      - {x: -0.43733293, y: 0.18826093}
-      - {x: -0.43809414, y: 0.05066434}
-      - {x: -0.37921116, y: -0.028518744}
+      - {x: -0.38563627, y: 0.31997836}
+      - {x: -0.43733293, y: 0.18826091}
+      - {x: -0.43809414, y: 0.050664365}
+      - {x: -0.37921116, y: -0.028518736}
       - {x: -0.16744629, y: -0.140742}
-      - {x: -0.096381284, y: -0.1780651}
+      - {x: -0.096381284, y: -0.17806512}
       - {x: -0.07199019, y: -0.22821292}
       - {x: -0.1276533, y: -0.27612165}
       - {x: -0.13590465, y: -0.3180554}
+      - {x: -0.09467626, y: -0.3590669}
       - {x: -0.040897466, y: -0.3210592}
       - {x: -0.0038822526, y: -0.32232535}
+      - {x: 0.04120998, y: -0.35823536}
       - {x: 0.062321708, y: -0.32290018}
       - {x: 0.10282232, y: -0.33031476}
       - {x: 0.10928495, y: -0.32080537}
       - {x: 0.06379405, y: -0.24305472}
       - {x: 0.05304967, y: -0.20551881}
-      - {x: 0.14388287, y: -0.13243683}
+      - {x: 0.14388287, y: -0.13243681}
       - {x: 0.18797116, y: -0.093162686}
-      - {x: 0.31481278, y: -0.056135397}
-      - {x: 0.37798616, y: 0.037443385}
-      - {x: 0.40343997, y: 0.22563814}
-      - {x: 0.39029014, y: 0.30703303}
+      - {x: 0.31481278, y: -0.056135386}
+      - {x: 0.37798616, y: 0.0374434}
+      - {x: 0.40343997, y: 0.22563815}
+      - {x: 0.39029014, y: 0.30703306}
 --- !u!1 &4812422654755840918
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +288,6 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -456,7 +455,6 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -491,7 +489,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!60 &4879541174562538786
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -505,10 +503,10 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.15}
+  m_Offset: {x: 0, y: 0.35}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1.0666667, y: 1.05}
     adaptiveTilingThreshold: 0.5
@@ -656,7 +654,6 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
