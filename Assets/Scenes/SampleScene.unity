@@ -18653,27 +18653,27 @@ MonoBehaviour:
   sounds:
   - name: Plow
     clip: {fileID: 8300000, guid: 59d0a3b77519642cd986663a4ae79bc1, type: 3}
-    volume: 0.5
+    volume: 0.259
     pitch: 0
     source: {fileID: 0}
   - name: Harvest
     clip: {fileID: 8300000, guid: 751323f2c3ae2426fb33ddf90778c430, type: 3}
-    volume: 0.5
+    volume: 0.214
     pitch: 0
     source: {fileID: 0}
   - name: Manual Save
     clip: {fileID: 8300000, guid: e1682ab6dd0884e4590b4e65cc857edc, type: 3}
-    volume: 0.5
+    volume: 0.279
     pitch: 0
     source: {fileID: 0}
   - name: Click
     clip: {fileID: 8300000, guid: a16cab7a818b3450bbdb6b2c7264a459, type: 3}
-    volume: 0.75
+    volume: 0.577
     pitch: 0
     source: {fileID: 0}
   - name: Buy Button
     clip: {fileID: 8300000, guid: 4725da994485d430c9d6d7ed1e32ece4, type: 3}
-    volume: 0.75
+    volume: 0.512
     pitch: 0
     source: {fileID: 0}
   - name: Page Turn
@@ -18683,27 +18683,27 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: No Money
     clip: {fileID: 8300000, guid: b8855a49167a14b59a8a44d08ba7fdb7, type: 3}
-    volume: 0.5
+    volume: 0.308
     pitch: 0
     source: {fileID: 0}
   - name: Seed
     clip: {fileID: 8300000, guid: 9950c4f8eb3b44241b450b2c135da070, type: 3}
-    volume: 0.5
+    volume: 0.269
     pitch: 0
     source: {fileID: 0}
   - name: Error
     clip: {fileID: 8300000, guid: 389035e82825746eca66a2a7f2084f2b, type: 3}
-    volume: 0.5
+    volume: 0.264
     pitch: 0
     source: {fileID: 0}
   - name: Level Up
     clip: {fileID: 8300000, guid: 6966b636342c245aebd2578a01a0567d, type: 3}
-    volume: 0.5
+    volume: 0.274
     pitch: 0
     source: {fileID: 0}
   - name: Destroy
     clip: {fileID: 8300000, guid: df7d3f84f0bb646f187dc46fae0c1e10, type: 3}
-    volume: 1
+    volume: 0.428
     pitch: 0
     source: {fileID: 0}
   - name: Null
@@ -51209,8 +51209,8 @@ PolygonCollider2D:
     m_Paths:
     - - {x: -0.001198858, y: -0.016497022}
       - {x: -0.43146235, y: -0.23388076}
-      - {x: -0.003414303, y: -0.45161462}
-      - {x: 0.4203512, y: -0.23255384}
+      - {x: -0.050853997, y: -0.4245062}
+      - {x: 0.36032543, y: -0.20254098}
 --- !u!50 &4955195849227715552
 Rigidbody2D:
   serializedVersion: 4

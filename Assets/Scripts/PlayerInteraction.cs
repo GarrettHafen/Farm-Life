@@ -66,8 +66,6 @@ public class PlayerInteraction : MonoBehaviour
 				{
 					if (MenuController.instance.plowActive && !MenuController.instance.previewObstructed)
 					{
-						//old code
-						//TileSelector.instance.GetPlotPosition();
 						if (StatsController.instance.RemoveCoins(5))
 						{
 							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), plotOffset);
@@ -321,7 +319,6 @@ public class PlayerInteraction : MonoBehaviour
 				timer.slider.gameObject.SetActive(false);
 			}
 			target = null;
-			tempTarget = null;
             timer = null;
 			
         }
