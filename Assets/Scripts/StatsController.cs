@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Packages.Rider.Editor.UnitTesting;
 
 public class StatsController : MonoBehaviour
 {
@@ -128,7 +129,7 @@ public class StatsController : MonoBehaviour
 
         while (currentCoinsCU < targetCoinsTotalCU)
         {
-            currentCoinsCU += speedCU;
+            currentCoinsCU += 1;
             //currentCoinsCU = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal); dont remember why we needed this clamp.....
             if(currentCoinsCU < 1000000)
             {
@@ -139,7 +140,8 @@ public class StatsController : MonoBehaviour
                 coinsText.text = currentCoinsCU.ToString();
             }
             yield return null;
-        }    
+        }
+        
     }
     IEnumerator CountDownToTarget(int speed)
     {
@@ -283,5 +285,9 @@ public class StatsController : MonoBehaviour
         }
         writer.Close();
         /*--------------------------------------------------------------------*/
+    }
+    private void ThingyTest()
+    {
+        Debug.Log("Test complete");
     }
 }

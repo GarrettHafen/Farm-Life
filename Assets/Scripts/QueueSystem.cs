@@ -10,6 +10,7 @@ public class QueueSystem
     MonoBehaviour m_Owner = null;
     Coroutine m_InternalCoroutine = null;
     Queue<IEnumerator> actions = new Queue<IEnumerator>();
+
     public QueueSystem(MonoBehaviour aCoroutineOwner)
     {
         m_Owner = aCoroutineOwner;
@@ -53,6 +54,7 @@ public class QueueSystem
 
     private IEnumerator Wait(float aWaitTime)
     {
+        Debug.Log("wait");
         yield return new WaitForSeconds(aWaitTime);
     }
 

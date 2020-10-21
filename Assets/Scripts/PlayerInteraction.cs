@@ -12,7 +12,6 @@ public class PlayerInteraction : MonoBehaviour
 	public GameObject tempTarget;
 
 	public TimerController timer;
-	public QueueProgressThingy timerThingy;
 
 	RaycastHit2D hit;
 
@@ -31,7 +30,6 @@ public class PlayerInteraction : MonoBehaviour
 
 	public Sprite redPreview4x4, greenPreview4x4, redPreview1x1, greenPreview1x1;
 
-	public QueueStuffSystem stuffQueue;
 
 	public Vector3 plotOffset;
 	public Vector3 treeOffset;
@@ -49,8 +47,6 @@ public class PlayerInteraction : MonoBehaviour
 		mouseyCompanionImage = mouseyCompanion.GetComponent<SpriteRenderer>();
 		mouseyCompanion.gameObject.SetActive(false);
 
-		stuffQueue = new QueueStuffSystem(this);
-		stuffQueue.StartLoop();
 
 	}
 
@@ -323,41 +319,6 @@ public class PlayerInteraction : MonoBehaviour
 			
         }
 	}
-
-	public IEnumerator ProgressBarQueue(string function)
-    {
-		timerThingy.slider.gameObject.SetActive(true);
-		float time = 0;
-		while(time < 300)
-        {
-			//float time = timerThingy.GetTime() + Time.deltaTime;
-			//var percent = time / 5f;
-			//timerThingy.SetTime(Mathf.Lerp(0, 1, percent));
-			//Debug.Log(timerThingy.GetTime());
-
-			time += Time.deltaTime;
-			Debug.Log(time);
-			
-        }
-        switch (function)	
-		{
-			case "Plow":
-				{
-					DirtTile.instance.Plow();
-					break;
-				}
-			case "NewPlot":
-				{
-					TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), new Vector3(0, .25f, 0));
-					FindObjectOfType<AudioManager>().PlaySound("Plow");
-					StatsController.instance.AddExp(1);
-					break;
-				}
-        }
-		timerThingy.slider.gameObject.SetActive(false);
-		yield return null;
-    }
-
 
 	public void DestroyStuff()
     {

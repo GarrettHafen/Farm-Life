@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DirtTile : MonoBehaviour
 {
@@ -12,8 +13,8 @@ public class DirtTile : MonoBehaviour
 	public bool needsPlowing = false;
 	public Sprite fallowed;
 
-	public string onGroundLayer;
-	public string normalCropLayer;
+	SpriteRenderer parentSprite;
+	SpriteRenderer[] childSprites;
 
 	private void Start()
 	{
@@ -23,7 +24,7 @@ public class DirtTile : MonoBehaviour
 		instance = this;
 	}
 
-	public void Interact (Crop c, /*Tool t, */PlayerInteraction player, DirtTile dirt)
+	public void Interact (Crop c,PlayerInteraction player, DirtTile dirt)
 	{
 		if (MenuController.instance.hasSeed && c.HasCrop())
 		{
@@ -42,7 +43,7 @@ public class DirtTile : MonoBehaviour
 		{
 			if (StatsController.instance.RemoveCoins(5))
 			{
-				//PlayerInteraction.instance.stuffQueue.EnqueueAction(PlayerInteraction.instance.ProgressBarQueue("Plow"));
+				
 				Plow();
 			}
 		}
@@ -51,14 +52,30 @@ public class DirtTile : MonoBehaviour
 			
 			MarketController.instance.ActivateMarket();
         }
-		else if (/*t.toolType == ToolType.Harvest &&*/ dirt.crop.HasCrop() && dirt.crop.state == CropState.Done && !MenuController.instance.fireTool)
+		else if (dirt.crop.HasCrop() && dirt.crop.state == CropState.Done && !MenuController.instance.fireTool)
 		{
-			HarvestCrop(player);
+			//set overlay and parent sprite opacity to .5
+			parentSprite = dirt.GetComponent<SpriteRenderer>();
+            parentSprite.color = new Color(1f, 1f, 1f, .5f);
+			childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
+			/*
+			 * HARD CODE ALERT!!!!! DON'T KNOW WHY DEPTH FIRST SEARCH ISN'T PICKING UP THE CHILD SPRITE RENDERER
+			 * 
+			 */
+			childSprites[1].color = new Color(1f, 1f, 1f, .5f);
+
+			//queue timer
+			QueueTaskSystem.instance.SetTask("harvestCrop", this);
+				//slider set to active
+				//while loop
+				//slider set to inactive
+				//call Harvest Crop
+					//add money
+					//change overlay and parent opacity to 1
+					//change overlay sprite to fallow
 		}
         else if (MenuController.instance.fireTool)
         {
-			//need confirmation message
-			//DestroyPlot(dirt);
 			MenuController.instance.OpenFireMenu();
         }
 
@@ -89,27 +106,26 @@ public class DirtTile : MonoBehaviour
 		player.SetCrop(new Crop(c.asset));
 	}
 
-	void HarvestCrop (PlayerInteraction player)
+	public void HarvestCrop(DirtTile dirt)
 	{
-		if (crop.state == CropState.Done || crop.state == CropState.Dead)
+		if (dirt.crop.state == CropState.Done || dirt.crop.state == CropState.Dead)
 		{
-			StatsController.instance.AddCoins(crop.asset.cropReward);
-			StatsController.instance.AddExp(crop.asset.expReward);
-			crop = new Crop(null);
-			needsPlowing = true;
-			AddDirt();
+			StatsController.instance.AddCoins(dirt.crop.asset.cropReward);
+			StatsController.instance.AddExp(dirt.crop.asset.expReward);
+			dirt.crop = new Crop(null);
+			dirt.needsPlowing = true;
+			parentSprite = dirt.GetComponent<SpriteRenderer>();
+			parentSprite.color = new Color(1f, 1f, 1f, 1f);
+			childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
+			childSprites[1].color = new Color(1f, 1f, 1f, 1f);
+			dirt.AddDirt();
 			FindObjectOfType<AudioManager>().PlaySound("Harvest");
-            if (PlayerInteraction.instance.timer.gameObject.activeInHierarchy)
-            {
-				PlayerInteraction.instance.timer.slider.gameObject.SetActive(false);
-            }
 		}
 	}
 
 	public void AddDirt()
 	{
 		overlay.sprite = fallowed;
-		overlay.sortingLayerName = onGroundLayer;
 	}
 
 	public void Plow ()
@@ -127,13 +143,6 @@ public class DirtTile : MonoBehaviour
 	public void UpdateSprite ()
 	{
 		overlay.sprite = crop.GetCropSprite();
-		if (crop.IsOnGround())
-		{
-			overlay.sortingLayerName = onGroundLayer;
-		} else
-		{
-			overlay.sortingLayerName = normalCropLayer;
-		}
 	}
 
 	private void Update()
