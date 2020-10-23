@@ -56,7 +56,7 @@ public class DirtTile : MonoBehaviour
 		{
 			//set overlay and parent sprite opacity to .5
 			parentSprite = dirt.GetComponent<SpriteRenderer>();
-            parentSprite.color = new Color(1f, 1f, 1f, .5f);
+            parentSprite.color = new Color(1f, 1f, 1f, .25f);
 			childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
 			/*
 			 * HARD CODE ALERT!!!!! DON'T KNOW WHY DEPTH FIRST SEARCH ISN'T PICKING UP THE CHILD SPRITE RENDERER
