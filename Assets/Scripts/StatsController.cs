@@ -17,7 +17,18 @@ public class StatsController : MonoBehaviour
     private int baseEXP = 100;
     private int currentEXP = 0;
     private int[] expToNextLevel;
-    private float currentCoins = 50;
+
+    /*
+     * had to split the coins into two types for new queue system. 
+     * need to make sure the player can execute a queued system before
+     * adding it to the task list. FarmVille cancels the queue if a task 
+     * cant complete due to insufficient funds, which seems dumb to me. 
+     * so i created the master coins list, and when a task completes, the 
+     * display will update to with the same change as master. master shouldn't
+     * get out of sync with display...but its a concern.
+     */
+    private float masterCoins = 50;
+    private float displayCoins = 50;
 
     private float targetCoinsTotal;
 
@@ -53,7 +64,8 @@ public class StatsController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            AddCoins(25);
+            AddCoinsMaster(25);
+            AddCoinsDisplay(25);
         }/*else if (Input.GetKeyDown(KeyCode.V))
         {
             AddCoins(250);
@@ -75,12 +87,40 @@ public class StatsController : MonoBehaviour
             SetCoins(5000);
             UpdateStats();
         }
+        if (masterCoins != displayCoins){
+            if (QueueTaskSystem.instance.GetQueueCount() == 0)
+            {
+                Debug.Log("problem with master and display, as expected...");
+            }
+        }
     }
 
     public void AddCoins(int coinsToAdd)
     {
+        AddCoinsMaster(coinsToAdd);
+        AddCoinsDisplay(coinsToAdd);
+    }
+
+    void AddCoinsMaster(int coinsToAdd)
+    {
+        /*
+         * doesn't need as much logic because its not going to be displayed
+         */
+        masterCoins += coinsToAdd;
+    }
+
+    void AddCoinsDisplay(int coinsToAdd)
+    {
+        /*
+         * - displayed in UI
+         * - if the coins get to high, i don't want 'coins' appended, ***pretty bad code, coins aren't being updated after this point, stupid***
+         * - i want coins to count up slowly but it needs to queue
+         * depending on how many coins are being added, it should count up 
+         * faster or slower.
+         * - queue actually updates display in UI
+         */
         
-        targetCoinsTotal = currentCoins + coinsToAdd;
+        targetCoinsTotal = displayCoins + coinsToAdd;
         
         if (targetCoinsTotal > 999999999f)
         {
@@ -88,48 +128,59 @@ public class StatsController : MonoBehaviour
         }
         else
         {
-            //StartCoroutine(CountUpToTarget(GetSpeed(coinsToAdd)));
-            //StartCoroutine(Coroutine2(coinsToAdd));
             int speed = GetSpeed(coinsToAdd);
-            queue.EnqueueAction(CountUpToTarget(currentCoins, targetCoinsTotal, speed));
-            //queue.EnqueueWait(.5f);
+            queue.EnqueueAction(CountUpToTarget(displayCoins, targetCoinsTotal, speed));
 
         }
-        currentCoins += coinsToAdd;
+        displayCoins += coinsToAdd;
 
     }
 
-    /*IEnumerator Coroutine2(int coinsToAdd)
+    public bool CheckMaster(int coinsToRemove)
     {
-        yield return CountUpToTarget(GetSpeed(coinsToAdd));
+        /*
+         * if master has enough coins, then the task can proceed 
+         */
 
-        //Coroutine1 is now finished and you can use its result
-    }*/
-
-    public bool RemoveCoins(int coinsToRemove)
-    {
-        targetCoinsTotal = currentCoins - coinsToRemove;
-        if(targetCoinsTotal < 0)
+        if(masterCoins > coinsToRemove)
         {
-            Debug.Log("cant do that you poor fool");
-            MenuController.instance.notificationBar.SetActive(false);
-            MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red,"No Money");
-            return false;
+            return true;
         }
         else
         {
-            
-            StartCoroutine(CountDownToTarget(GetSpeed(coinsToRemove)));
-            return true;
+            return false;
         }
+    }
+
+    public void RemoveCoinsMaster(int coinsToRemove)
+    {
+        /*
+         * doesn't need as much logic because its not going to be displayed
+         */
+
+        masterCoins -= coinsToRemove;
+    }
+
+    public void RemoveCoinsDisplay(int coinsToRemove)
+    {
+        /*
+         * needs to same logic as AddCoinsDisplay just in reverse
+         * 
+         */
+        targetCoinsTotal = displayCoins - coinsToRemove;
+        int speed = GetSpeed(coinsToRemove);
+        queue.EnqueueAction(CountDownToTarget(displayCoins, targetCoinsTotal, speed));
     }
 
     IEnumerator CountUpToTarget(float currentCoinsCU, float targetCoinsTotalCU, int speedCU)
     {
-
+        /*
+         * if coins are greater than x amount, remove Coins from display
+         * count up coins at the count of speed
+         */
         while (currentCoinsCU < targetCoinsTotalCU)
         {
-            currentCoinsCU += 1;
+            currentCoinsCU += speedCU;
             //currentCoinsCU = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal); dont remember why we needed this clamp.....
             if(currentCoinsCU < 1000000)
             {
@@ -143,19 +194,23 @@ public class StatsController : MonoBehaviour
         }
         
     }
-    IEnumerator CountDownToTarget(int speed)
+    IEnumerator CountDownToTarget(float currentCoinsCD, float targetCoinsTotalCD, int speedCD)
     {
-        while (currentCoins > targetCoinsTotal)
+        /*
+         * if coins are greater than x amount, remove Coins from display
+         * count up coins at the count of speed
+         */
+        while (currentCoinsCD > targetCoinsTotalCD)
         {
-            currentCoins -= speed;
-            currentCoins = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal);
-            if (currentCoins < 1000000)
+            currentCoinsCD -= speedCD;
+            //currentCoinsCD = Mathf.Clamp(currentCoinsCD, 0f, targetCoinsTotal);
+            if (currentCoinsCD < 1000000)
             {
-                coinsText.text = currentCoins + " coins";
+                coinsText.text = currentCoinsCD + " coins";
             }
             else
             {
-                coinsText.text = currentCoins.ToString();
+                coinsText.text = currentCoinsCD.ToString();
             }
         }
         yield return null;
@@ -163,6 +218,14 @@ public class StatsController : MonoBehaviour
 
     private int GetSpeed(int coins)
     {
+        /*
+         * bad code ----- might not matter with new queue task system
+         * 
+         * 
+         * not very elegant, if coins is small, speed is low.
+         * code is to prevent coins from counting up for 
+         * forever when doing things in mass 
+         */
         int speed = 1;
         if (coins < 25)
         {
@@ -186,8 +249,6 @@ public class StatsController : MonoBehaviour
         {
             if (currentEXP >= expToNextLevel[playerLevel])
             {
-                //LevelUp(); becuase of using minimum, currentEXP does not need to be adjusted after level up
-
                 playerLevel++;
                 levelText.text = playerLevel.ToString();
                 FindObjectOfType<AudioManager>().PlaySound("Level Up");
@@ -197,23 +258,18 @@ public class StatsController : MonoBehaviour
         {
             currentEXP = 0;
         }
-        //Debug.Log("------------Passed through------------");
-        //Debug.Log("currentEXP: " + currentEXP + " minimum: " + expToNextLevel[playerLevel - 1] + " maximum: " + expToNextLevel[playerLevel]);
         GetCurrentFill(currentEXP, expToNextLevel[playerLevel-1], expToNextLevel[playerLevel]);
     }
+
     public void GetCurrentFill(float currentEXP, float minimumEXP, float maximumEXP)
     {
         current = currentEXP;
         minimum = minimumEXP;
         maximum = maximumEXP;
 
-        //Debug.Log("------------enter GetCurrentFill------------");
         float currentOffset = current - minimum;
-        //Debug.Log("currentOffset " + currentOffset + " = current: " + current + " - minimum: " + minimum);
         float maximumOffset = maximum - minimum;
-        //Debug.Log("maximumOffset " + maximumOffset + " = maximum: " + maximum + " - minimum: " + minimum);
         float fillAmount = currentOffset / maximumOffset;
-        //Debug.Log("FillAmount " + fillAmount + " = currentOffset: " + currentOffset + " / maximumOffset: " + maximumOffset);
         fill.fillAmount = fillAmount;
 
         fill.color = color;
@@ -225,23 +281,18 @@ public class StatsController : MonoBehaviour
         expToNextLevel[1] = baseEXP;
         for (int i = 2; i < expToNextLevel.Length; i++)
         {
-            expToNextLevel[i] = (int)(Mathf.Floor(baseEXP * (Mathf.Pow(i, 1.5f))));
-            
+            expToNextLevel[i] = (int)(Mathf.Floor(baseEXP * (Mathf.Pow(i, 1.5f))));   
         }
-        /*for(int i = 0; i < expToNextLevel.Length; i++)
-        {
-            Debug.Log(i + ": " + expToNextLevel[i]);
-        }*/
-        
     }
 
     public float GetCoins()
     {
-        return currentCoins;
+        return masterCoins;
     }
     public void SetCoins(float coins)
     {
-        currentCoins = coins;
+        masterCoins = coins;
+        displayCoins = coins;
     }
     public int GetLvl()
     {
@@ -261,7 +312,7 @@ public class StatsController : MonoBehaviour
     }
     public void UpdateStats()
     {
-        coinsText.text = currentCoins + " coins";
+        coinsText.text = displayCoins + " coins";
         levelText.text = "" + playerLevel;
         GetCurrentFill(currentEXP, expToNextLevel[playerLevel - 1], expToNextLevel[playerLevel]);
     }
@@ -285,9 +336,5 @@ public class StatsController : MonoBehaviour
         }
         writer.Close();
         /*--------------------------------------------------------------------*/
-    }
-    private void ThingyTest()
-    {
-        Debug.Log("Test complete");
     }
 }

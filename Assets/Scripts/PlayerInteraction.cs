@@ -34,8 +34,9 @@ public class PlayerInteraction : MonoBehaviour
 	public Vector3 plotOffset;
 	public Vector3 treeOffset;
 
-	//public GameObject plot;
-
+	//sprites to manage opactiy during task execution
+	SpriteRenderer parentPlotSprite;
+	SpriteRenderer parentTreeSprite;
 
 
 	private void Start()
@@ -62,12 +63,34 @@ public class PlayerInteraction : MonoBehaviour
 				{
 					if (MenuController.instance.plowActive && !MenuController.instance.previewObstructed)
 					{
-						if (StatsController.instance.RemoveCoins(5))
+						// queue FIRST PLOW
+
+						//check if enough coins to perform task
+						if (StatsController.instance.CheckMaster(5))
 						{
-							TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), plotOffset);
-							FindObjectOfType<AudioManager>().PlaySound("Plow");
-							StatsController.instance.AddExp(1);
-							//stuffQueue.EnqueueAction(ProgressBarQueue("NewPlot"));
+							// if enough coins, decrement master
+							StatsController.instance.RemoveCoinsMaster(5);
+
+							//instantiate object, set opacity to half
+							DirtTile tempPlot = TileSelector.instance.PlacePlot(MenuController.instance.GetMouseyThingyPosition(), plotOffset);
+							parentPlotSprite = tempPlot.GetComponent<SpriteRenderer>();
+							parentPlotSprite.color = new Color(1f, 1f, 1f, .5f);
+
+							//queue task
+							//don't need to include anything else
+							QueueTaskSystem.instance.SetTask("firstPlow", tempPlot);
+
+							//after timer finishs, change opacity to full and play sound and update display
+							// see FinishFirstPlot()
+
+							
+                        }
+                        else
+                        {
+							//error notification and sound
+							MenuController.instance.notificationBar.SetActive(false);
+							MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red, "No Money");
+
 						}
 						return;
 					}
@@ -79,10 +102,35 @@ public class PlayerInteraction : MonoBehaviour
 					}
                     if(MenuController.instance.hasTree && !MenuController.instance.previewObstructed)
                     {
-                        if (StatsController.instance.RemoveCoins(tree.GetCost()))
+
+						//queue PLANT TREE
+
+						//check if enough coins to perform task
+                        if (StatsController.instance.CheckMaster(tree.GetCost()))
                         {
-							TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this, treeOffset);
+							// if enough coins, decrement master
+							StatsController.instance.RemoveCoinsMaster(tree.GetCost());
+
+							//instantiate object, set opacity to half
+							TreeTile tempTree = TileSelector.instance.PlantTree(MenuController.instance.GetMouseyThingyPosition(), tree, this, treeOffset);
+							parentTreeSprite = tempTree.GetComponent<SpriteRenderer>();
+							parentTreeSprite.color = new Color(1f, 1f, 1f, .5f);
+
+							// queue task
+							// nothing else needs passed
+
+							QueueTaskSystem.instance.SetTask("plantTree", tempTree);
+
+							//after task finishes, change opacity to full, update display and play sound, see FinishPlanttree()
+							
+
                         }
+                        else
+                        {
+							//error notification and sound
+							MenuController.instance.notificationBar.SetActive(false);
+							MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red, "No Money");
+						}
                     }
 					return;
 				}
@@ -342,4 +390,22 @@ public class PlayerInteraction : MonoBehaviour
     {
 		tempTarget = null;
     }
+
+	public void FinishFirstPlow(DirtTile dirt)
+    {
+		parentPlotSprite = dirt.GetComponent<SpriteRenderer>();
+		parentPlotSprite.color = new Color(1f, 1f, 1f, 1f);
+		StatsController.instance.RemoveCoinsDisplay(5);
+		FindObjectOfType<AudioManager>().PlaySound("Plow");
+		StatsController.instance.AddExp(1);
+	}
+
+	public void FinishPlantTree(TreeTile tree)
+    {
+		parentTreeSprite = tree.GetComponent<SpriteRenderer>();
+		parentTreeSprite.color = new Color(1f, 1f, 1f, 1f);
+		StatsController.instance.RemoveCoinsDisplay(tree.tree.GetCost());
+		FindObjectOfType<AudioManager>().PlaySound("Plow");
+		StatsController.instance.AddExp(1);
+	}
 }

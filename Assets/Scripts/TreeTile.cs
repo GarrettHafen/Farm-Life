@@ -8,6 +8,11 @@ public class TreeTile : MonoBehaviour
     public SpriteRenderer overlay;
 
 
+    //used to control opacity for task system
+    SpriteRenderer parentSprite;
+    SpriteRenderer[] childSprites;
+
+
     void Start()
     {
         instance = this;
@@ -32,7 +37,19 @@ public class TreeTile : MonoBehaviour
     {
         if(treeTile.tree.HasTree() && treeTile.tree.treeState == TreeState.Done && !MenuController.instance.fireTool)
         {
-            HarvestTree(player);
+            //queue HARVEST TREE
+
+            //set overlay and parent sprite opacity to .5
+            parentSprite = treeTile.GetComponent<SpriteRenderer>();
+            childSprites = treeTile.GetComponentsInChildren<SpriteRenderer>();
+
+            parentSprite.color = new Color(1f, 1f, 1f, .5f);
+            childSprites[1].color = new Color(1f, 1f, 1f, .5f);
+
+            // queue task
+            QueueTaskSystem.instance.SetTask("harvestTree", treeTile);
+
+            //after task is compolete, see HarvestTree
         }
         if (MenuController.instance.fireTool)
         {
@@ -43,13 +60,19 @@ public class TreeTile : MonoBehaviour
         //sell
     }
 
-    void HarvestTree(PlayerInteraction player)
+    public void HarvestTree(TreeTile tree)
     {
-        StatsController.instance.AddCoins(tree.asset.treeReward);
-        StatsController.instance.AddExp(tree.asset.expReward);
-        tree.treeState = TreeState.Growing;
+        parentSprite = tree.GetComponent<SpriteRenderer>();
+        childSprites = tree.GetComponentsInChildren<SpriteRenderer>();
+
+        parentSprite.color = new Color(1f, 1f, 1f, 1f);
+        childSprites[1].color = new Color(1f, 1f, 1f, 1f);
+
+        StatsController.instance.AddCoins(tree.tree.asset.treeReward);
+        StatsController.instance.AddExp(tree.tree.asset.expReward);
+        tree.tree.treeState = TreeState.Growing;
         UpdateTreeSprite();
-        tree.SetGrowthLvl(0f);
+        tree.tree.SetGrowthLvl(0f);
         FindObjectOfType<AudioManager>().PlaySound("Harvest");
         
     }

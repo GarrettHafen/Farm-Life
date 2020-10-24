@@ -59,6 +59,9 @@ public class QueueSystem
     }
 
   
-
+    public int GetQueueCount()
+    {
+        return actions.Count;
+    }
 
 }

@@ -105,16 +105,16 @@ public class TileSelector : MonoBehaviour
         // activate plot at plot position
 
         //if plots should cost money.... still on the fence
-        if (StatsController.instance.RemoveCoins(5))
+        /*if (StatsController.instance.RemoveCoins(5))
         {
             plots[intendedPlotPosition].SetActive(true);
             FindObjectOfType<AudioManager>().PlaySound("Plow");
-        }
+        }*/
         //plots[intendedPlotPosition].SetActive(true);
         //FindObjectOfType<AudioManager>().PlaySound("Plow");
     }
 
-    public void PlacePlot(Vector3 plotPosition, Vector3 offset)
+    public DirtTile PlacePlot(Vector3 plotPosition, Vector3 offset)
     {
         //this is for creating all the plots and setting them as inactive until the player wants to activate them.
         /*GOOD STUFF DON'T DELETE*/
@@ -129,9 +129,10 @@ public class TileSelector : MonoBehaviour
         tempPlot.SetActive(true);
         tempPlot.transform.SetParent(plotParent.transform);
         plots.Add(tempPlot);
+        return tempPlot.GetComponent<DirtTile>();
     }
 
-    public void PlantTree(Vector3 mousePosition, Tree t, PlayerInteraction player, Vector3 offset)
+    public TreeTile PlantTree(Vector3 mousePosition, Tree t, PlayerInteraction player, Vector3 offset)
     {
         mousePosition.y += offset.y;//0.16f
         mousePosition.x += offset.x; //0.023f;
@@ -148,8 +149,7 @@ public class TileSelector : MonoBehaviour
         treeTile.tree = t;
         treeTile.UpdateTreeSprite();
 
-        FindObjectOfType<AudioManager>().PlaySound("Plow");
-
+        return tempTree.GetComponent<TreeTile>();
 
     }
 
