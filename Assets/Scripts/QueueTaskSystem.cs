@@ -44,7 +44,6 @@ public class QueueTaskSystem : MonoBehaviour
     {
         //dirt
         Slider[] sliders = dirt.GetComponentsInChildren<Slider>(true);
-        Debug.Log(sliders.Length);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
         while (sliders[1].value < sliders[1].maxValue)

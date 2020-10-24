@@ -79,6 +79,7 @@ public class PlayerInteraction : MonoBehaviour
 							//queue task
 							//don't need to include anything else
 							QueueTaskSystem.instance.SetTask("firstPlow", tempPlot);
+							//Debug.Log(QueueTaskSystem.instance.GetQueueCount());
 
 							//after timer finishs, change opacity to full and play sound and update display
 							// see FinishFirstPlot()

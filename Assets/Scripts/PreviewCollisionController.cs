@@ -40,7 +40,7 @@ public class PreviewCollisionController : MonoBehaviour
         else
         {
             MenuController.instance.previewObstructed = true;
-            Debug.Log("Collision in list: " + listOfCollisions[0].name);
+            //Debug.Log("Collision in list: " + listOfCollisions[0].name);
         }
     }
 }

@@ -174,7 +174,7 @@ public class TileSelector : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Grid Setup Complete");
+        //Debug.Log("Grid Setup Complete");
     }
 
     private void WriteGridToFile()

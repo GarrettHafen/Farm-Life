@@ -54,7 +54,7 @@ public class QueueSystem
 
     private IEnumerator Wait(float aWaitTime)
     {
-        Debug.Log("wait");
+        //Debug.Log("wait");
         yield return new WaitForSeconds(aWaitTime);
     }
 

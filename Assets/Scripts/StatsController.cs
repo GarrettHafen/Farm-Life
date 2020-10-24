@@ -87,11 +87,9 @@ public class StatsController : MonoBehaviour
             SetCoins(5000);
             UpdateStats();
         }
-        if (masterCoins != displayCoins){
-            if (QueueTaskSystem.instance.GetQueueCount() == 0)
-            {
-                Debug.Log("problem with master and display, as expected...");
-            }
+        if (masterCoins != displayCoins && QueueTaskSystem.instance.GetQueueCount() == 0)
+        { 
+            //Debug.Log("problem with master and display, as expected...");
         }
     }
 
@@ -201,7 +199,8 @@ public class StatsController : MonoBehaviour
          * count up coins at the count of speed
          */
         while (currentCoinsCD > targetCoinsTotalCD)
-        {
+        { 
+            Debug.Log("inside while");
             currentCoinsCD -= speedCD;
             //currentCoinsCD = Mathf.Clamp(currentCoinsCD, 0f, targetCoinsTotal);
             if (currentCoinsCD < 1000000)
