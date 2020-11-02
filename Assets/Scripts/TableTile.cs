@@ -12,7 +12,7 @@ public class TableTile : MonoBehaviour
 	private void Start()
 	{
 		if (crop.HasCrop())
-			overlay.sprite = crop.GetCropSprite();
+			overlay.sprite = crop.GetCropSprite(crop);
 		else if (tool != null)
 			overlay.sprite = tool.sprite;
 	}
@@ -27,7 +27,7 @@ public class TableTile : MonoBehaviour
 		if (tool != null)
 			overlay.sprite = tool.sprite;
 		else if (crop != null)
-			overlay.sprite = crop.GetCropSprite();
+			overlay.sprite = crop.GetCropSprite(crop);
 		else
 			overlay.sprite = null;
 	}

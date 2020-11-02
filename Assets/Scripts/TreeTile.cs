@@ -27,7 +27,7 @@ public class TreeTile : MonoBehaviour
                 bool treeIsDone = tree.TreeGrow(Time.deltaTime, this);
                 if (treeIsDone)
                 {
-                    UpdateTreeSprite();
+                    UpdateTreeSprite(this);
                 }
             }
         }
@@ -60,19 +60,19 @@ public class TreeTile : MonoBehaviour
         //sell
     }
 
-    public void HarvestTree(TreeTile tree)
+    public void HarvestTree(TreeTile treeThingy)
     {
-        parentSprite = tree.GetComponent<SpriteRenderer>();
-        childSprites = tree.GetComponentsInChildren<SpriteRenderer>();
+        parentSprite = treeThingy.GetComponent<SpriteRenderer>();
+        childSprites = treeThingy.GetComponentsInChildren<SpriteRenderer>();
 
         parentSprite.color = new Color(1f, 1f, 1f, 1f);
         childSprites[1].color = new Color(1f, 1f, 1f, 1f);
 
-        StatsController.instance.AddCoins(tree.tree.asset.treeReward);
-        StatsController.instance.AddExp(tree.tree.asset.expReward);
-        tree.tree.treeState = TreeState.Growing;
-        UpdateTreeSprite();
-        tree.tree.SetGrowthLvl(0f);
+        StatsController.instance.AddCoins(treeThingy.tree.asset.treeReward);
+        StatsController.instance.AddExp(treeThingy.tree.asset.expReward);
+        treeThingy.tree.treeState = TreeState.Growing;
+        UpdateTreeSprite(treeThingy);
+        treeThingy.tree.SetGrowthLvl(0f);
         FindObjectOfType<AudioManager>().PlaySound("Harvest");
         
     }
@@ -103,8 +103,8 @@ public class TreeTile : MonoBehaviour
         
     }
 
-    public void UpdateTreeSprite()
+    public void UpdateTreeSprite(TreeTile treeThingy)
     {
-        overlay.sprite = tree.GetTreeSprite();
+        treeThingy.overlay.sprite = tree.GetTreeSprite(treeThingy.tree);
     }
 }

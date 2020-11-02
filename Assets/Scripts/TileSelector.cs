@@ -144,10 +144,10 @@ public class TileSelector : MonoBehaviour
         tempTree.transform.SetParent(treeParent.transform);
         trees.Add(tempTree);
         tree = t;
-        //player.SetTree(new Tree(t.asset));
+        player.SetTree(new Tree(t.asset));
         TreeTile treeTile = tempTree.GetComponent<TreeTile>();
         treeTile.tree = t;
-        treeTile.UpdateTreeSprite();
+        treeTile.UpdateTreeSprite(treeTile);
 
         return tempTree.GetComponent<TreeTile>();
 

@@ -156,7 +156,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 2.5
+  m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -275,7 +275,6 @@ GameObject:
   - component: {fileID: 1633298131934116058}
   - component: {fileID: 60577805356608902}
   - component: {fileID: 114009906283981976}
-  - component: {fileID: 7444830403987301295}
   - component: {fileID: 50118480929171136}
   m_Layer: 0
   m_Name: TilledTile
@@ -415,18 +414,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1812355155498150701}
   timerSprite: {fileID: 8558405040070300815}
---- !u!114 &7444830403987301295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2555449587901654986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a192bcab41f1c1648b714e01ba8c9604, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &50118480929171136
 Rigidbody2D:
   serializedVersion: 4

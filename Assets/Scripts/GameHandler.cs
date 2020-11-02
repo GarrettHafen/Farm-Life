@@ -131,8 +131,8 @@ public class GameHandler : MonoBehaviour
                             dirt.crop.SetGrowthLvl(CalcTimePassed(data.activeTimers[i], data.savedTime, dirt.crop.asset.cropTimer, dirt));
                             //set crop state and update sprites
                             dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
-                            dirt.crop.GetCropSprite();// ************************i don't know what this line does ************************
-                            dirt.UpdateSprite();
+                            dirt.crop.GetCropSprite(dirt.crop);// ************************i don't know what this line does ************************
+                            dirt.UpdateSprite(dirt);
 
                             //set needs plowing
                             dirt.needsPlowing = data.needsPlowing[i];
@@ -174,7 +174,7 @@ public class GameHandler : MonoBehaviour
             TreeTile treeTile = TileSelector.instance.trees[i].GetComponent<TreeTile>();
             treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTreeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
             treeTile.tree.treeState = treeTile.tree.GetState(data.activeTreeStates[i]);
-            treeTile.UpdateTreeSprite();
+            treeTile.UpdateTreeSprite(treeTile);
 
         }
 

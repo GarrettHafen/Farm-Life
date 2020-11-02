@@ -72,19 +72,19 @@ public class Tree
         return asset.treeCost;
     }
 
-    public Sprite GetTreeSprite()
+    public Sprite GetTreeSprite(Tree t)
     {
-        if (asset == null)
+        if (t.asset == null)
             return null;
 
-        switch (treeState)
+        switch (t.treeState)
         {
             case TreeState.Planted:
-                return asset.treePlantedSprite;
+                return t.asset.treePlantedSprite;
             case TreeState.Growing://displays the flowering sprite
-                return asset.treeGrowingSprite;
+                return t.asset.treeGrowingSprite;
             case TreeState.Done:
-                return asset.treeDoneSprite;
+                return t.asset.treeDoneSprite;
         }
 
         Debug.LogError("WHAT?!");

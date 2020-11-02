@@ -87,9 +87,10 @@ public class StatsController : MonoBehaviour
             SetCoins(5000);
             UpdateStats();
         }
-        if (masterCoins != displayCoins && QueueTaskSystem.instance.GetQueueCount() == 0)
-        { 
-            //Debug.Log("problem with master and display, as expected...");
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("Master: " + masterCoins);
+            Debug.Log("Display: " + displayCoins);
         }
     }
 
@@ -140,7 +141,7 @@ public class StatsController : MonoBehaviour
          * if master has enough coins, then the task can proceed 
          */
 
-        if(masterCoins > coinsToRemove)
+        if(masterCoins >= coinsToRemove)
         {
             return true;
         }
@@ -168,6 +169,7 @@ public class StatsController : MonoBehaviour
         targetCoinsTotal = displayCoins - coinsToRemove;
         int speed = GetSpeed(coinsToRemove);
         queue.EnqueueAction(CountDownToTarget(displayCoins, targetCoinsTotal, speed));
+        displayCoins -= coinsToRemove;
     }
 
     IEnumerator CountUpToTarget(float currentCoinsCU, float targetCoinsTotalCU, int speedCU)
@@ -200,7 +202,6 @@ public class StatsController : MonoBehaviour
          */
         while (currentCoinsCD > targetCoinsTotalCD)
         { 
-            Debug.Log("inside while");
             currentCoinsCD -= speedCD;
             //currentCoinsCD = Mathf.Clamp(currentCoinsCD, 0f, targetCoinsTotal);
             if (currentCoinsCD < 1000000)

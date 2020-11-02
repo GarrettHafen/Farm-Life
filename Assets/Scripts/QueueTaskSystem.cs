@@ -10,7 +10,7 @@ public class QueueTaskSystem : MonoBehaviour
     //public Slider slider;
     QueueSystem queue;
 
-    float waitTime = .5f;
+    float waitTime = .15f;
 
     private void Start()
     {
@@ -74,7 +74,6 @@ public class QueueTaskSystem : MonoBehaviour
     {
         //tree
         Slider[] sliders = tree.GetComponentsInChildren<Slider>(true);
-        Debug.Log(sliders.Length);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
         while (sliders[1].value < sliders[1].maxValue)
@@ -101,7 +100,6 @@ public class QueueTaskSystem : MonoBehaviour
     {
         //plant seed
         Slider[] sliders = dirt.GetComponentsInChildren<Slider>(true);
-        Debug.Log(sliders.Length);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
         while (sliders[1].value < sliders[1].maxValue)

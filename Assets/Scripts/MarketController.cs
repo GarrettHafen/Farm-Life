@@ -50,11 +50,6 @@ public class MarketController : MonoBehaviour
         }
     }
 
-    public void Test()
-    {
-        Debug.Log("test");
-    }
-
     public void ActivateMarket()
     {
         marketOpen = true;

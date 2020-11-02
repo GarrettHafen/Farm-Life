@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DirtTile : MonoBehaviour
 {
@@ -35,9 +32,14 @@ public class DirtTile : MonoBehaviour
                 {
 					//if enough coins, decrement master
 					StatsController.instance.RemoveCoinsMaster(c.asset.cropCost);
+					//change sprite opacity
+					parentSprite = this.GetComponent<SpriteRenderer>();
+					childSprites = this.GetComponentsInChildren<SpriteRenderer>();
+					parentSprite.color = new Color(1f, 1f, 1f, .5f);
+					childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 
 					// queue task
-					QueueTaskSystem.instance.SetTask(c, player, dirt);
+					QueueTaskSystem.instance.SetTask(new Crop(c.asset), player, this);
 
 					// after task completes, see PlantSeed(c, player, dirt);
                 }
@@ -68,13 +70,13 @@ public class DirtTile : MonoBehaviour
 				StatsController.instance.RemoveCoinsMaster(5);
 
 				//change overlay
-				parentSprite = dirt.GetComponent<SpriteRenderer>();
-				childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
+				parentSprite = this.GetComponent<SpriteRenderer>();
+				childSprites = this.GetComponentsInChildren<SpriteRenderer>();
 				parentSprite.color = new Color(1f, 1f, 1f, .5f);
 				childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 
 				//queue task
-				QueueTaskSystem.instance.SetTask("secondPlow", dirt);
+				QueueTaskSystem.instance.SetTask("secondPlow", this);
 
 				//after task completes see Plow(dirt)
             }
@@ -95,9 +97,9 @@ public class DirtTile : MonoBehaviour
 			//queue HARVEST
 
 			//set overlay and parent sprite opacity to .5
-			parentSprite = dirt.GetComponent<SpriteRenderer>();
+			parentSprite = this.GetComponent<SpriteRenderer>();
             parentSprite.color = new Color(1f, 1f, 1f, .25f);
-			childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
+			childSprites = this.GetComponentsInChildren<SpriteRenderer>();
 			/*
 			 * HARD CODE ALERT!!!!! DON'T KNOW WHY DEPTH FIRST SEARCH ISN'T PICKING UP THE CHILD SPRITE RENDERER
 			 * 
@@ -105,7 +107,7 @@ public class DirtTile : MonoBehaviour
 			childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 			
 			//queue timer
-			QueueTaskSystem.instance.SetTask("harvestCrop", dirt);
+			QueueTaskSystem.instance.SetTask("harvestCrop", this);
 				//slider set to active
 				//while loop
 				//slider set to inactive
@@ -116,6 +118,8 @@ public class DirtTile : MonoBehaviour
 		}
         else if (MenuController.instance.fireTool)
         {
+
+			//need to assign to task queue
 			MenuController.instance.OpenFireMenu();
         }
 
@@ -124,6 +128,10 @@ public class DirtTile : MonoBehaviour
 
 	public void PlantSeed (Crop c, PlayerInteraction player, DirtTile dirt)
 	{
+		parentSprite = dirt.GetComponent<SpriteRenderer>();
+		childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
+
+		
 		if (dirt.crop.asset != null && dirt.crop.state != CropState.Seed)
 		{
 			Debug.Log("Crop not seed, can't plan't.");
@@ -131,16 +139,16 @@ public class DirtTile : MonoBehaviour
 			MenuController.instance.AnimateNotifcation("Can't Plant Seed", Color.red, "Error");
 			return;
 		}
-		crop = c;
-		crop.state = CropState.Planted;
-
-		UpdateSprite();
+		dirt.crop = c;
+		dirt.crop.state = CropState.Planted;
+		UpdateSprite(dirt);
+		parentSprite.color = new Color(1f, 1f, 1f, 1f);
+		childSprites[1].color = new Color(1f, 1f, 1f, 1f);
 
 		StatsController.instance.AddExp(1);
 		StatsController.instance.RemoveCoinsDisplay(c.asset.cropCost);
 		FindObjectOfType<AudioManager>().PlaySound("Seed");
 
-		player.SetCrop(new Crop(c.asset));
 	}
 
 	public void HarvestCrop(DirtTile dirt)
@@ -180,9 +188,10 @@ public class DirtTile : MonoBehaviour
 		
 	}
 
-	public void UpdateSprite ()
+	public void UpdateSprite (DirtTile dirtPlot)
 	{
-		overlay.sprite = crop.GetCropSprite();
+		SpriteRenderer[] sprites = dirtPlot.GetComponentsInChildren<SpriteRenderer>();
+			sprites[1].sprite = dirtPlot.crop.GetCropSprite(dirtPlot.crop);
 	}
 
 	private void Update()
@@ -194,7 +203,7 @@ public class DirtTile : MonoBehaviour
 				bool isDone = crop.Grow(Time.deltaTime, this);
 				if (isDone)
 				{
-					UpdateSprite();
+					UpdateSprite(this);
 				}
 			}
 		}
@@ -202,7 +211,7 @@ public class DirtTile : MonoBehaviour
 
 
     public void DestroyPlot(DirtTile plotToDestroy)
-    {
+    {	
         foreach(GameObject plot in TileSelector.instance.plots)
         {
             if (plot.Equals(plotToDestroy.gameObject))
@@ -220,7 +229,6 @@ public class DirtTile : MonoBehaviour
 		overlay.sprite = null;
 		needsPlowing = false;
 		crop = new Crop(null);
-		int temp = TileSelector.instance.plots.Count;
 		foreach (GameObject plot in TileSelector.instance.plots)
 		{
 			Object.Destroy(plot);
@@ -228,11 +236,6 @@ public class DirtTile : MonoBehaviour
 		}
 		TileSelector.instance.plots.Clear();
 
-        /* broken for some reason
-		for(int i = 0; i < temp; i++)
-        {
-			TileSelector.instance.plots.Remove(TileSelector.instance.plots[i]);
-        }*/
 	}
 
 }

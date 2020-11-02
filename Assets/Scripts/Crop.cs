@@ -26,7 +26,7 @@ public class Crop
 			state = CropState.Growing;
 			if(dirt.overlay.sprite = asset.seedSprite)
             {
-				dirt.UpdateSprite();
+				dirt.UpdateSprite(dirt);
             }
 			return false;
         }
@@ -57,23 +57,23 @@ public class Crop
 			return true;
 	}
 
-	public Sprite GetCropSprite()
+	public Sprite GetCropSprite(Crop c)
 	{
-		if (asset == null)
+		if (c.asset == null)
 			return null;
 
 		switch (state)
 		{
 			case CropState.Seed:
-				return asset.seedSprite;
+				return c.asset.seedSprite;
 			case CropState.Planted:
-				return asset.seedSprite;
+				return c.asset.seedSprite;
 			case CropState.Growing://displays the sprout sprite
-				return asset.sproutSprite;
+				return c.asset.sproutSprite;
 			case CropState.Dead:
-				return asset.deadSprite;
+				return c.asset.deadSprite;
 			case CropState.Done:
-				return asset.doneSprite;
+				return c.asset.doneSprite;
 		}
 
 		Debug.LogError("WHAT?!");
