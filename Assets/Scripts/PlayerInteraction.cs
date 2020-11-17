@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,8 @@ public class PlayerInteraction : MonoBehaviour
 	private Tool tool;
 	[SerializeField]
 	private Tree tree;
+	[SerializeField]
+	private Animal animal;
 
 
 	public GameObject mouseyCompanion;
@@ -33,10 +36,12 @@ public class PlayerInteraction : MonoBehaviour
 
 	public Vector3 plotOffset;
 	public Vector3 treeOffset;
+	public Vector3 animalOffset;
 
 	//sprites to manage opactiy during task execution
 	SpriteRenderer parentPlotSprite;
 	SpriteRenderer parentTreeSprite;
+	SpriteRenderer parentAnimalSprite;
 
 
 	private void Start()
@@ -118,13 +123,38 @@ public class PlayerInteraction : MonoBehaviour
 							parentTreeSprite.color = new Color(1f, 1f, 1f, .5f);
 
 							// queue task
-							// nothing else needs passed
-
 							QueueTaskSystem.instance.SetTask("plantTree", tempTree);
 
 							//after task finishes, change opacity to full, update display and play sound, see FinishPlanttree()
 							
 
+                        }
+                        else
+                        {
+							//error notification and sound
+							MenuController.instance.notificationBar.SetActive(false);
+							MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red, "No Money");
+						}
+                    }
+					if (MenuController.instance.hasAnimal && !MenuController.instance.previewObstructed)
+                    {
+						//queue PLACE ANIMAL
+
+						// check if enough coins to perform task
+						if (StatsController.instance.CheckMaster(animal.GetCost()))
+                        {
+							//if enough coins, decrement master
+							StatsController.instance.RemoveCoinsMaster(animal.GetCost());
+
+							//instantiate object, set opacity to half
+							AnimalTile tempAnimal = TileSelector.instance.PlaceAnimal(MenuController.instance.GetMouseyThingyPosition(), animal, this, animalOffset);
+							parentAnimalSprite = tempAnimal.GetComponent<SpriteRenderer>();
+							parentAnimalSprite.color = new Color(1f, 1f, 1f, .5f);
+
+							//queue task
+							QueueTaskSystem.instance.SetTask("placeAnimal", tempAnimal);
+
+							//after task finishes, change opacity to full, update display and play sound, see FinishPlaceAnimal()
                         }
                         else
                         {
@@ -142,6 +172,11 @@ public class PlayerInteraction : MonoBehaviour
 				}
 
 				//animal code
+				AnimalTile animalTile = target.GetComponent<AnimalTile>();
+				if(animalTile != null)
+                {
+					animalTile.Interact(animal, animalTile, this);
+                }
 
 
 				//tree code
@@ -159,7 +194,12 @@ public class PlayerInteraction : MonoBehaviour
 			MenuController.instance.DestroyPreview();
         }
 
-
+		/*
+		 * 
+		 * can this all be replaced by a single function that pulls the right preview from the new list i just made?
+		 * 
+		 * 
+		 */
         //if plow tool active, display 4x4 preview
         if (MenuController.instance.plowActive)
 		{
@@ -170,11 +210,11 @@ public class PlayerInteraction : MonoBehaviour
             }
             if (MenuController.instance.previewObstructed)
             {
-				MenuController.instance.SetPreviewColor(redPreview4x4, preview);
+				MenuController.instance.SetPreviewColor(GameHandler.instance.previewList[8].previewRedSprite, preview);
             }
             else
             {
-				MenuController.instance.SetPreviewColor(greenPreview4x4, preview);
+				MenuController.instance.SetPreviewColor(GameHandler.instance.previewList[8].previewGreenSprite, preview);
             }
 		}
         //display tree and preview
@@ -188,17 +228,35 @@ public class PlayerInteraction : MonoBehaviour
 			}
 			if (MenuController.instance.previewObstructed)
 			{
-				MenuController.instance.SetPreviewColor(redPreview1x1, preview);
+				MenuController.instance.SetPreviewColor(GameHandler.instance.previewList[0].previewRedSprite, preview);
 			}
 			else
 			{
-				MenuController.instance.SetPreviewColor(greenPreview1x1, preview);
+				MenuController.instance.SetPreviewColor(GameHandler.instance.previewList[0].previewGreenSprite, preview);
 			}
 		}
 
-        //display animal and preview
-
-        //display decoration and preview
+		//display animal and preview
+		if (MarketController.instance.marketState == MarketState.Animal && MenuController.instance.hasAnimal)
+		{
+			GameObject preview = GetPreviewContainer(animal.asset.preview);
+			int previewPosition = GetPreviewPosition(animal.asset.preview);
+			if (!MenuController.instance.GetMouseyThingy())
+			{
+				MenuController.instance.ActivatePreview(preview);
+				MenuController.instance.previewObstructed = false;
+			}
+			if (MenuController.instance.previewObstructed)
+			{
+				MenuController.instance.SetPreviewColor(GameHandler.instance.previewList[previewPosition].previewRedSprite, preview);
+			}
+			else
+			{
+				MenuController.instance.SetPreviewColor(GameHandler.instance.previewList[previewPosition].previewGreenSprite, preview);
+			}
+		}
+		//display decoration and preview
+		//remove to comment out entire section*/
 
 		//display timer if hovered over target
 		if (target != null && !MenuController.instance.previewActive)
@@ -269,6 +327,32 @@ public class PlayerInteraction : MonoBehaviour
 					DisplayMouseyCompanion(null);
                 }
 			}
+
+			AnimalTile tempAnimal = target.GetComponent<AnimalTile>();
+            if (tempAnimal)
+            {
+                if (tempAnimal.animal.HasAnimal())
+                {
+					timer = tempAnimal.GetComponent<TimerController>();
+					timer.slider.gameObject.SetActive(true);
+					timer.SetTime(tempAnimal.animal.GetGrowthLvl());
+					timer.SetSprite(tempAnimal.animal.asset.animalIconSprite);
+                }
+				if(tempAnimal.animal.animalState == AnimalState.Done)
+                {
+					//display harvest tool
+					DisplayMouseyCompanion(basketToolSprite);
+                }
+				if (MenuController.instance.fireTool)
+				{
+					//display destroy icon
+					DisplayMouseyCompanion(fireToolSprite);
+				}
+				if (tempAnimal.animal.animalState == AnimalState.Growing)
+				{
+					DisplayMouseyCompanion(null);
+				}
+			}
 		}
         else
         {
@@ -327,6 +411,11 @@ public class PlayerInteraction : MonoBehaviour
 		tree = t;
 		MenuController.instance.DisplayInventory();
     }
+	public void SetAnimal(Animal a)
+    {
+		animal = a;
+		MenuController.instance.DisplayInventory();
+    }
 	public Crop GetCrop()
     {
 		return crop;
@@ -337,6 +426,10 @@ public class PlayerInteraction : MonoBehaviour
 		return tree;
     }
 
+	public Animal GetAnimal()
+    {
+		return animal;
+    }
     private void DisplayMouseyCompanion(Sprite sprite)
     {
         if(sprite == null)
@@ -350,8 +443,6 @@ public class PlayerInteraction : MonoBehaviour
 		mouseyCompanionImage.sprite = sprite;
 		mouseyCompanion.gameObject.SetActive(true);
 	}
-
-	
 
 	public void Deselect()
 	{
@@ -408,5 +499,55 @@ public class PlayerInteraction : MonoBehaviour
 		StatsController.instance.RemoveCoinsDisplay(tree.tree.GetCost());
 		FindObjectOfType<AudioManager>().PlaySound("Plow");
 		StatsController.instance.AddExp(1);
+	}
+
+	public void FinishPlaceAnimal(AnimalTile animal)
+    {
+		parentAnimalSprite = animal.GetComponent<SpriteRenderer>();
+		parentAnimalSprite.color = new Color(1f, 1f, 1f, 1f);
+		StatsController.instance.RemoveCoinsDisplay(animal.animal.GetCost());
+		FindObjectOfType<AudioManager>().PlaySound("Plow");
+		StatsController.instance.AddExp(1);
+	}
+
+	public GameObject GetPreviewContainer(string intendedPreview)
+    {
+		switch (intendedPreview)
+		{
+			case "1x1":
+				{
+					return GameHandler.instance.previewContainerList[0];
+				}
+			case "4x4":
+                {
+					return GameHandler.instance.previewContainerList[1];
+                }
+			case "2x2":
+                {
+					return GameHandler.instance.previewContainerList[6];
+                }
+        }
+
+		return null;
+    }
+	public int GetPreviewPosition(string intendedPreview)
+	{
+		switch (intendedPreview)
+		{
+			case "1x1":
+				{
+					return 0;
+				}
+			case "4x4":
+				{
+					return 8;	
+				}
+			case "2x2":
+                {
+					return 5;
+                }
+		}
+		Debug.Log("error in preview position");
+		return 0;
 	}
 }

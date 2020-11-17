@@ -54,10 +54,10 @@ public class TreeTile : MonoBehaviour
         if (MenuController.instance.fireTool)
         {
             MenuController.instance.OpenFireMenu();
-            //treeTile.DestroyTree(treeTile);
         }
 
         //sell
+        //move??
     }
 
     public void HarvestTree(TreeTile treeThingy)

@@ -16,7 +16,7 @@ MonoBehaviour:
   treeGrowingSprite: {fileID: 21300000, guid: 7558e5a958e334d5f8dad5f7bbb3f5dd, type: 3}
   treeDoneSprite: {fileID: 21300000, guid: 502ec112480bf40d48af864db35ee506, type: 3}
   treeIconSprite: {fileID: 21300000, guid: 6dd6e222b23d14dafb31f171868b6026, type: 3}
-  treeTimer: 3600
+  treeTimer: 15
   treeCost: 15
   treeReward: 5
   expReward: 2

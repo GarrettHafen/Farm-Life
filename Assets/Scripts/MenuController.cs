@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,7 @@ public class MenuController : MonoBehaviour
     public GameObject handIndicatorParent;
 
     public bool hasTree = false;
+    public bool hasAnimal = false;
 
     public GameObject fireMenu;
 
@@ -70,6 +72,7 @@ public class MenuController : MonoBehaviour
                 Vector3 screenToWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
                 Vector3Int worldToCell = grid.WorldToCell(screenToWorld);
                 mouseyThingy.position = new Vector3(grid.GetCellCenterWorld(worldToCell).x + xOffset, grid.GetCellCenterWorld(worldToCell).y + yOffset, 9f);
+                
                 //placeablePreview for when we need to place animals, trees or decorations. 
             }
         }
@@ -238,6 +241,10 @@ public class MenuController : MonoBehaviour
         {
             handIndicator.sprite = PlayerInteraction.instance.GetTree().asset.treeIconSprite;
         }
+        else if (hasAnimal)
+        {
+            handIndicator.sprite = PlayerInteraction.instance.GetAnimal().asset.animalIconSprite;
+        }
     }
 
     public void ClearHand()
@@ -245,6 +252,7 @@ public class MenuController : MonoBehaviour
         handIndicatorParent.SetActive(false);
         hasSeed = false;
         hasTree = false;
+        hasAnimal = false;
         plowActive = false;
         fireTool = false;
     }

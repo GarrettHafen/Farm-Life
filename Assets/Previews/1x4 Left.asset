@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c716a25b743401ea4048e9c227d612, type: 3}
+  m_Name: 1x4 Left
+  m_EditorClassIdentifier: 
+  previewName: 1x4 Left
+  previewGreenSprite: {fileID: 21300000, guid: 28243625b831645cb94efc73bf791c95, type: 3}
+  previewRedSprite: {fileID: 21300000, guid: f59b0a756b6d54643b0997cde0078918, type: 3}

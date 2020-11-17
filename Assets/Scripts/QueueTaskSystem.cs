@@ -33,6 +33,13 @@ public class QueueTaskSystem : MonoBehaviour
         queue.EnqueueWait(waitTime);
     }
 
+    public void SetTask(string task, AnimalTile animal)
+    {
+        //animal
+        queue.EnqueueAction(TaskTimer(task, animal));
+        queue.EnqueueWait(waitTime);
+    }
+
     public void SetTask(Crop c, PlayerInteraction player, DirtTile dirt)
     {
         //plant seed
@@ -89,6 +96,32 @@ public class QueueTaskSystem : MonoBehaviour
                 break; 
             case "harvestTree":
                 TreeTile.instance.HarvestTree(tree);
+                break;
+            case "burn":
+
+                break;
+        }
+    }
+
+    IEnumerator TaskTimer(string task, AnimalTile animal)
+    {
+        //animal
+        Slider[] sliders = animal.GetComponentsInChildren<Slider>(true);
+        sliders[1].gameObject.SetActive(true);
+        sliders[1].value = sliders[1].minValue;
+        while (sliders[1].value < sliders[1].maxValue)
+        {
+            sliders[1].value += Time.deltaTime;
+            yield return null;
+        }
+        sliders[1].gameObject.SetActive(false);
+        switch (task)
+        {
+            case "placeAnimal":
+                PlayerInteraction.instance.FinishPlaceAnimal(animal);
+                break;
+            case "harvestAnimal":
+                AnimalTile.instance.HarvestAnimal(animal);
                 break;
             case "burn":
 

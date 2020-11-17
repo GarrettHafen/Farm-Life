@@ -21,6 +21,8 @@ public class MarketController : MonoBehaviour
 
     public List<TreeAsset> treeAssetList;
 
+    public List<AnimalAsset> animalAssetList;
+
     public GameObject cropCell;
     private int pageNumber;
     private int cellNumber = 0;
@@ -165,6 +167,47 @@ public class MarketController : MonoBehaviour
                         }
                         break;
                     }
+                case MarketState.Animal:
+                    {
+                        //populate tree stuff
+                        if (GameHandler.instance.animalList[i] != null && GameHandler.instance.animalList[i].reqLvl <= StatsController.instance.GetLvl())
+                        {
+                            cropLockedList[cellNumber].gameObject.SetActive(false);
+                            cropNameList[cellNumber].text = GameHandler.instance.animalList[i].name;
+                            cropNameList[cellNumber].gameObject.SetActive(true);
+                            cropCostList[cellNumber].text = GameHandler.instance.animalList[i].animalCost.ToString();
+                            cropCostList[cellNumber].gameObject.SetActive(true);
+                            cropYieldList[cellNumber].text = GameHandler.instance.animalList[i].animalReward.ToString();
+                            cropYieldList[cellNumber].gameObject.SetActive(true);
+                            cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.animalList[i].animalTimer);
+                            cropTimeList[cellNumber].gameObject.SetActive(true);
+                            cropExpList[cellNumber].text = GameHandler.instance.animalList[i].expReward.ToString();
+                            cropExpList[cellNumber].gameObject.SetActive(true);
+                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
+                            cropImageList[cellNumber].sprite = GameHandler.instance.animalList[i].animalIconSprite;
+                            cropImageList[cellNumber].gameObject.SetActive(true);
+                            animalAssetList.Add(GameHandler.instance.animalList[i]);
+                            cellNumber++;
+                        }
+                        else
+                        {
+                            cropLockedList[cellNumber].gameObject.SetActive(true);
+                            cropNameList[cellNumber].gameObject.SetActive(true);
+                            cropNameList[cellNumber].text = "Unlocked at lvl: " + GameHandler.instance.animalList[i].reqLvl.ToString();
+                            cropCostList[cellNumber].gameObject.SetActive(false);
+                            cropYieldList[cellNumber].gameObject.SetActive(false);
+                            cropTimeList[cellNumber].gameObject.SetActive(false);
+                            cropExpList[cellNumber].gameObject.SetActive(false);
+                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
+                            cropImageList[cellNumber].gameObject.SetActive(false);
+                            cellNumber++;
+                        }
+                        if (GameHandler.instance.animalList[pageNumber + 9] == null || GameHandler.instance.animalList[pageNumber + 9].reqLvl > StatsController.instance.GetLvl())
+                        {
+                            forwardButton.SetActive(false);
+                        }
+                        break;
+                    }
                 case MarketState.Tree:
                     {
                         //populate tree stuff
@@ -229,6 +272,13 @@ public class MarketController : MonoBehaviour
                     
                     break;
                 }
+            case MarketState.Animal:
+                {
+                    MenuController.instance.hasAnimal = true;
+                    PlayerInteraction.instance.SetAnimal(new Animal(animalAssetList[cropNumber]));
+
+                    break;
+                }
         }
         FindObjectOfType<AudioManager>().PlaySound("Buy Button");
 
@@ -280,6 +330,10 @@ public class MarketController : MonoBehaviour
                 break;
             case "Tree":
                 marketState = MarketState.Tree;
+                pageNumber = 1;
+                break;
+            case "Animal":
+                marketState = MarketState.Animal;
                 pageNumber = 1;
                 break;
         }

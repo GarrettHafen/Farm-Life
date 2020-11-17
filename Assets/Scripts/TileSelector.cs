@@ -14,116 +14,39 @@ public class TileSelector : MonoBehaviour
     public Tilemap tilemapGround;
     private List<Vector3> availablePlaces; //transform
     private List<Vector3Int> localPlaces; //grid
-    private int intendedPlotPosition; //obsolete
-    public List<int> currentPlotPositionsActive = new List<int>(); //obsolete
 
     public GameObject plot;
     public GameObject baseTree;
+    public GameObject baseAnimal;
     public List<GameObject> plots;
     public List<GameObject> trees;
+    public List<GameObject> animals;
     public GameObject plotParent;
     public GameObject treeParent;
+    public GameObject animalParent;
     public int plotNum = 0;
     public int treeNum = 0;
+    public int animalNum = 0;
 
     public Tree tree;
+    public Animal animal;
 
 
 
-    void Start() //-----------------------------------------------------------------------
+    void Start() 
     {
         instance = this;
         SetupGrid();
 
         
-
-        //for (int i = 0; i < availablePlaces.Count; i++)
-        //{
-        //    PlacePlot(availablePlaces[i]);
-
-        //}
-        
         //used for writing info to a file
         //WriteGridToFile();
     }
-    private void Update()
-    {
-        
-    }
-
-    public void GetPlotPosition()
-    {
-        /*
-         * get mouse position
-         * get tile position at mouse position
-         * check if plot should go there
-        */
-
-        //get mouse position
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 2.0f;//always make on top? maybe?
-        //get what is under mouse
-        Ray ray = Camera.main.ScreenPointToRay(mousePos);
-        //get object at mouse position
-        Vector3 objectPos = ray.GetPoint(-ray.origin.z / ray.direction.z);
-        //change to grid location
-        Vector3Int cellIndex = grid.LocalToCell(objectPos);
-        //compare grid location to list of available grid locations
-        for (int i = 0; i < localPlaces.Count; i++)
-        {
-            if (localPlaces[i].x == cellIndex.x && localPlaces[i].y == cellIndex.y)
-            {
-                //this is the array index
-                intendedPlotPosition = i;
-            }
-        }
-        CheckPlot(intendedPlotPosition);
-
-
-    }
-
-    private void CheckPlot(int intendedPlotPosition)
-    {
-        //check if plot exists by keeping track of a list of ints passed through from the local places array. 
-        for (int i = 0; i < currentPlotPositionsActive.Count; i++)
-        {
-            if (intendedPlotPosition == currentPlotPositionsActive[i])
-            {
-                //better code needs to go here one day
-
-                return;
-            }
-        }
-        //an array of active plot indexes based on localPlaces array. 
-        currentPlotPositionsActive.Add(intendedPlotPosition);
-
-        ActivatePlot(intendedPlotPosition);
-    }
-
-    private void ActivatePlot(int intendedPlotPosition)
-    {
-        // activate plot at plot position
-
-        //if plots should cost money.... still on the fence
-        /*if (StatsController.instance.RemoveCoins(5))
-        {
-            plots[intendedPlotPosition].SetActive(true);
-            FindObjectOfType<AudioManager>().PlaySound("Plow");
-        }*/
-        //plots[intendedPlotPosition].SetActive(true);
-        //FindObjectOfType<AudioManager>().PlaySound("Plow");
-    }
-
+    
     public DirtTile PlacePlot(Vector3 plotPosition, Vector3 offset)
     {
-        //this is for creating all the plots and setting them as inactive until the player wants to activate them.
-        /*GOOD STUFF DON'T DELETE*/
-
-        //minus .25 for some reason i don't understand
         plotPosition.y -= offset.y;//.25f;
-        GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); //changed this code while trying to figure out why all the states were being synced, see 7/8/2020 2:00pm ish in trello. new code may not be needed.  
-        //GameObject tempPlot = UnityEditor.PrefabUtility.InstantiatePrefab(plot as GameObject) as GameObject; // this code wouldn't build?
-        //tempPlot.transform.position = plotPosition; // related to the above line
+        GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation); 
         tempPlot.name = "Plot: " + plotNum;
         plotNum++;
         tempPlot.SetActive(true);
@@ -139,7 +62,6 @@ public class TileSelector : MonoBehaviour
         GameObject tempTree = (GameObject)Instantiate(baseTree, mousePosition, transform.rotation);
         tempTree.name = t.asset.name + " " + treeNum;
         treeNum++;
-        //Debug.Log("Tree Planted: " + t.asset.name);
         tempTree.SetActive(true);
         tempTree.transform.SetParent(treeParent.transform);
         trees.Add(tempTree);
@@ -149,8 +71,28 @@ public class TileSelector : MonoBehaviour
         treeTile.tree = t;
         treeTile.UpdateTreeSprite(treeTile);
 
-        return tempTree.GetComponent<TreeTile>();
+        return treeTile;
 
+    }
+
+    public AnimalTile PlaceAnimal(Vector3 mousePosition, Animal a, PlayerInteraction player, Vector3 offset)
+    {
+
+        mousePosition.y += offset.y;
+        mousePosition.x += offset.x;
+        GameObject tempAnimal = (GameObject)Instantiate(baseAnimal, mousePosition, transform.rotation);
+        tempAnimal.name = a.asset.name + " " + animalNum;
+        animalNum++;
+        tempAnimal.SetActive(true);
+        tempAnimal.transform.SetParent(animalParent.transform);
+        animals.Add(tempAnimal);
+        animal = a;
+        player.SetAnimal(new Animal(a.asset));
+        AnimalTile animalTile = tempAnimal.GetComponent<AnimalTile>();
+        animalTile.animal = a;
+        animalTile.UpdateAnimalSprite(animalTile);
+
+        return animalTile;
     }
 
     private void SetupGrid()
@@ -174,7 +116,6 @@ public class TileSelector : MonoBehaviour
                 }
             }
         }
-        //Debug.Log("Grid Setup Complete");
     }
 
     private void WriteGridToFile()

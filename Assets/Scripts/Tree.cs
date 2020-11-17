@@ -7,17 +7,6 @@ public class Tree
     public TreeState treeState;
     private float growthLevel;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public bool TreeGrow(float amount, TreeTile tree)
     {
         growthLevel += amount / asset.treeTimer;

@@ -26,6 +26,9 @@ public class GameHandler : MonoBehaviour
 
     public List<CropAsset> cropsList;
     public List<TreeAsset> treeList;
+    public List<AnimalAsset> animalList;
+    public List<PreviewAsset> previewList;
+    public List<GameObject> previewContainerList;
     public List<Tree> loadTreeList;
 
     private List<CropAsset> loadCropList = new List<CropAsset>();
