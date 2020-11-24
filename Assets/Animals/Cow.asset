@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Cow
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 0}
-  animalDoneSprite: {fileID: 0}
-  animalIconSprite: {fileID: 21300000, guid: 1a67384eeda534f1da50abc27cecbf50, type: 3}
-  animalTimer: 0
-  animalCost: 0
-  animalReward: 0
-  expReward: 0
-  animalName: 
-  reqLvl: 99
+  animalGrowingSprite: {fileID: 21300000, guid: 13f8f53aec3904496a0b19c3a5a16cf6,
+    type: 3}
+  animalDoneSprite: {fileID: 21300000, guid: f9ae96b6edf5544bf8b29664d359eec7, type: 3}
+  animalIconSprite: {fileID: 21300000, guid: 16694c94fe8864434a668e60e6a5ef07, type: 3}
+  animalTimer: 15
+  animalCost: 15
+  animalReward: 15
+  expReward: 15
+  animalName: Cow
+  reqLvl: 8
+  preview: 4x4
+  animalPrefab: {fileID: 5070918467947706043, guid: 00409dc2e974541b3af16e92f2d95a51,
+    type: 3}

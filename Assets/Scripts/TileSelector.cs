@@ -80,7 +80,7 @@ public class TileSelector : MonoBehaviour
 
         mousePosition.y += offset.y;
         mousePosition.x += offset.x;
-        GameObject tempAnimal = (GameObject)Instantiate(baseAnimal, mousePosition, transform.rotation);
+        GameObject tempAnimal = (GameObject)Instantiate(a.asset.animalPrefab, mousePosition, transform.rotation);
         tempAnimal.name = a.asset.name + " " + animalNum;
         animalNum++;
         tempAnimal.SetActive(true);

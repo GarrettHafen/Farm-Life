@@ -26,9 +26,16 @@ public class PlayerData
     public float[] activeTreeTimers;
     public string[] activeTreeStates;
 
-    //private int numActive = TileSelector.instance.currentPlotPositionsActive.Count; // old count of plots currently existing, based on TileSelector.plots[] 
+    public int[] activeAnimals;
+    public float[] animalPositionX;
+    public float[] animalPositionY;
+    public string[] activeAnimalNames;
+    public float[] activeAnimalTimers;
+    public string[] activeAnimalStates;
+
     public int cropsActive;
     public int treesActive;
+    public int animalsActive;
     
 
     public PlayerData ()
@@ -101,40 +108,33 @@ public class PlayerData
             treeCounter++;
         }
 
+        //save data for animals
+        int animalCounter = 0;
+        animalsActive = TileSelector.instance.animals.Count;
+        animalPositionX = new float[animalsActive];
+        animalPositionY = new float[animalsActive];
+        activeAnimalNames = new string[animalsActive];
+        activeAnimalTimers = new float[animalsActive];
+        activeAnimalStates = new string[animalsActive];
 
-
-        /* old code based on all plots intialized at start
-        activePlots = new int[numActive];
-        
-        for(int i = 0; i < numActive; i++)
+        foreach(GameObject animal in TileSelector.instance.animals)
         {
-            activePlots[i] = TileSelector.instance.currentPlotPositionsActive[i];
-        }
-        */
-
-        //new code based on player intializing plots
-
-        //----------------crops/timers Array----------------
-        /* old code based on all plots intialized at start
-        activeCrops = new string[numActive];
-        activeTimers = new float[numActive];
-        activeCropsStates = new string[numActive];
-        for(int i = 0; i < numActive; i++)
-        {
-            DirtTile dirt = TileSelector.instance.plots[TileSelector.instance.currentPlotPositionsActive[i]].GetComponent<DirtTile>();
-            if (dirt.crop.HasCrop())
+            animalPositionX[animalCounter] = animal.transform.position.x;
+            animalPositionY[animalCounter] = animal.transform.position.y;
+            AnimalTile animalTile = animal.GetComponent<AnimalTile>();
+            if (animalTile.animal.HasAnimal())
             {
-                activeCrops[i] = dirt.crop.GetName();
-                activeTimers[i] = dirt.crop.GetGrowthLvl();
-                activeCropsStates[i] = dirt.crop.GetState();
+                activeAnimalNames[animalCounter] = animalTile.animal.GetName();
+                activeAnimalTimers[animalCounter] = animalTile.animal.GetGrowthLvl();
+
             }
             else
             {
-                activeCrops[i] = null;
-                activeTimers[i] = -1f;
+                activeAnimalNames[animalCounter] = null;
+                activeAnimalTimers[animalCounter] = -1f;
             }
+            activeAnimalStates[animalCounter] = animalTile.animal.GetState();
+            animalCounter++;
         }
-        */
-
     }
 }

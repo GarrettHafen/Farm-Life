@@ -21,3 +21,5 @@ MonoBehaviour:
   expReward: 0
   animalName: 
   reqLvl: 99
+  preview: 4x4
+  animalPrefab: {fileID: 0}

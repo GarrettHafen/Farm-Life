@@ -29,8 +29,9 @@ public class GameHandler : MonoBehaviour
     public List<AnimalAsset> animalList;
     public List<PreviewAsset> previewList;
     public List<GameObject> previewContainerList;
-    public List<Tree> loadTreeList;
 
+    public List<Tree> loadTreeList;
+    public List<Animal> loadAnimalList;
     private List<CropAsset> loadCropList = new List<CropAsset>();
 
     public bool landingPageOpen = true;
@@ -109,6 +110,11 @@ public class GameHandler : MonoBehaviour
             TreeTile.instance.DestroyTrees();
             TileSelector.instance.treeNum = 0;
         }
+        if(TileSelector.instance.animals.Count > 0)
+        {
+            AnimalTile.instance.DestroyAnimals();
+            TileSelector.instance.animalNum = 0;
+        }
         
 
         //instantiate plots, add to array, set details
@@ -159,7 +165,8 @@ public class GameHandler : MonoBehaviour
         }
 
         //instantiate trees, add to array, set details
-        
+
+        //what is this code?
         for (int i = 0; i < data.activeTreeNames.Length; i++) {
             for (int j = 0; j < treeList.Count; j++)
             {
@@ -182,6 +189,26 @@ public class GameHandler : MonoBehaviour
         }
 
         //instantiate animals, add to array, set details
+        for(int i = 0; i < data.activeAnimalNames.Length; i++)
+        {
+            for(int j = 0; j < animalList.Count; j++)
+            {
+                if(data.activeAnimalNames[i] == animalList[j].animalName)
+                {
+                    loadAnimalList.Add(new Animal(animalList[j]));
+                    break;
+                }
+            }
+        }
+        for(int i = 0; i < data.animalsActive; i++)
+        {
+            Vector3 newAnimalPosition = new Vector3(data.animalPositionX[i], data.animalPositionY[i], 9);
+            TileSelector.instance.PlaceAnimal(newAnimalPosition, loadAnimalList[i], PlayerInteraction.instance, new Vector3(0, 0, 0));
+            AnimalTile animalTile = TileSelector.instance.animals[i].GetComponent<AnimalTile>();
+            animalTile.animal.SetGrowthLvl(CalcTimePassed(data.activeAnimalTimers[i], data.savedTime, animalTile.animal.asset.animalTimer));
+            animalTile.animal.animalState = animalTile.animal.GetState(data.activeAnimalStates[i]);
+            animalTile.UpdateAnimalSprite(animalTile);
+        }
 
         //instantiate decor, add to array, set details
 

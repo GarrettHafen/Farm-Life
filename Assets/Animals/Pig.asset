@@ -23,3 +23,5 @@ MonoBehaviour:
   animalName: Pig
   reqLvl: 6
   preview: 2x2
+  animalPrefab: {fileID: 1037856249616860370, guid: f672818a04b49417a85e9090267df71b,
+    type: 3}

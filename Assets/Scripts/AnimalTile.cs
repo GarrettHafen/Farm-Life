@@ -30,6 +30,13 @@ public class AnimalTile : MonoBehaviour
                 }
             }
         }
+
+        //code to randomly flip the sprite, happens pretty quick, 500 might not be high enough. 18 is an arbitrary number, just like that number. 
+        float randomNumber = Mathf.Round(Random.Range(0.0f, 500.0f));
+        if(randomNumber == 18)
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().flipX = !this.gameObject.GetComponent<SpriteRenderer>().flipX;
+        }
     }
 
     public void Interact(Animal a, AnimalTile animalTile, PlayerInteraction player)

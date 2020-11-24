@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Packages.Rider.Editor.UnitTesting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +12,7 @@ public class PlayerInteraction : MonoBehaviour
 	public static PlayerInteraction instance;
 
 	public GameObject target = null;
+	private GameObject previousTarget;
 	public GameObject tempTarget;
 
 	public TimerController timer;
@@ -261,6 +264,7 @@ public class PlayerInteraction : MonoBehaviour
 		//display timer if hovered over target
 		if (target != null && !MenuController.instance.previewActive)
 		{
+			
 			DirtTile tempDirt = target.GetComponent<DirtTile>();
 			if (tempDirt)//code to prevent random errors when game starts
 			{
@@ -363,12 +367,13 @@ public class PlayerInteraction : MonoBehaviour
 		// define target by what is under mouse
 		if (!GameHandler.instance.overMenu && !MenuController.instance.previewActive)
 		{
+			previousTarget = target;
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
 			hit = Physics2D.Raycast(mousePosition, left, 0.1f, LayerMask.NameToLayer("Plots"));
 			if (hit.collider != null && !hit.collider.CompareTag("Bound"))
 			{
-				if (hit.collider.gameObject == target || hit.collider.name == "OverlaySprite")
+				if (hit.collider.gameObject == target || hit.collider.gameObject.transform.parent.gameObject == target)
 				{
 					//this code fixed a bug where when hovering over a plot, it was considered "not the map"
 					MapController.instance.overMap = true;
@@ -376,7 +381,7 @@ public class PlayerInteraction : MonoBehaviour
 				else
                 {
 					Deselect();
-					if (hit.collider.name == "OverlaySprite")
+					if (hit.collider.name.Equals("OverlaySprite")) 
 					{
 						target = hit.collider.gameObject.transform.parent.gameObject;
 					}
@@ -446,18 +451,19 @@ public class PlayerInteraction : MonoBehaviour
 
 	public void Deselect()
 	{
-		if (target != null)
+		if (previousTarget != null)
 		{
 			//Debug.Log("deselect code: " + target.name);
 			if (timer != null)
 			{
-				timer = target.GetComponent<TimerController>();
+				timer = previousTarget.GetComponent<TimerController>();
 				timer.slider.gameObject.SetActive(false);
 			}
+			previousTarget = null;
 			target = null;
             timer = null;
-			
-        }
+
+		}
 	}
 
 	public void DestroyStuff()
