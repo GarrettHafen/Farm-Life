@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Sheep
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 0}
-  animalDoneSprite: {fileID: 0}
-  animalIconSprite: {fileID: 0}
-  animalTimer: 0
-  animalCost: 0
-  animalReward: 0
-  expReward: 0
-  animalName: 
-  reqLvl: 99
+  animalGrowingSprite: {fileID: 21300000, guid: 575f225e318d44704b0b827f627f7ae0,
+    type: 3}
+  animalDoneSprite: {fileID: 21300000, guid: d388a377e42c34ab3b87ecd2539db65f, type: 3}
+  animalIconSprite: {fileID: 21300000, guid: 216d2273517724b559e019872dbb9bed, type: 3}
+  animalTimer: 7200
+  animalCost: 300
+  animalReward: 60
+  expReward: 2
+  animalName: Sheep
+  reqLvl: 16
   preview: 2x2
-  animalPrefab: {fileID: 0}
+  animalPrefab: {fileID: 549112311621961046, guid: 6aa6ef345cd344f159691734d90fb924,
+    type: 3}
+  animalSound: Sheep

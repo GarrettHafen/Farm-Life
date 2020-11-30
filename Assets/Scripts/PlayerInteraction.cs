@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Packages.Rider.Editor.UnitTesting;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -45,6 +38,8 @@ public class PlayerInteraction : MonoBehaviour
 	SpriteRenderer parentPlotSprite;
 	SpriteRenderer parentTreeSprite;
 	SpriteRenderer parentAnimalSprite;
+
+	private bool playAnimalNoise = true;
 
 
 	private void Start()
@@ -470,14 +465,20 @@ public class PlayerInteraction : MonoBehaviour
     {
 		DirtTile dirt = tempTarget.GetComponent<DirtTile>();
 		if(dirt != null)
-        {
-			DirtTile.instance.DestroyPlot(dirt);
-        }
+		{ 
+			QueueTaskSystem.instance.SetTask("burn", dirt);
+		}
 		TreeTile treeTile = tempTarget.GetComponent<TreeTile>();
 		if(treeTile != null)
         {
-			TreeTile.instance.DestroyTree(treeTile);
-        }
+			QueueTaskSystem.instance.SetTask("burn", treeTile);
+		}
+		AnimalTile animalTile = tempTarget.GetComponent<AnimalTile>();
+		if(animalTile != null)
+        {
+			
+			QueueTaskSystem.instance.SetTask("burn", animalTile);
+		}
     }
 
 	public void SetTempTarget()
@@ -512,7 +513,13 @@ public class PlayerInteraction : MonoBehaviour
 		parentAnimalSprite = animal.GetComponent<SpriteRenderer>();
 		parentAnimalSprite.color = new Color(1f, 1f, 1f, 1f);
 		StatsController.instance.RemoveCoinsDisplay(animal.animal.GetCost());
-		FindObjectOfType<AudioManager>().PlaySound("Plow");
+        if (playAnimalNoise)
+        {
+			FindObjectOfType<AudioManager>().PlaySound(animal.animal.asset.animalSound);
+			
+        }
+		playAnimalNoise = !playAnimalNoise;
+
 		StatsController.instance.AddExp(1);
 	}
 

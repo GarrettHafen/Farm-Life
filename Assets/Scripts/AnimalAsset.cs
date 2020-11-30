@@ -14,6 +14,7 @@ public class AnimalAsset : ScriptableObject
     public int reqLvl; //the required lvl to be able to use this animal
     public string preview; //for when we have multiple different previews, long and skinny, 2x2, 4x4 etc
     public GameObject animalPrefab; // prefab for each animal type to maintain the collider
+    public string animalSound; //noise to be heard when playing ***(use animalName instead???)*****
     //happiness modifier? to be used at time of harvest, but would need another interact which means more code
 
 

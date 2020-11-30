@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Dog
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 0}
-  animalDoneSprite: {fileID: 0}
-  animalIconSprite: {fileID: 21300000, guid: 1a67384eeda534f1da50abc27cecbf50, type: 3}
-  animalTimer: 0
-  animalCost: 0
-  animalReward: 0
-  expReward: 0
-  animalName: 
-  reqLvl: 99
+  animalGrowingSprite: {fileID: 21300000, guid: 850d57e90fd9a4ec2a61db4c6f98aed5,
+    type: 3}
+  animalDoneSprite: {fileID: 21300000, guid: e47ac865f30904b3a80ddc7ac82ab6b2, type: 3}
+  animalIconSprite: {fileID: 21300000, guid: 32c31c0b4af9d4877bc0b5515260d053, type: 3}
+  animalTimer: 3600
+  animalCost: 250
+  animalReward: 50
+  expReward: 2
+  animalName: Dog
+  reqLvl: 15
   preview: 2x2
-  animalPrefab: {fileID: 0}
+  animalPrefab: {fileID: 1974431508380716682, guid: e43101644f09f4428b086b37724faab5,
+    type: 3}
+  animalSound: Dog

@@ -16,12 +16,13 @@ MonoBehaviour:
     type: 3}
   animalDoneSprite: {fileID: 21300000, guid: ef3fad66b5a6b4a05ae74753456408fd, type: 3}
   animalIconSprite: {fileID: 21300000, guid: 6f13bf01192ab456082f2bc8fb2de387, type: 3}
-  animalTimer: 15
-  animalCost: 15
-  animalReward: 30
-  expReward: 2
+  animalTimer: 1800
+  animalCost: 100
+  animalReward: 20
+  expReward: 1
   animalName: Pig
-  reqLvl: 6
+  reqLvl: 8
   preview: 2x2
   animalPrefab: {fileID: 1037856249616860370, guid: f672818a04b49417a85e9090267df71b,
     type: 3}
+  animalSound: Pig

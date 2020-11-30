@@ -16,12 +16,13 @@ MonoBehaviour:
     type: 3}
   animalDoneSprite: {fileID: 21300000, guid: 62870d9d3211c4414a91c9dcebb3829e, type: 3}
   animalIconSprite: {fileID: 21300000, guid: 8cea6a668ea264c9c8533a6c2fb6dc0f, type: 3}
-  animalTimer: 15
-  animalCost: 15
-  animalReward: 35
-  expReward: 3
+  animalTimer: 900
+  animalCost: 50
+  animalReward: 10
+  expReward: 1
   animalName: Chicken
   reqLvl: 5
   preview: 1x1
   animalPrefab: {fileID: 5817824788561296476, guid: e2ea329a7ec1d44969cd010cf688ac70,
     type: 3}
+  animalSound: Chicken

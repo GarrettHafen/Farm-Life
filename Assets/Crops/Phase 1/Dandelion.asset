@@ -20,7 +20,7 @@ MonoBehaviour:
   cropTimer: 60
   cropCost: 0
   cropReward: 7
-  expReward: 30
+  expReward: 10
   cropName: Dandelion
   reqLvl: 0
   seedIsOnGround: 0

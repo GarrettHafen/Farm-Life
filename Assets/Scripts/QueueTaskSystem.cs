@@ -72,7 +72,7 @@ public class QueueTaskSystem : MonoBehaviour
                 DirtTile.instance.HarvestCrop(dirt);
             break;
             case "burn":
-
+                DirtTile.instance.DestroyPlot(dirt);
                 break;
         }
     }
@@ -98,7 +98,7 @@ public class QueueTaskSystem : MonoBehaviour
                 TreeTile.instance.HarvestTree(tree);
                 break;
             case "burn":
-
+                TreeTile.instance.DestroyTree(tree);
                 break;
         }
     }
@@ -124,7 +124,7 @@ public class QueueTaskSystem : MonoBehaviour
                 AnimalTile.instance.HarvestAnimal(animal);
                 break;
             case "burn":
-
+                AnimalTile.instance.DestroyAnimal(animal);
                 break;
         }
     }
