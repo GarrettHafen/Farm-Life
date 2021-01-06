@@ -19,6 +19,7 @@ public class MenuController : MonoBehaviour
 
     public GameObject settingsMenu;
     public GameObject saveOrQuitPanel;
+    public GameObject helpMenu;
 
     //variables to handle preview
     private Transform mouseyThingy = null;
@@ -224,7 +225,7 @@ public class MenuController : MonoBehaviour
     {
         handIndicator.sprite = null;
         handIndicatorParent.SetActive(true);
-
+        
         if (MenuController.instance.plowActive)
         {
             handIndicator.sprite = MenuController.instance.plow.sprite;
@@ -276,5 +277,18 @@ public class MenuController : MonoBehaviour
     public void ForceDeselect()
     {
         PlayerInteraction.instance.Deselect();
+    }
+
+    public void OpenHelpMenu()
+    {
+        //open the help menu, don't want it to close the settings, they can do that manually. 
+        helpMenu.SetActive(true);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
+    }
+
+    public void CloseHelpMenu()
+    {
+        helpMenu.SetActive(false);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
     }
 }

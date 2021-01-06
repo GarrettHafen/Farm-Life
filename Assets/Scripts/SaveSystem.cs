@@ -46,8 +46,8 @@ public static class SaveSystem
             }
             path = tempPath.ToString();
         }
-        //path = C:/Users/garre/AppData/LocalLow/DefaultCompany/FarmLife/player.farm
-        
+        //path = C:\Users\garre\AppData\LocalLow\Hafenators Gaming Studio\FarmLife\saves
+
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData();
