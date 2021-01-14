@@ -85,7 +85,7 @@ public class AnimalTile : MonoBehaviour
     {
         foreach(GameObject animal in TileSelector.instance.animals)
         {
-            if (animal.Equals(animalToDestroy))
+            if (animal.Equals(animalToDestroy.gameObject))
             {
                 TileSelector.instance.animals.Remove(animal);
                 break;
