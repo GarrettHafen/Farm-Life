@@ -23876,7 +23876,7 @@ MonoBehaviour:
   landingPage: {fileID: 1587324098}
   baseTree: {fileID: 6923840453652975470, guid: d67797e16616d47358f8cd61912a8777,
     type: 3}
-  devMode: 0
+  devMode: 1
 --- !u!4 &1843866708
 Transform:
   m_ObjectHideFlags: 0
