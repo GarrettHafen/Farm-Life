@@ -81,6 +81,7 @@ public class PlayerInteraction : MonoBehaviour
 
 							//queue task
 							//don't need to include anything else
+							tempPlot.isBusy = true;
 							QueueTaskSystem.instance.SetTask("firstPlow", tempPlot);
                             //Debug.Log(QueueTaskSystem.instance.GetQueueCount());
 
@@ -121,6 +122,7 @@ public class PlayerInteraction : MonoBehaviour
 							parentTreeSprite.color = new Color(1f, 1f, 1f, .5f);
 
 							// queue task
+							tempTree.isBusy = true;
 							QueueTaskSystem.instance.SetTask("plantTree", tempTree);
 
 							//after task finishes, change opacity to full, update display and play sound, see FinishPlanttree()
@@ -149,6 +151,7 @@ public class PlayerInteraction : MonoBehaviour
 							parentAnimalSprite = tempAnimal.GetComponent<SpriteRenderer>();
 							parentAnimalSprite.color = new Color(1f, 1f, 1f, .5f);
 
+							tempAnimal.isBusy = true;
 							//queue task
 							QueueTaskSystem.instance.SetTask("placeAnimal", tempAnimal);
 
@@ -164,14 +167,14 @@ public class PlayerInteraction : MonoBehaviour
 					return;
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
-				if (dirt != null)
+				if (dirt != null && !dirt.isBusy)
 				{					
 					dirt.Interact(crop, this, dirt);
 				}
 
 				//animal code
 				AnimalTile animalTile = target.GetComponent<AnimalTile>();
-				if(animalTile != null)
+				if(animalTile != null && !animalTile.isBusy)
                 {
 					animalTile.Interact(animal, animalTile, this);
                 }
@@ -180,7 +183,7 @@ public class PlayerInteraction : MonoBehaviour
 				//tree code
 				TreeTile treeTile = target.GetComponent<TreeTile>();
 				//Debug.Log("tree" + treeTile);
-                if(treeTile != null)
+                if(treeTile != null && !treeTile.isBusy)
                 {
 					treeTile.Interact(tree, treeTile, this);
                 }
@@ -271,32 +274,35 @@ public class PlayerInteraction : MonoBehaviour
 					timer.SetSprite(tempDirt.crop.asset.iconSprite);
 
 				}
-                if(tempDirt.crop.state == CropState.Done)
-                {
-					//display harvest tool
-					DisplayMouseyCompanion(harvestToolSprite);
-				}
-                if (tempDirt.needsPlowing)
-                {
-					//display plow tool
-					DisplayMouseyCompanion(plowToolSprite);
+				if (!tempDirt.isBusy)
+				{
+					if (tempDirt.crop.state == CropState.Done)
+					{
+						//display harvest tool
+						DisplayMouseyCompanion(harvestToolSprite);
+					}
+					if (tempDirt.needsPlowing)
+					{
+						//display plow tool
+						DisplayMouseyCompanion(plowToolSprite);
 
 
-				}
-                if (!tempDirt.needsPlowing && !MenuController.instance.hasSeed && tempDirt.crop.state == CropState.Seed && !MenuController.instance.fireTool)
-                {
-					//display market tool
-					DisplayMouseyCompanion(marketToolSprite);
-				}
-                if (MenuController.instance.hasSeed)
-                {
-                    //display seed to be planted
-					DisplayMouseyCompanion(crop.asset.iconSprite);
-				}
-                if (MenuController.instance.fireTool)
-                {
-                    //display destroy icon
-					DisplayMouseyCompanion(fireToolSprite);
+					}
+					if (!tempDirt.needsPlowing && !MenuController.instance.hasSeed && tempDirt.crop.state == CropState.Seed && !MenuController.instance.fireTool)
+					{
+						//display market tool
+						DisplayMouseyCompanion(marketToolSprite);
+					}
+					if (MenuController.instance.hasSeed)
+					{
+						//display seed to be planted
+						DisplayMouseyCompanion(crop.asset.iconSprite);
+					}
+					if (MenuController.instance.fireTool)
+					{
+						//display destroy icon
+						DisplayMouseyCompanion(fireToolSprite);
+					}
 				}
 			}
 			
@@ -497,6 +503,7 @@ public class PlayerInteraction : MonoBehaviour
 		StatsController.instance.RemoveCoinsDisplay(5);
 		FindObjectOfType<AudioManager>().PlaySound("Plow");
 		StatsController.instance.AddExp(1);
+		dirt.isBusy = false;
 	}
 
 	public void FinishPlantTree(TreeTile tree)
@@ -506,6 +513,7 @@ public class PlayerInteraction : MonoBehaviour
 		StatsController.instance.RemoveCoinsDisplay(tree.tree.GetCost());
 		FindObjectOfType<AudioManager>().PlaySound("Plow");
 		StatsController.instance.AddExp(1);
+		tree.isBusy = false;
 	}
 
 	public void FinishPlaceAnimal(AnimalTile animal)
@@ -521,6 +529,8 @@ public class PlayerInteraction : MonoBehaviour
 		playAnimalNoise = !playAnimalNoise;
 
 		StatsController.instance.AddExp(1);
+
+		animal.isBusy = false;
 	}
 
 	public GameObject GetPreviewContainer(string intendedPreview)

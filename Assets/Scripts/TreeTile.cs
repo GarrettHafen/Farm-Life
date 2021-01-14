@@ -4,6 +4,7 @@ public class TreeTile : MonoBehaviour
 {
     public static TreeTile instance;
     public Tree tree;
+    public bool isBusy = false;
 
     public SpriteRenderer overlay;
 
@@ -47,6 +48,7 @@ public class TreeTile : MonoBehaviour
             childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 
             // queue task
+            treeTile.isBusy = true;
             QueueTaskSystem.instance.SetTask("harvestTree", treeTile);
 
             //after task is compolete, see HarvestTree
@@ -74,7 +76,8 @@ public class TreeTile : MonoBehaviour
         UpdateTreeSprite(treeThingy);
         treeThingy.tree.SetGrowthLvl(0f);
         FindObjectOfType<AudioManager>().PlaySound("Harvest");
-        
+        treeThingy.isBusy = false;
+
     }
 
     public void DestroyTree(TreeTile treeToDestroy)

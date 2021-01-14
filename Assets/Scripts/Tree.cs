@@ -9,12 +9,15 @@ public class Tree
 
     public bool TreeGrow(float amount, TreeTile tree)
     {
-        growthLevel += amount / asset.treeTimer;
-        if (growthLevel >= 1f)
+        if (!tree.isBusy)
         {
-            treeState = TreeState.Done;
-            //Debug.Log("tree is done");
-            return true;
+            growthLevel += amount / asset.treeTimer;
+            if (growthLevel >= 1f)
+            {
+                treeState = TreeState.Done;
+                //Debug.Log("tree is done");
+                return true;
+            }
         }
         /*else if (growthLevel <= 1f && growthLevel >= .5f)
         {

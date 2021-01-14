@@ -4,6 +4,7 @@ public class AnimalTile : MonoBehaviour
 {
     public static AnimalTile instance;
     public Animal animal;
+    public bool isBusy = false;
 
     public SpriteRenderer overlay;
 
@@ -50,6 +51,8 @@ public class AnimalTile : MonoBehaviour
             parentSprite.color = new Color(1f, 1f, 1f, .5f);
             childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 
+            animalTile.isBusy = true;
+
             //queue task
             QueueTaskSystem.instance.SetTask("harvestAnimal", animalTile);
 
@@ -75,6 +78,7 @@ public class AnimalTile : MonoBehaviour
         UpdateAnimalSprite(animalThingy);
         animalThingy.animal.SetGrowthLvl(0f);
         FindObjectOfType<AudioManager>().PlaySound("Harvest");
+        animalThingy.isBusy = false;
     }
 
     public void DestroyAnimal(AnimalTile animalToDestroy)

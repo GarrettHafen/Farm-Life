@@ -16,20 +16,24 @@ public class Crop
 
 	public bool Grow(float amount, DirtTile dirt)
 	{
-		growthLevel += amount / asset.cropTimer;
-		if (growthLevel >= 1f)
+		if (!dirt.isBusy)
 		{
-			state = CropState.Done;
-			return true;
-		}else if (growthLevel <= 1f && growthLevel >= .5f)
-        {
-			state = CropState.Growing;
-			if(dirt.overlay.sprite = asset.seedSprite)
-            {
-				dirt.UpdateSprite(dirt);
-            }
-			return false;
-        }
+			growthLevel += amount / asset.cropTimer;
+			if (growthLevel >= 1f)
+			{
+				state = CropState.Done;
+				return true;
+			}
+			else if (growthLevel <= 1f && growthLevel >= .5f)
+			{
+				state = CropState.Growing;
+				if (dirt.overlay.sprite = asset.seedSprite)
+				{
+					dirt.UpdateSprite(dirt);
+				}
+				return false;
+			}
+		}
 		return false;
 	}
 

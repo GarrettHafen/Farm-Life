@@ -8,6 +8,7 @@ public class DirtTile : MonoBehaviour
 	public SpriteRenderer overlay;
 
 	public bool needsPlowing = false;
+	public bool isBusy = false;
 	public Sprite fallowed;
 
 	SpriteRenderer parentSprite;
@@ -39,6 +40,7 @@ public class DirtTile : MonoBehaviour
 					childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 
 					// queue task
+					dirt.isBusy = true;
 					QueueTaskSystem.instance.SetTask(new Crop(c.asset), player, this);
 
 					// after task completes, see PlantSeed(c, player, dirt);
@@ -75,6 +77,7 @@ public class DirtTile : MonoBehaviour
 				parentSprite.color = new Color(1f, 1f, 1f, .5f);
 				childSprites[1].color = new Color(1f, 1f, 1f, .5f);
 
+				dirt.isBusy = true;
 				//queue task
 				QueueTaskSystem.instance.SetTask("secondPlow", this);
 
@@ -105,7 +108,9 @@ public class DirtTile : MonoBehaviour
 			 * 
 			 */
 			childSprites[1].color = new Color(1f, 1f, 1f, .5f);
-			
+
+			dirt.isBusy = true;
+
 			//queue timer
 			QueueTaskSystem.instance.SetTask("harvestCrop", this);
 				//slider set to active
@@ -148,6 +153,7 @@ public class DirtTile : MonoBehaviour
 		StatsController.instance.AddExp(1);
 		StatsController.instance.RemoveCoinsDisplay(c.asset.cropCost);
 		FindObjectOfType<AudioManager>().PlaySound("Seed");
+		dirt.isBusy = false;
 
 	}
 
@@ -165,6 +171,7 @@ public class DirtTile : MonoBehaviour
 			childSprites[1].color = new Color(1f, 1f, 1f, 1f);
 			dirt.AddDirt();
 			FindObjectOfType<AudioManager>().PlaySound("Harvest");
+			dirt.isBusy = false;
 		}
 	}
 
@@ -184,6 +191,7 @@ public class DirtTile : MonoBehaviour
 		StatsController.instance.RemoveCoinsDisplay(5);
 		StatsController.instance.AddExp(1);
 		FindObjectOfType<AudioManager>().PlaySound("Plow");
+		dirt.isBusy = false;
 		
 		
 	}

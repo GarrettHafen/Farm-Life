@@ -9,11 +9,14 @@ public class Animal
 
     public bool AnimalGrow(float amount, AnimalTile animal)
     {
-        growthLevel += amount / asset.animalTimer;
-        if(growthLevel >= 1f)
+        if (!animal.isBusy)
         {
-            animalState = AnimalState.Done;
-            return true;
+            growthLevel += amount / asset.animalTimer;
+            if (growthLevel >= 1f)
+            {
+                animalState = AnimalState.Done;
+                return true;
+            }
         }
         return false;
     }
