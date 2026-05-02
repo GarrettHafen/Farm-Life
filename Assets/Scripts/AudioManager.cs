@@ -18,7 +18,7 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             
         }
-        audioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+        audioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
     }
 
     private void Start()
@@ -29,6 +29,11 @@ public class AudioManager : MonoBehaviour
     public void PlaySound(string name)
     {
         Sounds s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound not found: " + name);
+            return;
+        }
         s.source.Play();
     }
 

@@ -1,46 +1,80 @@
-﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PreviewCollisionController : MonoBehaviour
 {
-    private List<GameObject> listOfCollisions = new List<GameObject>();
-    private void OnTriggerEnter2D(Collider2D collision)
+    private Collider2D previewCollider;
+    private readonly Collider2D[] buffer = new Collider2D[16];
+    private readonly ContactFilter2D noFilter = new ContactFilter2D().NoFilter();
+
+    [Header("Debug")]
+    public bool debugLog = false;
+
+    private void Awake()
     {
-        if (collision.name != "Grid" && collision.name != "OverlaySprite")
-        {
-            //MenuController.instance.previewObstructed = true;
-            //Debug.Log("collision: " + collision.name);
-            listOfCollisions.Add(collision.gameObject);
-
-
-
-            /*
-             * second attempt
-             * onTriggerEnter add object to the list
-             * onTriggerExit remove object from the list,
-             * if list is empty, previewObsturcted = false
-             */
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        //MenuController.instance.previewObstructed = false;
-        listOfCollisions.Remove(collision.gameObject);
-
+        previewCollider = GetComponent<Collider2D>();
     }
 
     private void Update()
     {
-        //Debug.Log(listOfCollisions.Count);
-        if (listOfCollisions.Count == 0)
+        if (previewCollider == null) return;
+
+        int count = Physics2D.OverlapCollider(previewCollider, noFilter, buffer);
+
+        bool obstructed = false;
+        for (int i = 0; i < count; i++)
         {
-            MenuController.instance.previewObstructed = false;
+            string n = buffer[i].gameObject.name;
+            if (n != "Grid" && n != "OverlaySprite")
+            {
+                obstructed = true;
+                break;
+            }
         }
-        else
+
+        // Block placement where no tile exists (catches edges the polygon misses)
+        bool noTile = false;
+        Vector3 placementPos = Vector3.zero;
+        if (!obstructed && TileSelector.instance != null)
         {
-            MenuController.instance.previewObstructed = true;
-            //Debug.Log("Collision in list: " + listOfCollisions[0].name);
+            placementPos = MenuController.instance.GetPlacementPosition();
+            if (!TileSelector.instance.HasTileAtWorldPos(placementPos))
+            {
+                obstructed = true;
+                noTile = true;
+            }
         }
+
+        if (debugLog)
+        {
+            Bounds b = previewCollider.bounds;
+            Vector2 center = b.center;
+            Vector2 half   = b.extents;
+
+            // Sample the four corners of the preview collider bounds
+            Vector2 tl = new Vector2(center.x - half.x, center.y + half.y);
+            Vector2 tr = new Vector2(center.x + half.x, center.y + half.y);
+            Vector2 bl = new Vector2(center.x - half.x, center.y - half.y);
+            Vector2 br = new Vector2(center.x + half.x, center.y - half.y);
+
+            Collider2D cTL = Physics2D.OverlapPoint(tl);
+            Collider2D cTR = Physics2D.OverlapPoint(tr);
+            Collider2D cBL = Physics2D.OverlapPoint(bl);
+            Collider2D cBR = Physics2D.OverlapPoint(br);
+
+            System.Text.StringBuilder sb = new();
+            sb.AppendLine($"[Preview] pos={placementPos:F2}  obstructed={obstructed}  noTile={noTile}");
+            sb.AppendLine($"  collider bounds: center={center:F2}  size={b.size:F2}");
+            sb.AppendLine($"  TL={tl:F2} → {(cTL ? cTL.gameObject.name : "none")}");
+            sb.AppendLine($"  TR={tr:F2} → {(cTR ? cTR.gameObject.name : "none")}");
+            sb.AppendLine($"  BL={bl:F2} → {(cBL ? cBL.gameObject.name : "none")}");
+            sb.AppendLine($"  BR={br:F2} → {(cBR ? cBR.gameObject.name : "none")}");
+            sb.Append($"  OverlapCollider hits ({count}): ");
+            for (int i = 0; i < count; i++)
+                sb.Append($"'{buffer[i].gameObject.name}' ");
+
+            Debug.Log(sb.ToString());
+        }
+
+        MenuController.instance.previewObstructed = obstructed;
     }
 }

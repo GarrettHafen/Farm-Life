@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class SearchMarket : MonoBehaviour
 {
-    public List<CropAsset> cropList = GameHandler.instance.cropsList;
+    public List<CropAsset> cropList;
     public List<CropAsset> filteredCropList;
-    // Start is called before the first frame update
+
     void Start()
     {
-        
+        cropList = GameHandler.instance.cropsList;
     }
 
     // Update is called once per frame

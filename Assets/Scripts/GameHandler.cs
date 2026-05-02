@@ -47,6 +47,11 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         instance = this;
+        var mainCanvas = landingPage.transform.parent.gameObject;
+        if(!mainCanvas.activeSelf)
+        {
+            mainCanvas.SetActive(true);    
+        }
        
 
     }
@@ -93,11 +98,14 @@ public class GameHandler : MonoBehaviour
 
     public void LoadData(PlayerData data)
     {
-
         StatsController.instance.SetLvl(data.level);
         StatsController.instance.SetCoins(data.coins);
         StatsController.instance.SetExp(data.exp);
         StatsController.instance.UpdateStats();
+
+        // restore zone unlock flags, then apply saved tile data (which also rebuilds the grid)
+        TileSelector.instance.SetZoneUnlocks(data.unlockedZoneNames);
+        TileSelector.instance.LoadZoneTileData(data.zoneTileData);
 
         //destroy all objects, clear plots array
         if (TileSelector.instance.plots.Count > 0)
@@ -115,13 +123,20 @@ public class GameHandler : MonoBehaviour
             AnimalTile.instance.DestroyAnimals();
             TileSelector.instance.animalNum = 0;
         }
-        
+        if (TileSelector.instance.debris.Count > 0)
+        {
+            DebrisTile.instance.DestroyAllDebris();
+            TileSelector.instance.debrisNum = 0;
+        }
+
+        Grid grid = TileSelector.instance.grid;
 
         //instantiate plots, add to array, set details
         for (int i = 0; i < data.cropsActive; i++)
         {
-            Vector3 newPlotPosition = new Vector3(data.plotPositionX[i], data.plotPositionY[i], 9);
-            TileSelector.instance.PlacePlot(newPlotPosition, new Vector3(0,0,0));
+            Vector3 newPlotPosition = grid.GetCellCenterWorld(new Vector3Int(data.plotCellX[i], data.plotCellY[i], 0));
+            newPlotPosition.z = 9f;
+            TileSelector.instance.PlacePlot(newPlotPosition, PlayerInteraction.instance.plotOffset);
             //PlacePlot should add to new array.
 
             //get dirt object of newly instantiated plot
@@ -142,6 +157,8 @@ public class GameHandler : MonoBehaviour
                             dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
                             dirt.crop.GetCropSprite(dirt.crop);// ************************i don't know what this line does ************************
                             dirt.UpdateSprite(dirt);
+                            if (dirt.crop.state == CropState.Planted || dirt.crop.state == CropState.Growing)
+                                dirt.crop.StartGrowth(dirt);
 
                             //set needs plowing
                             dirt.needsPlowing = data.needsPlowing[i];
@@ -179,12 +196,15 @@ public class GameHandler : MonoBehaviour
         }
         for(int i = 0; i < data.treesActive; i++)
         {
-            Vector3 newTreePosition = new Vector3(data.treePositionX[i], data.treePositionY[i], 9);
+            Vector3 newTreePosition = grid.GetCellCenterWorld(new Vector3Int(data.treeCellX[i], data.treeCellY[i], 0));
+            newTreePosition.z = 9f;
             TileSelector.instance.PlantTree(newTreePosition, loadTreeList[i], PlayerInteraction.instance, new Vector3(0, 0, 0));
             TreeTile treeTile = TileSelector.instance.trees[i].GetComponent<TreeTile>();
             treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTreeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
             treeTile.tree.treeState = treeTile.tree.GetState(data.activeTreeStates[i]);
             treeTile.UpdateTreeSprite(treeTile);
+            if (treeTile.tree.treeState == TreeState.Planted || treeTile.tree.treeState == TreeState.Growing)
+                treeTile.tree.StartGrowth(treeTile);
 
         }
 
@@ -202,25 +222,109 @@ public class GameHandler : MonoBehaviour
         }
         for(int i = 0; i < data.animalsActive; i++)
         {
-            Vector3 newAnimalPosition = new Vector3(data.animalPositionX[i], data.animalPositionY[i], 9);
+            Vector3 newAnimalPosition = grid.GetCellCenterWorld(new Vector3Int(data.animalCellX[i], data.animalCellY[i], 0));
+            newAnimalPosition.z = 9f;
             TileSelector.instance.PlaceAnimal(newAnimalPosition, loadAnimalList[i], PlayerInteraction.instance, new Vector3(0, 0, 0));
             AnimalTile animalTile = TileSelector.instance.animals[i].GetComponent<AnimalTile>();
             animalTile.animal.SetGrowthLvl(CalcTimePassed(data.activeAnimalTimers[i], data.savedTime, animalTile.animal.asset.animalTimer));
             animalTile.animal.animalState = animalTile.animal.GetState(data.activeAnimalStates[i]);
             animalTile.UpdateAnimalSprite(animalTile);
+            if (animalTile.animal.animalState == AnimalState.Growing)
+                animalTile.animal.StartGrowth(animalTile);
         }
 
-        //instantiate decor, add to array, set details
-
+        //instantiate debris, add to array
+        for (int i = 0; i < data.debrisActive; i++)
+        {
+            Vector3 debrisPos = grid.GetCellCenterWorld(new Vector3Int(data.debrisCellX[i], data.debrisCellY[i], 0));
+            debrisPos.z = 9f;
+            TileSelector.instance.PlaceDebris(debrisPos, Vector3.zero);
+        }
 
         Debug.Log("Data Loaded");
         MenuController.instance.notificationBar.SetActive(false);
         MenuController.instance.AnimateNotifcation("Load Complete", Color.white, "Null");
     }
 
-    private float CalcTimePassed(float currentGrowthTime, DateTime oldTime, float cropTimeTotal, DirtTile dirt)
+    public void NewGame()
+    {
+        SaveSystem.DeleteSave();
+
+        if (TileSelector.instance.plots.Count > 0)
+        {
+            DirtTile.instance.DestroyPlots();
+            TileSelector.instance.plotNum = 0;
+        }
+        if (TileSelector.instance.trees.Count > 0)
+        {
+            TreeTile.instance.DestroyTrees();
+            TileSelector.instance.treeNum = 0;
+        }
+        if (TileSelector.instance.animals.Count > 0)
+        {
+            AnimalTile.instance.DestroyAnimals();
+            TileSelector.instance.animalNum = 0;
+        }
+        if (TileSelector.instance.debris.Count > 0)
+        {
+            DebrisTile.instance.DestroyAllDebris();
+            TileSelector.instance.debrisNum = 0;
+        }
+
+        loadTreeList.Clear();
+        loadAnimalList.Clear();
+
+        StatsController.instance.SetCoins(50f);
+        StatsController.instance.SetLvl(1);
+        StatsController.instance.SetExp(0);
+        StatsController.instance.UpdateStats();
+
+        TileSelector.instance.GenerateAllZones();
+        TileSelector.instance.SpawnDebrisOnMap();
+    }
+
+    public void TimeSkip()
+    {
+        foreach (GameObject plotObj in TileSelector.instance.plots)
+        {
+            DirtTile dirt = plotObj.GetComponent<DirtTile>();
+            if (dirt.crop.HasCrop() && (dirt.crop.state == CropState.Planted || dirt.crop.state == CropState.Growing))
+            {
+                dirt.crop.CancelGrowth();
+                dirt.crop.state = CropState.Done;
+                dirt.UpdateSprite(dirt);
+            }
+        }
+
+        foreach (GameObject treeObj in TileSelector.instance.trees)
+        {
+            TreeTile treeTile = treeObj.GetComponent<TreeTile>();
+            if (treeTile.tree.HasTree() && (treeTile.tree.treeState == TreeState.Planted || treeTile.tree.treeState == TreeState.Growing))
+            {
+                treeTile.tree.CancelGrowth();
+                treeTile.tree.treeState = TreeState.Done;
+                treeTile.UpdateTreeSprite(treeTile);
+            }
+        }
+
+        foreach (GameObject animalObj in TileSelector.instance.animals)
+        {
+            AnimalTile animalTile = animalObj.GetComponent<AnimalTile>();
+            if (animalTile.animal.HasAnimal() && animalTile.animal.animalState == AnimalState.Growing)
+            {
+                animalTile.animal.CancelGrowth();
+                animalTile.animal.animalState = AnimalState.Done;
+                animalTile.UpdateAnimalSprite(animalTile);
+            }
+        }
+
+        Debug.Log("Time skip applied.");
+    }
+
+    private float CalcTimePassed(float currentGrowthTime, string oldTimeString, float cropTimeTotal, DirtTile dirt)
     {
         float newTime;
+        DateTime oldTime = DateTime.Parse(oldTimeString);
         TimeSpan difference = System.DateTime.Now.Subtract(oldTime);
         newTime = (float)difference.TotalSeconds; // number of seconds that have passed since the save to the load.
         //need to determine how many seconds from when the crop was planted, to the save, then add that to the difference
@@ -237,9 +341,10 @@ public class GameHandler : MonoBehaviour
             return temp + currentGrowthTime;
         }
     }
-    private float CalcTimePassed(float currentGrowthTime, DateTime oldTime, float cropTimeTotal)
+    private float CalcTimePassed(float currentGrowthTime, string oldTimeString, float cropTimeTotal)
     {
         float newTime;
+        DateTime oldTime = DateTime.Parse(oldTimeString);
         TimeSpan difference = System.DateTime.Now.Subtract(oldTime);
         newTime = (float)difference.TotalSeconds; // number of seconds that have passed since the save to the load.
         //need to determine how many seconds from when the crop was planted, to the save, then add that to the difference

@@ -8,6 +8,8 @@ public class TreeTile : MonoBehaviour
 
     public SpriteRenderer overlay;
 
+    [SerializeField] private string harvestSoundName = "Harvest";
+    [SerializeField] private string destroySoundName = "Destroy";
 
     //used to control opacity for task system
     SpriteRenderer parentSprite;
@@ -19,24 +21,9 @@ public class TreeTile : MonoBehaviour
         instance = this;
     }
 
-    void Update()
-    {
-        if (tree.HasTree())
-        {
-            if (tree.treeState == TreeState.Planted || tree.treeState == TreeState.Growing)
-            {
-                bool treeIsDone = tree.TreeGrow(Time.deltaTime, this);
-                if (treeIsDone)
-                {
-                    UpdateTreeSprite(this);
-                }
-            }
-        }
-    }
-
     public void Interact(Tree t, TreeTile treeTile, PlayerInteraction player)
     {
-        if(treeTile.tree.HasTree() && treeTile.tree.treeState == TreeState.Done && !MenuController.instance.fireTool)
+        if(treeTile.tree.HasTree() && treeTile.tree.treeState == TreeState.Done && !MenuController.instance.toolState.fireTool)
         {
             //queue HARVEST TREE
 
@@ -53,7 +40,7 @@ public class TreeTile : MonoBehaviour
 
             //after task is compolete, see HarvestTree
         }
-        if (MenuController.instance.fireTool)
+        if (MenuController.instance.toolState.fireTool)
         {
             MenuController.instance.OpenFireMenu();
         }
@@ -75,7 +62,8 @@ public class TreeTile : MonoBehaviour
         treeThingy.tree.treeState = TreeState.Growing;
         UpdateTreeSprite(treeThingy);
         treeThingy.tree.SetGrowthLvl(0f);
-        FindObjectOfType<AudioManager>().PlaySound("Harvest");
+        treeThingy.tree.StartGrowth(treeThingy);
+        AudioManager.instance.PlaySound(harvestSoundName);
         treeThingy.isBusy = false;
 
     }
@@ -91,8 +79,7 @@ public class TreeTile : MonoBehaviour
             }
         }
         Object.Destroy(treeToDestroy.gameObject);
-
-        FindObjectOfType<AudioManager>().PlaySound("Destroy");
+        AudioManager.instance.PlaySound(destroySoundName);
     }
 
     public void DestroyTrees()

@@ -40,6 +40,12 @@ public class QueueTaskSystem : MonoBehaviour
         queue.EnqueueWait(waitTime);
     }
 
+    public void SetTask(string task, DebrisTile debris)
+    {
+        queue.EnqueueAction(TaskTimer(task, debris));
+        queue.EnqueueWait(waitTime);
+    }
+
     public void SetTask(Crop c, PlayerInteraction player, DirtTile dirt)
     {
         //plant seed
@@ -125,6 +131,26 @@ public class QueueTaskSystem : MonoBehaviour
                 break;
             case "burn":
                 AnimalTile.instance.DestroyAnimal(animal);
+                break;
+        }
+    }
+
+    // Debris prefab uses a single Slider at index [0] (no growth hover timer needed)
+    IEnumerator TaskTimer(string task, DebrisTile debris)
+    {
+        Slider[] sliders = debris.GetComponentsInChildren<Slider>(true);
+        sliders[0].gameObject.SetActive(true);
+        sliders[0].value = sliders[0].minValue;
+        while (sliders[0].value < sliders[0].maxValue)
+        {
+            sliders[0].value += Time.deltaTime;
+            yield return null;
+        }
+        sliders[0].gameObject.SetActive(false);
+        switch (task)
+        {
+            case "clearDebris":
+                DebrisTile.instance.DestroyDebris(debris);
                 break;
         }
     }

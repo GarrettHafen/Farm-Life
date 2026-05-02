@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -16,21 +16,12 @@ public class StatsController : MonoBehaviour
     private int currentEXP = 0;
     private int[] expToNextLevel;
 
-    /*
-     * had to split the coins into two types for new queue system. 
-     * need to make sure the player can execute a queued system before
-     * adding it to the task list. FarmVille cancels the queue if a task 
-     * cant complete due to insufficient funds, which seems dumb to me. 
-     * so i created the master coins list, and when a task completes, the 
-     * display will update to with the same change as master. master shouldn't
-     * get out of sync with display...but its a concern.
-     */
-    private float masterCoins = 50;
-    private float displayCoins = 50;
+    // Single authoritative coin balance. displayedCoins chases this in Update()
+    // so the UI always animates smoothly without any risk of desync.
+    private float coins = 50f;
+    private float displayedCoins = 50f;
 
-    private float targetCoinsTotal;
-
-    //radial fill 
+    //radial fill
     public float minimum;
     public float maximum;
     public float current;
@@ -38,45 +29,44 @@ public class StatsController : MonoBehaviour
     public Image fill;
     public Color color;
 
-    private QueueSystem queue;
-
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
         SetupExp();
         UpdateStats();
-
-        //used for writing info to a file
-        //WriteExpToFile();
-
-
         GetCurrentFill(currentEXP, 0f, expToNextLevel[playerLevel]);
-
-        queue = new QueueSystem(this);
-        queue.StartLoop();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Smoothly animate the displayed coin count toward the real balance
+        float speed = Mathf.Max(10f, Mathf.Abs(coins - displayedCoins) * 5f);
+        displayedCoins = Mathf.MoveTowards(displayedCoins, coins, speed * Time.deltaTime);
+        int displayed = Mathf.RoundToInt(displayedCoins);
+        coinsText.text = displayed < 1000000 ? displayed + " coins" : displayed.ToString();
+
+        // Dev cheat keys
         if (Input.GetKeyDown(KeyCode.C))
         {
-            AddCoinsMaster(25);
-            AddCoinsDisplay(25);
-        }/*else if (Input.GetKeyDown(KeyCode.V))
-        {
-            AddCoins(250);
+            AddCoins(25);
         }
-        else if (Input.GetKeyDown(KeyCode.B))
+        else if (Input.GetKeyDown(KeyCode.V))
         {
-            AddCoins(1000);
-        }*/else if (Input.GetKeyDown(KeyCode.J))
+            AddCoins(10000);
+        }
+        else if (Input.GetKeyDown(KeyCode.J))
         {
             AddExp(75);
-        }else if (Input.GetKeyDown(KeyCode.K))
+        }
+        else if (Input.GetKeyDown(KeyCode.K))
         {
             AddExp(500);
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            GameHandler.instance.TimeSkip();
         }
         else if (Input.GetKeyDown(KeyCode.L) && GameHandler.instance.devMode)
         {
@@ -85,159 +75,21 @@ public class StatsController : MonoBehaviour
             SetCoins(5000);
             UpdateStats();
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("Master: " + masterCoins);
-            Debug.Log("Display: " + displayCoins);
-        }
     }
 
     public void AddCoins(int coinsToAdd)
     {
-        AddCoinsMaster(coinsToAdd);
-        AddCoinsDisplay(coinsToAdd);
-    }
-
-    void AddCoinsMaster(int coinsToAdd)
-    {
-        /*
-         * doesn't need as much logic because its not going to be displayed
-         */
-        masterCoins += coinsToAdd;
-    }
-
-    void AddCoinsDisplay(int coinsToAdd)
-    {
-        /*
-         * - displayed in UI
-         * - if the coins get to high, i don't want 'coins' appended, ***pretty bad code, coins aren't being updated after this point, stupid***
-         * - i want coins to count up slowly but it needs to queue
-         * depending on how many coins are being added, it should count up 
-         * faster or slower.
-         * - queue actually updates display in UI
-         */
-        
-        targetCoinsTotal = displayCoins + coinsToAdd;
-        
-        if (targetCoinsTotal > 999999999f)
-        {
-            targetCoinsTotal = 999999999f;
-        }
-        else
-        {
-            int speed = GetSpeed(coinsToAdd);
-            queue.EnqueueAction(CountUpToTarget(displayCoins, targetCoinsTotal, speed));
-
-        }
-        displayCoins += coinsToAdd;
-
+        coins += coinsToAdd;
     }
 
     public bool CheckMaster(int coinsToRemove)
     {
-        /*
-         * if master has enough coins, then the task can proceed 
-         */
-
-        if(masterCoins >= coinsToRemove)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return coins >= coinsToRemove;
     }
 
-    public void RemoveCoinsMaster(int coinsToRemove)
+    public void RemoveCoins(int coinsToRemove)
     {
-        /*
-         * doesn't need as much logic because its not going to be displayed
-         */
-
-        masterCoins -= coinsToRemove;
-    }
-
-    public void RemoveCoinsDisplay(int coinsToRemove)
-    {
-        /*
-         * needs to same logic as AddCoinsDisplay just in reverse
-         * 
-         */
-        targetCoinsTotal = displayCoins - coinsToRemove;
-        int speed = GetSpeed(coinsToRemove);
-        queue.EnqueueAction(CountDownToTarget(displayCoins, targetCoinsTotal, speed));
-        displayCoins -= coinsToRemove;
-    }
-
-    IEnumerator CountUpToTarget(float currentCoinsCU, float targetCoinsTotalCU, int speedCU)
-    {
-        /*
-         * if coins are greater than x amount, remove Coins from display
-         * count up coins at the count of speed
-         */
-        while (currentCoinsCU < targetCoinsTotalCU)
-        {
-            currentCoinsCU += speedCU;
-            //currentCoinsCU = Mathf.Clamp(currentCoins, 0f, targetCoinsTotal); dont remember why we needed this clamp.....
-            if(currentCoinsCU < 1000000)
-            {
-                coinsText.text = currentCoinsCU + " coins";
-            }
-            else
-            {
-                coinsText.text = currentCoinsCU.ToString();
-            }
-            yield return null;
-        }
-        
-    }
-    IEnumerator CountDownToTarget(float currentCoinsCD, float targetCoinsTotalCD, int speedCD)
-    {
-        /*
-         * if coins are greater than x amount, remove Coins from display
-         * count up coins at the count of speed
-         */
-        while (currentCoinsCD > targetCoinsTotalCD)
-        { 
-            currentCoinsCD -= speedCD;
-            //currentCoinsCD = Mathf.Clamp(currentCoinsCD, 0f, targetCoinsTotal);
-            if (currentCoinsCD < 1000000)
-            {
-                coinsText.text = currentCoinsCD + " coins";
-            }
-            else
-            {
-                coinsText.text = currentCoinsCD.ToString();
-            }
-        }
-        yield return null;
-    }
-
-    private int GetSpeed(int coins)
-    {
-        /*
-         * bad code ----- might not matter with new queue task system
-         * 
-         * 
-         * not very elegant, if coins is small, speed is low.
-         * code is to prevent coins from counting up for 
-         * forever when doing things in mass 
-         */
-        int speed = 1;
-        if (coins < 25)
-        {
-            speed = 1;
-        }
-        else if (coins >= 25 && coins < 100)
-        {
-            speed = 5;
-        }
-        else if (coins >= 100)
-        {
-            speed = 100;
-        }
-        return speed;
+        coins -= coinsToRemove;
     }
 
     public void AddExp(int expToAdd)
@@ -249,7 +101,7 @@ public class StatsController : MonoBehaviour
             {
                 playerLevel++;
                 levelText.text = playerLevel.ToString();
-                FindObjectOfType<AudioManager>().PlaySound("Level Up");
+                AudioManager.instance.PlaySound("Level Up");
             }
         }
         if (playerLevel >= maxLevel)
@@ -279,18 +131,18 @@ public class StatsController : MonoBehaviour
         expToNextLevel[1] = baseEXP;
         for (int i = 2; i < expToNextLevel.Length; i++)
         {
-            expToNextLevel[i] = (int)(Mathf.Floor(baseEXP * (Mathf.Pow(i, 1.5f))));   
+            expToNextLevel[i] = (int)(Mathf.Floor(baseEXP * (Mathf.Pow(i, 1.5f))));
         }
     }
 
     public float GetCoins()
     {
-        return masterCoins;
+        return coins;
     }
-    public void SetCoins(float coins)
+    public void SetCoins(float amount)
     {
-        masterCoins = coins;
-        displayCoins = coins;
+        coins = amount;
+        displayedCoins = amount; // snap on load so it doesn't animate from 0
     }
     public int GetLvl()
     {
@@ -310,7 +162,8 @@ public class StatsController : MonoBehaviour
     }
     public void UpdateStats()
     {
-        coinsText.text = displayCoins + " coins";
+        int displayed = Mathf.RoundToInt(displayedCoins);
+        coinsText.text = displayed < 1000000 ? displayed + " coins" : displayed.ToString();
         levelText.text = "" + playerLevel;
         GetCurrentFill(currentEXP, expToNextLevel[playerLevel - 1], expToNextLevel[playerLevel]);
     }
@@ -320,7 +173,7 @@ public class StatsController : MonoBehaviour
         *write all the values to a file for easy viewing*/
         string path = "Assets/test2.txt";
         StreamWriter writer = new StreamWriter(path, true);
-         int count = 0; 
+         int count = 0;
         foreach (int number in expToNextLevel)
         {
             count++;

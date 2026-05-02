@@ -5,37 +5,61 @@ public class Animal
 {
     public AnimalAsset asset;
     public AnimalState animalState;
-    private float growthLevel;
+    private float growthStartTime;
 
-    public bool AnimalGrow(float amount, AnimalTile animal)
+    private System.Action _doneCallback;
+
+    public void StartGrowth(AnimalTile tile)
     {
-        if (!animal.isBusy)
+        CancelGrowth();
+
+        float doneTime = growthStartTime + asset.animalTimer;
+
+        if (doneTime > Time.time)
         {
-            growthLevel += amount / asset.animalTimer;
-            if (growthLevel >= 1f)
+            _doneCallback = () =>
             {
                 animalState = AnimalState.Done;
-                return true;
-            }
+                tile.UpdateAnimalSprite(tile);
+            };
+            GrowthManager.instance.Register(doneTime, _doneCallback);
         }
-        return false;
+        else if (animalState != AnimalState.Done)
+        {
+            animalState = AnimalState.Done;
+            tile.UpdateAnimalSprite(tile);
+        }
+    }
+
+    public void CancelGrowth()
+    {
+        if (_doneCallback != null)
+        {
+            GrowthManager.instance.Cancel(_doneCallback);
+            _doneCallback = null;
+        }
     }
 
     public float GetGrowthLvl()
     {
-        return growthLevel;
+        if (animalState == AnimalState.Done)
+            return 1f;
+        if (asset == null)
+            return 0f;
+        return Mathf.Clamp01((Time.time - growthStartTime) / asset.animalTimer);
     }
 
-    public void SetGrowthLvl(float time)
+    public void SetGrowthLvl(float level)
     {
-        growthLevel = time;
+        if (asset != null)
+            growthStartTime = Time.time - level * asset.animalTimer;
     }
 
     public Animal(AnimalAsset a)
     {
         asset = a;
         animalState = AnimalState.Growing;
-        growthLevel = 0;
+        growthStartTime = 0f;
     }
 
     public bool HasAnimal()

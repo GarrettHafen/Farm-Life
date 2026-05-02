@@ -11,6 +11,11 @@ public class DirtTile : MonoBehaviour
 	public bool isBusy = false;
 	public Sprite fallowed;
 
+	[SerializeField] private string plantSoundName   = "Seed";
+	[SerializeField] private string harvestSoundName = "Harvest";
+	[SerializeField] private string plowSoundName    = "Plow";
+	[SerializeField] private string destroySoundName = "Destroy";
+
 	SpriteRenderer parentSprite;
 	SpriteRenderer[] childSprites;
 
@@ -21,18 +26,24 @@ public class DirtTile : MonoBehaviour
 
 	public void Interact (Crop c,PlayerInteraction player, DirtTile dirt)
 	{
-		if (MenuController.instance.hasSeed && c.HasCrop())
+		if (MenuController.instance.toolState.hasSeed && c.HasCrop())
 		{
 			//queue PLANTING
 
+			// Can't plant if the tile already has a crop in progress
+			if (dirt.crop.HasCrop() && dirt.crop.state != CropState.Seed)
+			{
+				MenuController.instance.notificationBar.SetActive(false);
+				MenuController.instance.AnimateNotifcation("Can't Plant Seed", Color.red, "Error");
+				return;
+			}
 
 			if (!needsPlowing)
 			{
 				//check if enough coins to perform task
 				if (StatsController.instance.CheckMaster(c.asset.cropCost))
                 {
-					//if enough coins, decrement master
-					StatsController.instance.RemoveCoinsMaster(c.asset.cropCost);
+					StatsController.instance.RemoveCoins(c.asset.cropCost);
 					//change sprite opacity
 					parentSprite = this.GetComponent<SpriteRenderer>();
 					childSprites = this.GetComponentsInChildren<SpriteRenderer>();
@@ -61,15 +72,13 @@ public class DirtTile : MonoBehaviour
 			return;
 
 		}
-		if (needsPlowing && !MenuController.instance.fireTool)
+		if (needsPlowing && !MenuController.instance.toolState.fireTool)
 		{
 			// queue SECOND PLOW
 
-			//check if enough oins to perfom task
 			if (StatsController.instance.CheckMaster(5))
 			{
-				//if enough coins, decrement master
-				StatsController.instance.RemoveCoinsMaster(5);
+				StatsController.instance.RemoveCoins(5);
 
 				//change overlay
 				parentSprite = this.GetComponent<SpriteRenderer>();
@@ -90,12 +99,12 @@ public class DirtTile : MonoBehaviour
 				MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red, "No Money");
 			}
 		}
-        else if (!needsPlowing && !dirt.crop.HasCrop() && !MenuController.instance.fireTool)
+        else if (!needsPlowing && !dirt.crop.HasCrop() && !MenuController.instance.toolState.fireTool)
         {
 			
 			MarketController.instance.ActivateMarket();
         }
-		else if (dirt.crop.HasCrop() && dirt.crop.state == CropState.Done && !MenuController.instance.fireTool)
+		else if (dirt.crop.HasCrop() && dirt.crop.state == CropState.Done && !MenuController.instance.toolState.fireTool)
 		{
 			//queue HARVEST
 
@@ -121,9 +130,14 @@ public class DirtTile : MonoBehaviour
 					//change overlay and parent opacity to 1
 					//change overlay sprite to fallow
 		}
-        else if (MenuController.instance.fireTool)
+        else if (MenuController.instance.toolState.fireTool)
         {
-
+            if (TileSelector.instance.plots.Count == 1)
+            {
+                MenuController.instance.notificationBar.SetActive(false);
+                MenuController.instance.AnimateNotifcation("Can't destroy last plot!", Color.red, "Error");
+                return;
+            }
 			//need to assign to task queue
 			MenuController.instance.OpenFireMenu();
         }
@@ -151,9 +165,10 @@ public class DirtTile : MonoBehaviour
 		childSprites[1].color = new Color(1f, 1f, 1f, 1f);
 
 		StatsController.instance.AddExp(1);
-		StatsController.instance.RemoveCoinsDisplay(c.asset.cropCost);
-		FindObjectOfType<AudioManager>().PlaySound("Seed");
+		AudioManager.instance.PlaySound(plantSoundName);
 		dirt.isBusy = false;
+		dirt.crop.SetGrowthLvl(0f);
+		dirt.crop.StartGrowth(dirt);
 
 	}
 
@@ -170,7 +185,7 @@ public class DirtTile : MonoBehaviour
 			childSprites = dirt.GetComponentsInChildren<SpriteRenderer>();
 			childSprites[1].color = new Color(1f, 1f, 1f, 1f);
 			dirt.AddDirt();
-			FindObjectOfType<AudioManager>().PlaySound("Harvest");
+			AudioManager.instance.PlaySound(harvestSoundName);
 			dirt.isBusy = false;
 		}
 	}
@@ -188,9 +203,8 @@ public class DirtTile : MonoBehaviour
 		childSprites[1].color = new Color(1f, 1f, 1f, 1f);
 		dirt.overlay.sprite = null;
 		dirt.needsPlowing = false;
-		StatsController.instance.RemoveCoinsDisplay(5);
 		StatsController.instance.AddExp(1);
-		FindObjectOfType<AudioManager>().PlaySound("Plow");
+		AudioManager.instance.PlaySound(plowSoundName);
 		dirt.isBusy = false;
 		
 		
@@ -202,24 +216,10 @@ public class DirtTile : MonoBehaviour
 			sprites[1].sprite = dirtPlot.crop.GetCropSprite(dirtPlot.crop);
 	}
 
-	private void Update()
-	{
-		if (crop.HasCrop())
-		{
-			if (crop.state == CropState.Planted || crop.state == CropState.Growing)
-			{
-				bool isDone = crop.Grow(Time.deltaTime, this);
-				if (isDone)
-				{
-					UpdateSprite(this);
-				}
-			}
-		}
-	}
 
 
     public void DestroyPlot(DirtTile plotToDestroy)
-    {	
+    {
         foreach(GameObject plot in TileSelector.instance.plots)
         {
             if (plot.Equals(plotToDestroy.gameObject))
@@ -229,8 +229,7 @@ public class DirtTile : MonoBehaviour
             }
         }
 		Object.Destroy(plotToDestroy.gameObject);
-		FindObjectOfType<AudioManager>().PlaySound("Destroy");
-
+		AudioManager.instance.PlaySound(destroySoundName);
 	}
 	public void DestroyPlots()
 	{

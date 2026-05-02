@@ -8,6 +8,9 @@ public class AnimalTile : MonoBehaviour
 
     public SpriteRenderer overlay;
 
+    [SerializeField] private string harvestSoundName = "Harvest";
+    [SerializeField] private string destroySoundName = "Destroy";
+
     //used to control opacity for task system
     SpriteRenderer parentSprite;
     SpriteRenderer[] childSprites;
@@ -20,19 +23,6 @@ public class AnimalTile : MonoBehaviour
 
     void Update()
     {
-        if (animal.HasAnimal())
-        {
-            if(animal.animalState == AnimalState.Growing)
-            {
-                bool animalIsDone = animal.AnimalGrow(Time.deltaTime, this);
-                if (animalIsDone)
-                {
-                    UpdateAnimalSprite(this);
-                }
-            }
-        }
-
-        //code to randomly flip the sprite, happens pretty quick, 500 might not be high enough. 18 is an arbitrary number, just like that number. 
         float randomNumber = Mathf.Round(Random.Range(0.0f, 500.0f));
         if(randomNumber == 18)
         {
@@ -42,7 +32,7 @@ public class AnimalTile : MonoBehaviour
 
     public void Interact(Animal a, AnimalTile animalTile, PlayerInteraction player)
     {
-        if(animalTile.animal.HasAnimal() && animalTile.animal.animalState == AnimalState.Done && !MenuController.instance.fireTool)
+        if(animalTile.animal.HasAnimal() && animalTile.animal.animalState == AnimalState.Done && !MenuController.instance.toolState.fireTool)
         {
             //queue Harvest Animal
             parentSprite = animalTile.GetComponent<SpriteRenderer>();
@@ -58,7 +48,7 @@ public class AnimalTile : MonoBehaviour
 
             //after task is complete, see HarvestAnimal
         }
-        if (MenuController.instance.fireTool)
+        if (MenuController.instance.toolState.fireTool)
         {
             MenuController.instance.OpenFireMenu();
         }
@@ -77,7 +67,8 @@ public class AnimalTile : MonoBehaviour
         animalThingy.animal.animalState = AnimalState.Growing;
         UpdateAnimalSprite(animalThingy);
         animalThingy.animal.SetGrowthLvl(0f);
-        FindObjectOfType<AudioManager>().PlaySound("Harvest");
+        animalThingy.animal.StartGrowth(animalThingy);
+        AudioManager.instance.PlaySound(harvestSoundName);
         animalThingy.isBusy = false;
     }
 
@@ -92,7 +83,7 @@ public class AnimalTile : MonoBehaviour
             }
         }
         Object.Destroy(animalToDestroy.gameObject);
-        FindObjectOfType<AudioManager>().PlaySound("Destroy");
+        AudioManager.instance.PlaySound(destroySoundName);
     }
 
     public void DestroyAnimals()

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -22,8 +23,8 @@ public class MenuController : MonoBehaviour
     public GameObject helpMenu;
 
     //variables to handle preview
-    private Transform mouseyThingy = null;
-    private SpriteRenderer mouseyThingySprite;
+    private Transform previewPlacementLocation = null;
+    private SpriteRenderer previewPlacementLocationSprite;
     public bool previewObstructed = false;
     public bool previewActive;
     private Grid grid;
@@ -33,19 +34,15 @@ public class MenuController : MonoBehaviour
     public GameObject previewParent;
     public GameObject placeablePreview;
     public float xOffset, yOffset;
+    private Vector3 placementPosition;
 
     public Tool plow;
-    public bool plowActive = false;
-    public bool hasSeed = false;
+    public PlayerToolState toolState = new PlayerToolState();
 
-    public bool fireTool = false;
     public Sprite fireToolSprite;
 
     public Image handIndicator;
     public GameObject handIndicatorParent;
-
-    public bool hasTree = false;
-    public bool hasAnimal = false;
 
     public GameObject fireMenu;
 
@@ -57,7 +54,7 @@ public class MenuController : MonoBehaviour
         //ResetTool();
         //Cursor.SetCursor(GameHandler.instance.defaultPointer, hotSpot, cursorMode);
 
-        grid = Grid.FindObjectOfType<Grid>();
+        grid = FindFirstObjectByType<Grid>();
        
 
     }
@@ -65,14 +62,16 @@ public class MenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mouseyThingy != null)
+        if (previewPlacementLocation != null)
         {
-            if (mouseyThingy.gameObject.activeInHierarchy)
+            if (previewPlacementLocation.gameObject.activeInHierarchy)
             {
                 //using grid to provide for isometric design 
                 Vector3 screenToWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
                 Vector3Int worldToCell = grid.WorldToCell(screenToWorld);
-                mouseyThingy.position = new Vector3(grid.GetCellCenterWorld(worldToCell).x + xOffset, grid.GetCellCenterWorld(worldToCell).y + yOffset, 9f);
+                Vector3 cellCenter = grid.GetCellCenterWorld(worldToCell);
+                placementPosition = new Vector3(cellCenter.x, cellCenter.y, 9f);
+                previewPlacementLocation.position = new Vector3(cellCenter.x + xOffset, cellCenter.y + yOffset, 9f);
                 
                 //placeablePreview for when we need to place animals, trees or decorations. 
             }
@@ -92,7 +91,7 @@ public class MenuController : MonoBehaviour
         else
         {
             menuToAnimate.SetActive(true);
-            FindObjectOfType<AudioManager>().PlaySound("Click");
+            AudioManager.instance.PlaySound("Click");
         }
     }
 
@@ -101,7 +100,7 @@ public class MenuController : MonoBehaviour
         notifcationText.text = notifyText;
         notifcationText.color = color;
         notificationBar.SetActive(true);
-        FindObjectOfType<AudioManager>().PlaySound(sound);
+        AudioManager.instance.PlaySound(sound);
 
     }
 
@@ -113,25 +112,50 @@ public class MenuController : MonoBehaviour
     public void OpenSettings()
     {
         settingsMenu.SetActive(true);
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
     }
     public void CloseSettings()
     {
         settingsMenu.SetActive(false);
         saveOrQuitPanel.SetActive(false);
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
     }
     public void SaveGame()
     {
-        SaveSystem.SavePlayer();
-        Debug.Log("Save Complete");
-        notificationBar.SetActive(false);
-        AnimateNotifcation("Save Complete", Color.white, "Manual Save");
+        try
+        {
+            SaveSystem.SavePlayer();
+            Debug.Log("Save Complete");
+            notificationBar.SetActive(false);
+            AnimateNotifcation("Save Complete", Color.white, "Manual Save");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Save failed: " + e.Message);
+            notificationBar.SetActive(false);
+            AnimateNotifcation("Save Failed!", Color.red, "Error");
+        }
     }
     public void LoadGame()
     {
-        FindObjectOfType<AudioManager>().PlaySound("Click");
-        GameHandler.instance.LoadData(SaveSystem.LoadPlayer());
+        AudioManager.instance.PlaySound("Click");
+        try
+        {
+            PlayerData data = SaveSystem.LoadPlayer();
+            if (data == null)
+            {
+                notificationBar.SetActive(false);
+                AnimateNotifcation("No save found", Color.red, "Error");
+                return;
+            }
+            GameHandler.instance.LoadData(data);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Load failed: " + e.Message);
+            notificationBar.SetActive(false);
+            AnimateNotifcation("Load Failed!", Color.red, "Error");
+        }
     }
 
     public void SaveOrExitGame()
@@ -139,17 +163,19 @@ public class MenuController : MonoBehaviour
         //save and quit or exit without saving
         CloseSettings();
         saveOrQuitPanel.SetActive(true);
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
     }
     public void QuitGame()
     {
-        FindObjectOfType<AudioManager>().PlaySound("Click");
-        //actually quit the game
-        Application.Quit();
+        AudioManager.instance.PlaySound("Click");
+        saveOrQuitPanel.SetActive(false);
+        settingsMenu.SetActive(false);
+        GameHandler.instance.landingPage.SetActive(true);
+        GameHandler.instance.landingPageOpen = true;
     }
     public void SaveAndExit()
     {
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
         StartCoroutine(ExecuteAfterTime(1));
     }
 
@@ -161,7 +187,7 @@ public class MenuController : MonoBehaviour
 
     public void MuteAudio()
     {
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
         GameMaster.instance.MuteAudio();
         //mute sounds
     }
@@ -169,27 +195,27 @@ public class MenuController : MonoBehaviour
     public void ActivatePreview(GameObject preview)
     {
         
-        mouseyThingy = ((GameObject)preview).transform;
-        mouseyThingy.gameObject.SetActive(true);
+        previewPlacementLocation = ((GameObject)preview).transform;
+        previewPlacementLocation.gameObject.SetActive(true);
         preview.SetActive(true);
         previewActive = true;
         previewParent.SetActive(true);
     }
     public void DestroyPreview()
     {
-        if (mouseyThingy)
+        if (previewPlacementLocation)
         {
-            mouseyThingy.gameObject.SetActive(false);
+            previewPlacementLocation.gameObject.SetActive(false);
             previewActive = false;
             previewParent.SetActive(false);
         }
     }
 
-    public bool GetMouseyThingy()
+    public bool GetpreviewPlacementLocation()
     {
-        if (mouseyThingy != null)
+        if (previewPlacementLocation != null)
         {
-            if (mouseyThingy.gameObject.activeInHierarchy)
+            if (previewPlacementLocation.gameObject.activeInHierarchy)
             {
                 return true;
             }
@@ -200,67 +226,57 @@ public class MenuController : MonoBehaviour
             return false;
         }
     }
-    public Vector3 GetMouseyThingyPosition()
+    public Vector3 GetpreviewPlacementLocationPosition()
     {
-        return mouseyThingy.position;
+        return previewPlacementLocation.position;
+    }
+
+    public Vector3 GetPlacementPosition()
+    {
+        return placementPosition;
     }
     public void SetPreviewColor(Sprite color, GameObject preview)
     {
-        mouseyThingySprite = preview.GetComponent<SpriteRenderer>();
+        previewPlacementLocationSprite = preview.GetComponent<SpriteRenderer>();
 
-        mouseyThingySprite.sprite = color;
+        previewPlacementLocationSprite.sprite = color;
     }
 
     public void ActivatePlow()
     {
-        plowActive = !plowActive;
+        toolState.TogglePlow();
         previewObstructed = false;
     }
     public void DeactivatePlow()
     {
-        plowActive = false;
-
+        if (toolState.plowActive) toolState.Clear();
     }
     public void DisplayInventory()
     {
         handIndicator.sprite = null;
         handIndicatorParent.SetActive(true);
-        
-        if (MenuController.instance.plowActive)
-        {
-            handIndicator.sprite = MenuController.instance.plow.sprite;
-        }
-        else if (hasSeed)
-        {
+
+        if (toolState.plowActive)
+            handIndicator.sprite = plow.sprite;
+        else if (toolState.hasSeed)
             handIndicator.sprite = PlayerInteraction.instance.GetCrop().asset.iconSprite;
-        }
-        else if (fireTool)
-        {
+        else if (toolState.fireTool)
             handIndicator.sprite = fireToolSprite;
-        }
-        else if (hasTree)
-        {
+        else if (toolState.hasTree)
             handIndicator.sprite = PlayerInteraction.instance.GetTree().asset.treeIconSprite;
-        }
-        else if (hasAnimal)
-        {
+        else if (toolState.hasAnimal)
             handIndicator.sprite = PlayerInteraction.instance.GetAnimal().asset.animalIconSprite;
-        }
     }
 
     public void ClearHand()
     {
         handIndicatorParent.SetActive(false);
-        hasSeed = false;
-        hasTree = false;
-        hasAnimal = false;
-        plowActive = false;
-        fireTool = false;
+        toolState.Clear();
     }
 
     public void SetFireTool()
     {
-        fireTool = !fireTool;
+        toolState.ToggleFire();
     }
 
     public void OpenFireMenu()
@@ -283,12 +299,12 @@ public class MenuController : MonoBehaviour
     {
         //open the help menu, don't want it to close the settings, they can do that manually. 
         helpMenu.SetActive(true);
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
     }
 
     public void CloseHelpMenu()
     {
         helpMenu.SetActive(false);
-        FindObjectOfType<AudioManager>().PlaySound("Click");
+        AudioManager.instance.PlaySound("Click");
     }
 }

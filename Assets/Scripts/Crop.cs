@@ -9,47 +9,88 @@ public class Crop
 
 	public CropState state;
 
-	private float growthLevel;
+	private float growthStartTime;
     private bool isDead;
 
 	private float witherTimer;
 
-	public bool Grow(float amount, DirtTile dirt)
+	private System.Action _halfGrownCallback;
+	private System.Action _doneCallback;
+
+	public void StartGrowth(DirtTile dirt)
 	{
-		if (!dirt.isBusy)
+		CancelGrowth();
+
+		float halfTime = growthStartTime + asset.cropTimer * 0.5f;
+		float doneTime = growthStartTime + asset.cropTimer;
+
+		if (halfTime > Time.time)
 		{
-			growthLevel += amount / asset.cropTimer;
-			if (growthLevel >= 1f)
+			_halfGrownCallback = () =>
 			{
-				state = CropState.Done;
-				return true;
-			}
-			else if (growthLevel <= 1f && growthLevel >= .5f)
-			{
-				state = CropState.Growing;
-				if (dirt.overlay.sprite = asset.seedSprite)
+				if (state == CropState.Planted)
 				{
+					state = CropState.Growing;
 					dirt.UpdateSprite(dirt);
 				}
-				return false;
-			}
+			};
+			GrowthManager.instance.Register(halfTime, _halfGrownCallback);
 		}
-		return false;
+		else if (state == CropState.Planted)
+		{
+			state = CropState.Growing;
+			dirt.UpdateSprite(dirt);
+		}
+
+		if (doneTime > Time.time)
+		{
+			_doneCallback = () =>
+			{
+				state = CropState.Done;
+				dirt.UpdateSprite(dirt);
+			};
+			GrowthManager.instance.Register(doneTime, _doneCallback);
+		}
+		else if (state != CropState.Done)
+		{
+			state = CropState.Done;
+			dirt.UpdateSprite(dirt);
+		}
+	}
+
+	public void CancelGrowth()
+	{
+		if (_halfGrownCallback != null)
+		{
+			GrowthManager.instance.Cancel(_halfGrownCallback);
+			_halfGrownCallback = null;
+		}
+		if (_doneCallback != null)
+		{
+			GrowthManager.instance.Cancel(_doneCallback);
+			_doneCallback = null;
+		}
 	}
 
 	public float GetGrowthLvl()
     {
-		return growthLevel;
+		if (state == CropState.Done || state == CropState.Dead)
+			return 1f;
+		if (asset == null || state == CropState.Seed)
+			return 0f;
+		return Mathf.Clamp01((Time.time - growthStartTime) / asset.cropTimer);
     }
-	public void SetGrowthLvl(float time)
+
+	public void SetGrowthLvl(float level)
     {
-		growthLevel = time;
+		if (asset != null)
+			growthStartTime = Time.time - level * asset.cropTimer;
     }
 
 	public Crop (CropAsset a) {
 		asset = a;
 		state = CropState.Seed;
-		growthLevel = 0f;
+		growthStartTime = 0f;
 		isDead = false;
 	}
 

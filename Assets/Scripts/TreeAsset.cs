@@ -13,4 +13,5 @@ public class TreeAsset : ScriptableObject
 	public int expReward; //how much xp you get per tree harvested
 	public string treeName; //tree name
 	public int reqLvl; //the required level to be able to use this tree.
+    public string preview; //footprint size: "1x1", "2x2", or "4x4"
 }

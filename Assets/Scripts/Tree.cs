@@ -5,46 +5,61 @@ public class Tree
 {
     public TreeAsset asset;
     public TreeState treeState;
-    private float growthLevel;
+    private float growthStartTime;
 
-    public bool TreeGrow(float amount, TreeTile tree)
+    private System.Action _doneCallback;
+
+    public void StartGrowth(TreeTile tile)
     {
-        if (!tree.isBusy)
+        CancelGrowth();
+
+        float doneTime = growthStartTime + asset.treeTimer;
+
+        if (doneTime > Time.time)
         {
-            growthLevel += amount / asset.treeTimer;
-            if (growthLevel >= 1f)
+            _doneCallback = () =>
             {
                 treeState = TreeState.Done;
-                //Debug.Log("tree is done");
-                return true;
-            }
+                tile.UpdateTreeSprite(tile);
+            };
+            GrowthManager.instance.Register(doneTime, _doneCallback);
         }
-        /*else if (growthLevel <= 1f && growthLevel >= .5f)
+        else if (treeState != TreeState.Done)
         {
-            treeState = TreeState.Growing;
-            if (tree.overlay.sprite = asset.treePlantedSprite)
-            {
-                tree.UpdateTreeSprite();
-            }
-            return false;
-        }*/
-        return false;
+            treeState = TreeState.Done;
+            tile.UpdateTreeSprite(tile);
+        }
+    }
+
+    public void CancelGrowth()
+    {
+        if (_doneCallback != null)
+        {
+            GrowthManager.instance.Cancel(_doneCallback);
+            _doneCallback = null;
+        }
     }
 
     public float GetGrowthLvl()
     {
-        return growthLevel;
+        if (treeState == TreeState.Done)
+            return 1f;
+        if (asset == null)
+            return 0f;
+        return Mathf.Clamp01((Time.time - growthStartTime) / asset.treeTimer);
     }
-    public void SetGrowthLvl(float time)
+
+    public void SetGrowthLvl(float level)
     {
-        growthLevel = time;
+        if (asset != null)
+            growthStartTime = Time.time - level * asset.treeTimer;
     }
 
     public Tree(TreeAsset a)
     {
         asset = a;
         treeState = TreeState.Growing;
-        growthLevel = 0f;
+        growthStartTime = 0f;
     }
 
     public bool HasTree()
