@@ -5,6 +5,8 @@ public class AnimalTile : MonoBehaviour
     public static AnimalTile instance;
     public Animal animal;
     public bool isBusy = false;
+    public Vector3 snapPosition;
+    public int previewCells = 1;
 
     public SpriteRenderer overlay;
 
@@ -74,6 +76,7 @@ public class AnimalTile : MonoBehaviour
 
     public void DestroyAnimal(AnimalTile animalToDestroy)
     {
+        TileSelector.instance.UnregisterFootprint(animalToDestroy.snapPosition, animalToDestroy.previewCells);
         foreach(GameObject animal in TileSelector.instance.animals)
         {
             if (animal.Equals(animalToDestroy.gameObject))

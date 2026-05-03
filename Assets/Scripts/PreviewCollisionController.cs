@@ -18,23 +18,11 @@ public class PreviewCollisionController : MonoBehaviour
     {
         if (previewCollider == null) return;
 
-        int count = Physics2D.OverlapCollider(previewCollider, noFilter, buffer);
-
-        bool obstructed = false;
-        for (int i = 0; i < count; i++)
-        {
-            string n = buffer[i].gameObject.name;
-            if (n != "Grid" && n != "OverlaySprite")
-            {
-                obstructed = true;
-                break;
-            }
-        }
-
-        // Block placement where no tile exists (catches edges the polygon misses)
+        // Block placement where no tilemap tile exists (keeps objects inside map bounds)
         bool noTile = false;
         Vector3 placementPos = Vector3.zero;
-        if (!obstructed && TileSelector.instance != null)
+        bool obstructed = false;
+        if (TileSelector.instance != null)
         {
             placementPos = MenuController.instance.GetPlacementPosition();
             if (!TileSelector.instance.HasTileAtWorldPos(placementPos))
@@ -42,6 +30,13 @@ public class PreviewCollisionController : MonoBehaviour
                 obstructed = true;
                 noTile = true;
             }
+        }
+
+        // Block placement when any fine cell in the footprint is already occupied
+        if (!obstructed && TileSelector.instance != null)
+        {
+            if (!TileSelector.instance.IsFootprintClear(placementPos, MenuController.instance.activePreviewCells))
+                obstructed = true;
         }
 
         if (debugLog)
@@ -68,9 +63,9 @@ public class PreviewCollisionController : MonoBehaviour
             sb.AppendLine($"  TR={tr:F2} → {(cTR ? cTR.gameObject.name : "none")}");
             sb.AppendLine($"  BL={bl:F2} → {(cBL ? cBL.gameObject.name : "none")}");
             sb.AppendLine($"  BR={br:F2} → {(cBR ? cBR.gameObject.name : "none")}");
-            sb.Append($"  OverlapCollider hits ({count}): ");
-            for (int i = 0; i < count; i++)
-                sb.Append($"'{buffer[i].gameObject.name}' ");
+            //sb.Append($"  OverlapCollider hits ({count}): ");
+            //for (int i = 0; i < count; i++)
+            //    sb.Append($"'{buffer[i].gameObject.name}' ");
 
             Debug.Log(sb.ToString());
         }

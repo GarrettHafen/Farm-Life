@@ -9,6 +9,8 @@ public class DirtTile : MonoBehaviour
 
 	public bool needsPlowing = false;
 	public bool isBusy = false;
+	public Vector3 snapPosition;
+	public int previewCells = 4;
 	public Sprite fallowed;
 
 	[SerializeField] private string plantSoundName   = "Seed";
@@ -220,6 +222,7 @@ public class DirtTile : MonoBehaviour
 
     public void DestroyPlot(DirtTile plotToDestroy)
     {
+        TileSelector.instance.UnregisterFootprint(plotToDestroy.snapPosition, plotToDestroy.previewCells);
         foreach(GameObject plot in TileSelector.instance.plots)
         {
             if (plot.Equals(plotToDestroy.gameObject))

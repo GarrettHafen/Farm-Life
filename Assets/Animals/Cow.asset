@@ -26,3 +26,4 @@ MonoBehaviour:
   animalPrefab: {fileID: 5070918467947706043, guid: 00409dc2e974541b3af16e92f2d95a51,
     type: 3}
   animalSound: Cow
+  placementOffset: {x: 0, y: 0.2, z: 0}

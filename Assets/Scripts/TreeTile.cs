@@ -5,6 +5,8 @@ public class TreeTile : MonoBehaviour
     public static TreeTile instance;
     public Tree tree;
     public bool isBusy = false;
+    public Vector3 snapPosition;
+    public int previewCells = 2;
 
     public SpriteRenderer overlay;
 
@@ -70,6 +72,7 @@ public class TreeTile : MonoBehaviour
 
     public void DestroyTree(TreeTile treeToDestroy)
     {
+        TileSelector.instance.UnregisterFootprint(treeToDestroy.snapPosition, treeToDestroy.previewCells);
         foreach(GameObject tree in TileSelector.instance.trees)
         {
             if (tree.Equals(treeToDestroy.gameObject))

@@ -55,6 +55,8 @@ public class TileSelector : MonoBehaviour
     public Tree tree;
     public Animal animal;
 
+    public HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>();
+
     private Matrix4x4 TileMatrix => Matrix4x4.TRS(tileOffset, Quaternion.identity, Vector3.one);
 
     void Start()
@@ -84,6 +86,7 @@ public class TileSelector : MonoBehaviour
 
     public DirtTile PlacePlot(Vector3 plotPosition, Vector3 offset)
     {
+        Vector3 snapPos = plotPosition;
         plotPosition.y -= offset.y;
         SetGroundTileAtWorldPos(plotPosition, weightedTiles[weightedTiles.Count - 1].tile);
         GameObject tempPlot = (GameObject)Instantiate(plot, plotPosition, transform.rotation);
@@ -92,7 +95,11 @@ public class TileSelector : MonoBehaviour
         tempPlot.SetActive(true);
         tempPlot.transform.SetParent(plotParent.transform);
         plots.Add(tempPlot);
-        return tempPlot.GetComponent<DirtTile>();
+        DirtTile dirtTile = tempPlot.GetComponent<DirtTile>();
+        dirtTile.snapPosition = snapPos;
+        dirtTile.previewCells = 4;
+        RegisterFootprint(snapPos, 4);
+        return dirtTile;
     }
 
     private void SetGroundTileAtWorldPos(Vector3 worldPos, TileBase tile)
@@ -111,6 +118,7 @@ public class TileSelector : MonoBehaviour
 
     public TreeTile PlantTree(Vector3 mousePosition, Tree t, PlayerInteraction player, Vector3 offset)
     {
+        Vector3 snapPos = mousePosition;
         mousePosition.y += offset.y;
         mousePosition.x += offset.x;
         GameObject tempTree = (GameObject)Instantiate(baseTree, mousePosition, transform.rotation);
@@ -124,15 +132,18 @@ public class TileSelector : MonoBehaviour
         TreeTile treeTile = tempTree.GetComponent<TreeTile>();
         treeTile.tree = t;
         treeTile.UpdateTreeSprite(treeTile);
-        string treePreview = string.IsNullOrEmpty(t.asset.preview) ? "2x2" : t.asset.preview;
-        AddFootprintCollider(tempTree, treePreview);
+        int treeCells = PreviewSizeToCells(string.IsNullOrEmpty(t.asset.preview) ? "2x2" : t.asset.preview);
+        treeTile.snapPosition = snapPos;
+        treeTile.previewCells = treeCells;
+        RegisterFootprint(snapPos, treeCells);
         return treeTile;
     }
 
-    public AnimalTile PlaceAnimal(Vector3 mousePosition, Animal a, PlayerInteraction player, Vector3 offset)
+    public AnimalTile PlaceAnimal(Vector3 mousePosition, Animal a, PlayerInteraction player)
     {
-        mousePosition.y += offset.y;
-        mousePosition.x += offset.x;
+        Vector3 snapPos = mousePosition;
+        mousePosition.y += a.asset.placementOffset.y;
+        mousePosition.x += a.asset.placementOffset.x;
         GameObject tempAnimal = (GameObject)Instantiate(a.asset.animalPrefab, mousePosition, transform.rotation);
         tempAnimal.name = a.asset.name + " " + animalNum;
         animalNum++;
@@ -144,12 +155,16 @@ public class TileSelector : MonoBehaviour
         AnimalTile animalTile = tempAnimal.GetComponent<AnimalTile>();
         animalTile.animal = a;
         animalTile.UpdateAnimalSprite(animalTile);
-        AddFootprintCollider(tempAnimal, a.asset.preview);
+        int animalCells = PreviewSizeToCells(a.asset.preview);
+        animalTile.snapPosition = snapPos;
+        animalTile.previewCells = animalCells;
+        RegisterFootprint(snapPos, animalCells);
         return animalTile;
     }
 
     public DebrisTile PlaceDebris(Vector3 position, Vector3 offset)
     {
+        Vector3 snapPos = position;
         position.y -= offset.y;
         GameObject tempDebris = (GameObject)Instantiate(baseDebris, position, transform.rotation);
         tempDebris.name = "Debris: " + debrisNum;
@@ -157,7 +172,11 @@ public class TileSelector : MonoBehaviour
         tempDebris.SetActive(true);
         tempDebris.transform.SetParent(debrisParent.transform);
         debris.Add(tempDebris);
-        return tempDebris.GetComponent<DebrisTile>();
+        DebrisTile debrisTile = tempDebris.GetComponent<DebrisTile>();
+        debrisTile.snapPosition = snapPos;
+        debrisTile.previewCells = 1;
+        RegisterFootprint(snapPos, 1);
+        return debrisTile;
     }
 
     public void SpawnDebrisOnMap()
@@ -348,14 +367,64 @@ public class TileSelector : MonoBehaviour
         return null;
     }
 
-    // Adds a trigger BoxCollider2D sized to the object's multi-cell footprint so
-    // the placement preview can detect occupied area at adjacent tile positions.
-    private void AddFootprintCollider(GameObject obj, string previewSize)
+    public void RegisterFootprint(Vector3 snapPos, int objCells)
     {
-        int cells = previewSize == "4x4" ? 4 : previewSize == "2x2" ? 2 : 1;
-        BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
-        bc.size = new Vector2(grid.cellSize.x * cells, grid.cellSize.y * cells);
-        bc.isTrigger = true;
+        Vector3Int origin = GetFineCellOrigin(snapPos, objCells);
+        for (int dx = 0; dx < objCells; dx++)
+            for (int dy = 0; dy < objCells; dy++)
+                occupiedCells.Add(new Vector3Int(origin.x + dx, origin.y + dy, 0));
+    }
+
+    public void UnregisterFootprint(Vector3 snapPos, int objCells)
+    {
+        Vector3Int origin = GetFineCellOrigin(snapPos, objCells);
+        for (int dx = 0; dx < objCells; dx++)
+            for (int dy = 0; dy < objCells; dy++)
+                occupiedCells.Remove(new Vector3Int(origin.x + dx, origin.y + dy, 0));
+    }
+
+    public bool IsFootprintClear(Vector3 snapPos, int objCells)
+    {
+        Vector3Int origin = GetFineCellOrigin(snapPos, objCells);
+        for (int dx = 0; dx < objCells; dx++)
+            for (int dy = 0; dy < objCells; dy++)
+                if (occupiedCells.Contains(new Vector3Int(origin.x + dx, origin.y + dy, 0)))
+                    return false;
+        return true;
+    }
+
+    public void ClearAllFootprints() => occupiedCells.Clear();
+
+    public static int PreviewSizeToCells(string previewSize) =>
+        previewSize == "4x4" ? 4 : previewSize == "2x2" ? 2 : 1;
+
+    // Converts a world snap position to the top-left fine-cell index of the object's footprint.
+    // Each old cell is divided into a 4x4 grid of fine cells (BASE=4).
+    // objCells=4 → 1 position/cell (4x4 object), objCells=2 → 4 positions, objCells=1 → 16 positions.
+    private Vector3Int GetFineCellOrigin(Vector3 worldPos, int objCells)
+    {
+        const int BASE = 4;
+        int N_sub = BASE / objCells;
+
+        Vector3Int oldCell = grid.WorldToCell(new Vector3(worldPos.x, worldPos.y, 0f));
+        Vector3 oldCenter = grid.GetCellCenterWorld(oldCell);
+
+        float bx = grid.cellSize.x * 0.5f;
+        float by = grid.cellSize.y * 0.5f;
+        float offsetX = worldPos.x - oldCenter.x;
+        float offsetY = worldPos.y - oldCenter.y;
+
+        // Decompose world offset into isometric basis coordinates (alpha, beta ∈ [-0.5, 0.5])
+        float alpha = (offsetX / bx + offsetY / by) * 0.5f;
+        float beta  = (offsetY / by - offsetX / bx) * 0.5f;
+
+        int k_alpha = Mathf.Clamp(Mathf.FloorToInt((alpha + 0.5f) * N_sub), 0, N_sub - 1);
+        int k_beta  = Mathf.Clamp(Mathf.FloorToInt((beta  + 0.5f) * N_sub), 0, N_sub - 1);
+
+        return new Vector3Int(
+            oldCell.x * BASE + k_alpha * objCells,
+            oldCell.y * BASE + k_beta  * objCells,
+            0);
     }
 
     private void SetupGrid()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Zone4
   m_EditorClassIdentifier: Assembly-CSharp::FarmZoneAsset
   zoneName: Expansion 4
-  unlockLevel: 25
+  unlockLevel: 50
   unlockCost: 100000
   unlockedByDefault: 0
   iconSprite: {fileID: 0}

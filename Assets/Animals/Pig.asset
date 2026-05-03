@@ -26,3 +26,4 @@ MonoBehaviour:
   animalPrefab: {fileID: 1037856249616860370, guid: f672818a04b49417a85e9090267df71b,
     type: 3}
   animalSound: Pig
+  placementOffset: {x: 0, y: 0.13, z: 0}

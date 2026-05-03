@@ -416,7 +416,7 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0.75}
     oldSize: {x: 0.51428574, y: 0.51428574}
     newSize: {x: 1.0285715, y: 1.0285715}
     adaptiveTilingThreshold: 0.5
@@ -2903,8 +2903,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 29622895
+  m_SortingLayer: 1
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6843bfb94ea82423196d7c8fb3e8b8c7, type: 3}
@@ -17814,6 +17814,7 @@ MonoBehaviour:
   placeablePreview: {fileID: 0}
   xOffset: 0
   yOffset: 0.25
+  activePreviewCells: 4
   plow: {fileID: 11400000, guid: e254a8096944a96499bdcb3484ba996d, type: 2}
   fireToolSprite: {fileID: 21300000, guid: 11024c2f63c9c4b30a9161908dfa7053, type: 3}
   handIndicator: {fileID: 107934149}
@@ -29578,8 +29579,7 @@ MonoBehaviour:
   greenPreview1x1: {fileID: 21300000, guid: fc6d81bfca2c94b2ab651dd4760c1a79, type: 3}
   clearDebrisSprite: {fileID: 0}
   plotOffset: {x: 0, y: 0.25, z: 0}
-  treeOffset: {x: 0, y: 0, z: 0}
-  animalOffset: {x: 0, y: 0.25, z: 0}
+  treeOffset: {x: 0, y: -0.1, z: 0}
 --- !u!114 &1843866711
 MonoBehaviour:
   m_ObjectHideFlags: 0

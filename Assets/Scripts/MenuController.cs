@@ -35,6 +35,7 @@ public class MenuController : MonoBehaviour
     public GameObject placeablePreview;
     public float xOffset, yOffset;
     private Vector3 placementPosition;
+    public int activePreviewCells = 4;
 
     public Tool plow;
     public PlayerToolState toolState = new PlayerToolState();
@@ -68,10 +69,30 @@ public class MenuController : MonoBehaviour
             {
                 //using grid to provide for isometric design 
                 Vector3 screenToWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
-                Vector3Int worldToCell = grid.WorldToCell(screenToWorld);
-                Vector3 cellCenter = grid.GetCellCenterWorld(worldToCell);
-                placementPosition = new Vector3(cellCenter.x, cellCenter.y, 9f);
-                previewPlacementLocation.position = new Vector3(cellCenter.x + xOffset, cellCenter.y + yOffset, 9f);
+                Vector3Int oldCell = grid.WorldToCell(screenToWorld);
+                Vector3 oldCenter = grid.GetCellCenterWorld(oldCell);
+
+                float bx = grid.cellSize.x * 0.5f;
+                float by = grid.cellSize.y * 0.5f;
+                float offsetX = screenToWorld.x - oldCenter.x;
+                float offsetY = screenToWorld.y - oldCenter.y;
+
+                // Decompose mouse offset into isometric basis coordinates (alpha, beta ∈ [-0.5, 0.5])
+                float alpha = (offsetX / bx + offsetY / by) * 0.5f;
+                float beta  = (offsetY / by - offsetX / bx) * 0.5f;
+
+                // Quantize to the nearest sub-region center for the active object size
+                int N_sub = 4 / activePreviewCells;
+                int k_alpha = Mathf.Clamp(Mathf.FloorToInt((alpha + 0.5f) * N_sub), 0, N_sub - 1);
+                int k_beta  = Mathf.Clamp(Mathf.FloorToInt((beta  + 0.5f) * N_sub), 0, N_sub - 1);
+                float snappedAlpha = (k_alpha + 0.5f) / N_sub - 0.5f;
+                float snappedBeta  = (k_beta  + 0.5f) / N_sub - 0.5f;
+
+                float snapX = oldCenter.x + (snappedAlpha - snappedBeta) * bx;
+                float snapY = oldCenter.y + (snappedAlpha + snappedBeta) * by;
+
+                placementPosition = new Vector3(snapX, snapY, 9f);
+                previewPlacementLocation.position = new Vector3(snapX + xOffset, snapY + yOffset, 9f);
                 
                 //placeablePreview for when we need to place animals, trees or decorations. 
             }
@@ -209,7 +230,10 @@ public class MenuController : MonoBehaviour
             previewActive = false;
             previewParent.SetActive(false);
         }
+        activePreviewCells = 4;
     }
+
+    public void SetPreviewCells(int cells) => activePreviewCells = cells;
 
     public bool GetpreviewPlacementLocation()
     {

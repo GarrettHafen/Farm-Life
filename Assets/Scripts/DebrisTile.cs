@@ -5,6 +5,8 @@ public class DebrisTile : MonoBehaviour
     public static DebrisTile instance;
     public int removalCost = 25;
     public bool isBusy = false;
+    public Vector3 snapPosition;
+    public int previewCells = 1;
 
     private void Start()
     {
@@ -28,6 +30,7 @@ public class DebrisTile : MonoBehaviour
 
     public void DestroyDebris(DebrisTile debris)
     {
+        TileSelector.instance.UnregisterFootprint(debris.snapPosition, debris.previewCells);
         TileSelector.instance.debris.Remove(debris.gameObject);
         AudioManager.instance.PlaySound("Destroy");
         StatsController.instance.AddExp(1);

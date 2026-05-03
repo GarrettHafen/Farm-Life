@@ -26,3 +26,4 @@ MonoBehaviour:
   animalPrefab: {fileID: 549112311621961046, guid: 6aa6ef345cd344f159691734d90fb924,
     type: 3}
   animalSound: Sheep
+  placementOffset: {x: 0, y: 0.1, z: 0}

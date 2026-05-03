@@ -26,3 +26,4 @@ MonoBehaviour:
   animalPrefab: {fileID: 1974431508380716682, guid: e43101644f09f4428b086b37724faab5,
     type: 3}
   animalSound: Dog
+  placementOffset: {x: 0, y: 0.11, z: 0}

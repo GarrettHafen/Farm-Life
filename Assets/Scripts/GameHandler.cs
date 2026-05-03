@@ -98,6 +98,7 @@ public class GameHandler : MonoBehaviour
 
     public void LoadData(PlayerData data)
     {
+        TileSelector.instance.ClearAllFootprints();
         StatsController.instance.SetLvl(data.level);
         StatsController.instance.SetCoins(data.coins);
         StatsController.instance.SetExp(data.exp);
@@ -224,7 +225,7 @@ public class GameHandler : MonoBehaviour
         {
             Vector3 newAnimalPosition = grid.GetCellCenterWorld(new Vector3Int(data.animalCellX[i], data.animalCellY[i], 0));
             newAnimalPosition.z = 9f;
-            TileSelector.instance.PlaceAnimal(newAnimalPosition, loadAnimalList[i], PlayerInteraction.instance, new Vector3(0, 0, 0));
+            TileSelector.instance.PlaceAnimal(newAnimalPosition, loadAnimalList[i], PlayerInteraction.instance);
             AnimalTile animalTile = TileSelector.instance.animals[i].GetComponent<AnimalTile>();
             animalTile.animal.SetGrowthLvl(CalcTimePassed(data.activeAnimalTimers[i], data.savedTime, animalTile.animal.asset.animalTimer));
             animalTile.animal.animalState = animalTile.animal.GetState(data.activeAnimalStates[i]);
@@ -249,6 +250,7 @@ public class GameHandler : MonoBehaviour
     public void NewGame()
     {
         SaveSystem.DeleteSave();
+        TileSelector.instance.ClearAllFootprints();
 
         if (TileSelector.instance.plots.Count > 0)
         {

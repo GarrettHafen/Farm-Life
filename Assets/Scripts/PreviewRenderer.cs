@@ -18,7 +18,10 @@ public class PreviewRenderer : MonoBehaviour
         {
             GameObject preview = MenuController.instance.preview4x4;
             if (!MenuController.instance.GetpreviewPlacementLocation())
+            {
                 MenuController.instance.ActivatePreview(preview);
+                MenuController.instance.SetPreviewCells(4);
+            }
 
             Sprite sprite = MenuController.instance.previewObstructed
                 ? GameHandler.instance.previewList[8].previewRedSprite
@@ -30,6 +33,7 @@ public class PreviewRenderer : MonoBehaviour
         {
             Tree tree = player.GetTree();
             string treePreview = string.IsNullOrEmpty(tree.asset.preview) ? "2x2" : tree.asset.preview;
+            MenuController.instance.SetPreviewCells(TileSelector.PreviewSizeToCells(treePreview));
             GameObject preview = GetPreviewContainer(treePreview);
             int previewPosition = GetPreviewPosition(treePreview);
             if (!MenuController.instance.GetpreviewPlacementLocation())
@@ -46,6 +50,7 @@ public class PreviewRenderer : MonoBehaviour
         if (MarketController.instance.marketState == MarketState.Animal && MenuController.instance.toolState.hasAnimal)
         {
             Animal animal = player.GetAnimal();
+            MenuController.instance.SetPreviewCells(TileSelector.PreviewSizeToCells(animal.asset.preview));
             GameObject preview = GetPreviewContainer(animal.asset.preview);
             int previewPosition = GetPreviewPosition(animal.asset.preview);
             if (!MenuController.instance.GetpreviewPlacementLocation())

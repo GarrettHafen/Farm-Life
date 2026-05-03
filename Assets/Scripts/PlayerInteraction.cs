@@ -35,7 +35,6 @@ public class PlayerInteraction : MonoBehaviour
 
 	public Vector3 plotOffset;
 	public Vector3 treeOffset;
-	public Vector3 animalOffset;
 
 	//sprites to manage opactiy during task execution
 	SpriteRenderer parentPlotSprite;
@@ -136,7 +135,7 @@ public class PlayerInteraction : MonoBehaviour
 							StatsController.instance.RemoveCoins(animal.GetCost());
 
 							//instantiate object, set opacity to half
-							AnimalTile tempAnimal = TileSelector.instance.PlaceAnimal(MenuController.instance.GetPlacementPosition(), animal, this, animalOffset);
+							AnimalTile tempAnimal = TileSelector.instance.PlaceAnimal(MenuController.instance.GetPlacementPosition(), animal, this);
 							parentAnimalSprite = tempAnimal.GetComponent<SpriteRenderer>();
 							parentAnimalSprite.color = new Color(1f, 1f, 1f, .5f);
 
