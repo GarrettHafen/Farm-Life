@@ -15,30 +15,30 @@ public class PlayerData
     public ZoneTileData[] zoneTileData;
 
     public int cropsActive;
-    public int[] plotCellX;
-    public int[] plotCellY;
+    public float[] plotX;
+    public float[] plotY;
     public string[] activeCropNames;
     public float[] activeTimers;
     public string[] activeCropsStates;
     public bool[] needsPlowing;
 
     public int treesActive;
-    public int[] treeCellX;
-    public int[] treeCellY;
+    public float[] treeX;
+    public float[] treeY;
     public string[] activeTreeNames;
     public float[] activeTreeTimers;
     public string[] activeTreeStates;
 
     public int animalsActive;
-    public int[] animalCellX;
-    public int[] animalCellY;
+    public float[] animalX;
+    public float[] animalY;
     public string[] activeAnimalNames;
     public float[] activeAnimalTimers;
     public string[] activeAnimalStates;
 
     public int debrisActive;
-    public int[] debrisCellX;
-    public int[] debrisCellY;
+    public float[] debrisX;
+    public float[] debrisY;
 
     public PlayerData() { }
 
@@ -57,8 +57,8 @@ public class PlayerData
         // crops
         int cropsCounter = 0;
         data.cropsActive = TileSelector.instance.plots.Count;
-        data.plotCellX = new int[data.cropsActive];
-        data.plotCellY = new int[data.cropsActive];
+        data.plotX = new float[data.cropsActive];
+        data.plotY = new float[data.cropsActive];
         data.activeCropNames = new string[data.cropsActive];
         data.activeTimers = new float[data.cropsActive];
         data.activeCropsStates = new string[data.cropsActive];
@@ -66,10 +66,9 @@ public class PlayerData
 
         foreach (GameObject plot in TileSelector.instance.plots)
         {
-            Vector3Int cell = grid.WorldToCell(plot.transform.position);
-            data.plotCellX[cropsCounter] = cell.x;
-            data.plotCellY[cropsCounter] = cell.y;
             DirtTile dirt = plot.GetComponent<DirtTile>();
+            data.plotX[cropsCounter] = dirt.snapPosition.x;
+            data.plotY[cropsCounter] = dirt.snapPosition.y;
             if (dirt.crop.HasCrop())
             {
                 data.activeCropNames[cropsCounter] = dirt.crop.GetName();
@@ -88,18 +87,17 @@ public class PlayerData
         // trees
         int treeCounter = 0;
         data.treesActive = TileSelector.instance.trees.Count;
-        data.treeCellX = new int[data.treesActive];
-        data.treeCellY = new int[data.treesActive];
+        data.treeX = new float[data.treesActive];
+        data.treeY = new float[data.treesActive];
         data.activeTreeNames = new string[data.treesActive];
         data.activeTreeTimers = new float[data.treesActive];
         data.activeTreeStates = new string[data.treesActive];
 
         foreach (GameObject treeObj in TileSelector.instance.trees)
         {
-            Vector3Int cell = grid.WorldToCell(treeObj.transform.position);
-            data.treeCellX[treeCounter] = cell.x;
-            data.treeCellY[treeCounter] = cell.y;
             TreeTile treeTile = treeObj.GetComponent<TreeTile>();
+            data.treeX[treeCounter] = treeTile.snapPosition.x;
+            data.treeY[treeCounter] = treeTile.snapPosition.y;
             if (treeTile.tree.HasTree())
             {
                 data.activeTreeNames[treeCounter] = treeTile.tree.GetName();
@@ -117,18 +115,17 @@ public class PlayerData
         // animals
         int animalCounter = 0;
         data.animalsActive = TileSelector.instance.animals.Count;
-        data.animalCellX = new int[data.animalsActive];
-        data.animalCellY = new int[data.animalsActive];
+        data.animalX = new float[data.animalsActive];
+        data.animalY = new float[data.animalsActive];
         data.activeAnimalNames = new string[data.animalsActive];
         data.activeAnimalTimers = new float[data.animalsActive];
         data.activeAnimalStates = new string[data.animalsActive];
 
         foreach (GameObject animalObj in TileSelector.instance.animals)
         {
-            Vector3Int cell = grid.WorldToCell(animalObj.transform.position);
-            data.animalCellX[animalCounter] = cell.x;
-            data.animalCellY[animalCounter] = cell.y;
             AnimalTile animalTile = animalObj.GetComponent<AnimalTile>();
+            data.animalX[animalCounter] = animalTile.snapPosition.x;
+            data.animalY[animalCounter] = animalTile.snapPosition.y;
             if (animalTile.animal.HasAnimal())
             {
                 data.activeAnimalNames[animalCounter] = animalTile.animal.GetName();
@@ -146,13 +143,13 @@ public class PlayerData
         // debris
         int debrisCounter = 0;
         data.debrisActive = TileSelector.instance.debris.Count;
-        data.debrisCellX = new int[data.debrisActive];
-        data.debrisCellY = new int[data.debrisActive];
+        data.debrisX = new float[data.debrisActive];
+        data.debrisY = new float[data.debrisActive];
         foreach (GameObject d in TileSelector.instance.debris)
         {
-            Vector3Int cell = grid.WorldToCell(d.transform.position);
-            data.debrisCellX[debrisCounter] = cell.x;
-            data.debrisCellY[debrisCounter] = cell.y;
+            DebrisTile dt = d.GetComponent<DebrisTile>();
+            data.debrisX[debrisCounter] = dt.snapPosition.x;
+            data.debrisY[debrisCounter] = dt.snapPosition.y;
             debrisCounter++;
         }
 

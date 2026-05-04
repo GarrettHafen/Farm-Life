@@ -202,6 +202,11 @@ public class PlayerInteraction : MonoBehaviour
 					timer.SetTime(tempDirt.crop.GetGrowthLvl());
 					timer.SetSprite(tempDirt.crop.asset.iconSprite);
 				}
+				else
+				{
+					timer = tempDirt.GetComponent<TimerController>();
+					timer.slider.gameObject.SetActive(false);
+				}
 				if (!tempDirt.isBusy)
 				{
 					if (tempDirt.crop.state == CropState.Done)
@@ -242,6 +247,11 @@ public class PlayerInteraction : MonoBehaviour
 					timer.SetTime(tempTree.tree.GetGrowthLvl());
 					timer.SetSprite(tempTree.tree.asset.treeIconSprite);
 				}
+				else
+				{
+					timer = tempTree.GetComponent<TimerController>();
+					timer.slider.gameObject.SetActive(false);
+				}
                 if (tempTree.tree.treeState == TreeState.Done)
 				{
 					//display harvest tool
@@ -268,6 +278,11 @@ public class PlayerInteraction : MonoBehaviour
 					timer.SetTime(tempAnimal.animal.GetGrowthLvl());
 					timer.SetSprite(tempAnimal.animal.asset.animalIconSprite);
                 }
+				else
+				{
+					timer = tempAnimal.GetComponent<TimerController>();
+					timer.slider.gameObject.SetActive(false);
+				}
 				if (tempAnimal.animal.animalState == AnimalState.Done)
                 {
 					//display harvest tool

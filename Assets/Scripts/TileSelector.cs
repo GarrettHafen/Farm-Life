@@ -46,11 +46,13 @@ public class TileSelector : MonoBehaviour
     public int animalNum = 0;
 
     public List<GameObject> debris;
+    public List<Sprite> debrisImages;
     public GameObject baseDebris;
     public GameObject debrisParent;
     public int debrisNum = 0;
     [Range(0f, 1f)] public float debrisFillChance = 0.7f;
     public float debrisClearRadius = 1.5f;
+    public Vector3 debrisOffset;
 
     public Tree tree;
     public Animal animal;
@@ -164,9 +166,10 @@ public class TileSelector : MonoBehaviour
 
     public DebrisTile PlaceDebris(Vector3 position, Vector3 offset)
     {
-        Vector3 snapPos = position;
         position.y -= offset.y;
+        Vector3 snapPos = position;  // footprint must match the actual instantiation position
         GameObject tempDebris = (GameObject)Instantiate(baseDebris, position, transform.rotation);
+        tempDebris.GetComponent<SpriteRenderer>().sprite = debrisImages[Random.Range(0, debrisImages.Count)];
         tempDebris.name = "Debris: " + debrisNum;
         debrisNum++;
         tempDebris.SetActive(true);
@@ -184,10 +187,11 @@ public class TileSelector : MonoBehaviour
         // Spawn at exact cell centers (no plotOffset) so the debris collider lines up
         // with the preview ghost, which also sits at the unmodified cell center.
         // Visual alignment is handled by the debris sprite pivot instead.
+
         var centers = CollectTileCenters();
         if (centers.Count == 0) return;
 
-        Vector3 mapCenter = Vector3.zero;
+                Vector3 mapCenter = Vector3.zero;
         foreach (Vector3 p in centers) mapCenter += p;
         mapCenter /= centers.Count;
 
@@ -195,8 +199,14 @@ public class TileSelector : MonoBehaviour
         {
             if (Vector3.Distance(pos, mapCenter) < debrisClearRadius) continue;
             if (Random.value > debrisFillChance) continue;
-            PlaceDebris(new Vector3(pos.x, pos.y, 9f), Vector3.zero);
+            PlaceDebris(new Vector3(pos.x, pos.y, 9f), debrisOffset);
         }
+
+        // DEBUG: spawn one debris on the bottom-most tile only
+        /* Vector3 bottom = centers[0];
+        foreach (Vector3 p in centers)
+            if (p.y < bottom.y) bottom = p;
+        PlaceDebris(new Vector3(bottom.x, bottom.y, 9f), debrisOffset); */
     }
 
     public void SpawnDebrisOnZone(string zoneName)
@@ -222,7 +232,7 @@ public class TileSelector : MonoBehaviour
         {
             if (Vector3.Distance(pos, mapCenter) < debrisClearRadius) continue;
             if (Random.value > debrisFillChance) continue;
-            PlaceDebris(new Vector3(pos.x, pos.y, 9f), Vector3.zero);
+            PlaceDebris(new Vector3(pos.x, pos.y, 9f), debrisOffset);
         }
     }
 

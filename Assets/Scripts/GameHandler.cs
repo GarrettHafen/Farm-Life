@@ -135,8 +135,7 @@ public class GameHandler : MonoBehaviour
         //instantiate plots, add to array, set details
         for (int i = 0; i < data.cropsActive; i++)
         {
-            Vector3 newPlotPosition = grid.GetCellCenterWorld(new Vector3Int(data.plotCellX[i], data.plotCellY[i], 0));
-            newPlotPosition.z = 9f;
+            Vector3 newPlotPosition = new Vector3(data.plotX[i], data.plotY[i], 9f);
             TileSelector.instance.PlacePlot(newPlotPosition, PlayerInteraction.instance.plotOffset);
             //PlacePlot should add to new array.
 
@@ -170,7 +169,7 @@ public class GameHandler : MonoBehaviour
             }
             else
             {
-                    
+
                 dirt.crop = new Crop(null);
                 dirt.crop.SetGrowthLvl(data.activeTimers[i]);
                 dirt.crop.state = dirt.crop.GetState(data.activeCropsStates[i]);
@@ -180,11 +179,11 @@ public class GameHandler : MonoBehaviour
                     dirt.AddDirt();
                 }
             }
+            dirt.GetComponent<TimerController>()?.slider.gameObject.SetActive(false);
         }
 
         //instantiate trees, add to array, set details
-
-        //what is this code?
+        loadTreeList.Clear();
         for (int i = 0; i < data.activeTreeNames.Length; i++) {
             for (int j = 0; j < treeList.Count; j++)
             {
@@ -197,19 +196,19 @@ public class GameHandler : MonoBehaviour
         }
         for(int i = 0; i < data.treesActive; i++)
         {
-            Vector3 newTreePosition = grid.GetCellCenterWorld(new Vector3Int(data.treeCellX[i], data.treeCellY[i], 0));
-            newTreePosition.z = 9f;
-            TileSelector.instance.PlantTree(newTreePosition, loadTreeList[i], PlayerInteraction.instance, new Vector3(0, 0, 0));
+            Vector3 newTreePosition = new Vector3(data.treeX[i], data.treeY[i], 9f);
+            TileSelector.instance.PlantTree(newTreePosition, loadTreeList[i], PlayerInteraction.instance, PlayerInteraction.instance.treeOffset);
             TreeTile treeTile = TileSelector.instance.trees[i].GetComponent<TreeTile>();
             treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTreeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
             treeTile.tree.treeState = treeTile.tree.GetState(data.activeTreeStates[i]);
             treeTile.UpdateTreeSprite(treeTile);
             if (treeTile.tree.treeState == TreeState.Planted || treeTile.tree.treeState == TreeState.Growing)
                 treeTile.tree.StartGrowth(treeTile);
-
+            treeTile.GetComponent<TimerController>()?.slider.gameObject.SetActive(false);
         }
 
         //instantiate animals, add to array, set details
+        loadAnimalList.Clear();
         for(int i = 0; i < data.activeAnimalNames.Length; i++)
         {
             for(int j = 0; j < animalList.Count; j++)
@@ -223,8 +222,7 @@ public class GameHandler : MonoBehaviour
         }
         for(int i = 0; i < data.animalsActive; i++)
         {
-            Vector3 newAnimalPosition = grid.GetCellCenterWorld(new Vector3Int(data.animalCellX[i], data.animalCellY[i], 0));
-            newAnimalPosition.z = 9f;
+            Vector3 newAnimalPosition = new Vector3(data.animalX[i], data.animalY[i], 9f);
             TileSelector.instance.PlaceAnimal(newAnimalPosition, loadAnimalList[i], PlayerInteraction.instance);
             AnimalTile animalTile = TileSelector.instance.animals[i].GetComponent<AnimalTile>();
             animalTile.animal.SetGrowthLvl(CalcTimePassed(data.activeAnimalTimers[i], data.savedTime, animalTile.animal.asset.animalTimer));
@@ -232,16 +230,17 @@ public class GameHandler : MonoBehaviour
             animalTile.UpdateAnimalSprite(animalTile);
             if (animalTile.animal.animalState == AnimalState.Growing)
                 animalTile.animal.StartGrowth(animalTile);
+            animalTile.GetComponent<TimerController>()?.slider.gameObject.SetActive(false);
         }
 
         //instantiate debris, add to array
         for (int i = 0; i < data.debrisActive; i++)
         {
-            Vector3 debrisPos = grid.GetCellCenterWorld(new Vector3Int(data.debrisCellX[i], data.debrisCellY[i], 0));
-            debrisPos.z = 9f;
+            Vector3 debrisPos = new Vector3(data.debrisX[i], data.debrisY[i], 9f);
             TileSelector.instance.PlaceDebris(debrisPos, Vector3.zero);
         }
 
+        MenuController.instance.ClearHand();
         Debug.Log("Data Loaded");
         MenuController.instance.notificationBar.SetActive(false);
         MenuController.instance.AnimateNotifcation("Load Complete", Color.white, "Null");
