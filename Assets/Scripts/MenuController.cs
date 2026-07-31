@@ -67,29 +67,21 @@ public class MenuController : MonoBehaviour
         {
             if (previewPlacementLocation.gameObject.activeInHierarchy)
             {
-                //using grid to provide for isometric design 
                 Vector3 screenToWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
                 Vector3Int oldCell = grid.WorldToCell(screenToWorld);
                 Vector3 oldCenter = grid.GetCellCenterWorld(oldCell);
 
-                float bx = grid.cellSize.x * 0.5f;
-                float by = grid.cellSize.y * 0.5f;
                 float offsetX = screenToWorld.x - oldCenter.x;
                 float offsetY = screenToWorld.y - oldCenter.y;
 
-                // Decompose mouse offset into isometric basis coordinates (alpha, beta ∈ [-0.5, 0.5])
-                float alpha = (offsetX / bx + offsetY / by) * 0.5f;
-                float beta  = (offsetY / by - offsetX / bx) * 0.5f;
-
-                // Quantize to the nearest sub-region center for the active object size
+                // Quantize X and Y independently into N_sub subdivisions per cell
                 int N_sub = 4 / activePreviewCells;
-                int k_alpha = Mathf.Clamp(Mathf.FloorToInt((alpha + 0.5f) * N_sub), 0, N_sub - 1);
-                int k_beta  = Mathf.Clamp(Mathf.FloorToInt((beta  + 0.5f) * N_sub), 0, N_sub - 1);
-                float snappedAlpha = (k_alpha + 0.5f) / N_sub - 0.5f;
-                float snappedBeta  = (k_beta  + 0.5f) / N_sub - 0.5f;
-
-                float snapX = oldCenter.x + (snappedAlpha - snappedBeta) * bx;
-                float snapY = oldCenter.y + (snappedAlpha + snappedBeta) * by;
+                float normX = offsetX / grid.cellSize.x;
+                float normY = offsetY / grid.cellSize.y;
+                int kx = Mathf.Clamp(Mathf.FloorToInt((normX + 0.5f) * N_sub), 0, N_sub - 1);
+                int ky = Mathf.Clamp(Mathf.FloorToInt((normY + 0.5f) * N_sub), 0, N_sub - 1);
+                float snapX = oldCenter.x + ((kx + 0.5f) / N_sub - 0.5f) * grid.cellSize.x;
+                float snapY = oldCenter.y + ((ky + 0.5f) / N_sub - 0.5f) * grid.cellSize.y;
 
                 placementPosition = new Vector3(snapX, snapY, 9f);
                 previewPlacementLocation.position = new Vector3(snapX + xOffset, snapY + yOffset, 9f);
@@ -290,6 +282,8 @@ public class MenuController : MonoBehaviour
             handIndicator.sprite = PlayerInteraction.instance.GetTree().asset.treeIconSprite;
         else if (toolState.hasAnimal)
             handIndicator.sprite = PlayerInteraction.instance.GetAnimal().asset.animalIconSprite;
+        else if (toolState.hasDecoration)
+            handIndicator.sprite = PlayerInteraction.instance.GetDecoration().iconSprite;
     }
 
     public void ClearHand()

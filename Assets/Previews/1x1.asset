@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: 1x1
   m_EditorClassIdentifier: 
   previewName: 1x1
-  previewGreenSprite: {fileID: 21300000, guid: fc6d81bfca2c94b2ab651dd4760c1a79, type: 3}
-  previewRedSprite: {fileID: 21300000, guid: 6843bfb94ea82423196d7c8fb3e8b8c7, type: 3}
+  previewGreenSprite: {fileID: 21300000, guid: 8f715698d62be2a41baec763d94dbc36, type: 3}
+  previewRedSprite: {fileID: 21300000, guid: ae56efca083c75c448adc3ebb6c096e9, type: 3}

@@ -34,8 +34,10 @@ public static class MapGenerator
     // Paints a previously generated ZoneTileData onto a tilemap.
     // tileMatrix is optional — when provided it overrides the per-cell transform on every tile
     // so that offsets set via Grid Selection Properties survive ClearAllTiles + re-apply cycles.
-    public static void Apply(Tilemap tilemap, ZoneTileData data, List<WeightedTile> tiles, Matrix4x4? tileMatrix = null)
+    // randomRotation randomly picks 0/90/180/270 degrees per cell to break up texture repetition.
+    public static void Apply(Tilemap tilemap, ZoneTileData data, List<WeightedTile> tiles, Matrix4x4? tileMatrix = null, bool randomRotation = false)
     {
+        int[] angles = { 0, 90, 180, 270 };
         for (int i = 0; i < data.tileIndices.Length; i++)
         {
             int idx = data.tileIndices[i];
@@ -43,15 +45,23 @@ public static class MapGenerator
             {
                 Vector3Int cell = new Vector3Int(data.cellX[i], data.cellY[i], 0);
                 tilemap.SetTile(cell, tiles[idx].tile);
-                if (tileMatrix.HasValue)
+
+                if (randomRotation)
+                {
+                    Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.Euler(0, 0, angles[Random.Range(0, 4)]));
+                    tilemap.SetTransformMatrix(cell, tileMatrix.HasValue ? tileMatrix.Value * rot : rot);
+                }
+                else if (tileMatrix.HasValue)
+                {
                     tilemap.SetTransformMatrix(cell, tileMatrix.Value);
+                }
             }
         }
     }
 
     // Returns the index of the first tile whose threshold >= noise value.
     // Tiles should be ordered by threshold ascending in the inspector.
-    private static int PickTile(float noise, List<WeightedTile> tiles)
+    public static int PickTile(float noise, List<WeightedTile> tiles)
     {
         for (int i = 0; i < tiles.Count; i++)
             if (noise <= tiles[i].threshold)

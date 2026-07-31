@@ -9,6 +9,7 @@ public class TreeTile : MonoBehaviour
     public int previewCells = 2;
 
     public SpriteRenderer overlay;
+    public SpriteRenderer canopyOverlay;
 
     [SerializeField] private string harvestSoundName = "Harvest";
     [SerializeField] private string destroySoundName = "Destroy";
@@ -99,5 +100,7 @@ public class TreeTile : MonoBehaviour
     public void UpdateTreeSprite(TreeTile treeThingy)
     {
         treeThingy.overlay.sprite = tree.GetTreeSprite(treeThingy.tree);
+        if (treeThingy.canopyOverlay != null)
+            treeThingy.canopyOverlay.sprite = tree.GetTreeCanopySprite(treeThingy.tree);
     }
 }

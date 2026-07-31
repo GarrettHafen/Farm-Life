@@ -8,4 +8,7 @@ public class FarmZoneAsset : ScriptableObject
     public int unlockCost;
     public bool unlockedByDefault;
     public Sprite iconSprite;
+
+    public bool isBoundary;
+    public DebrisSetAsset debrisSet;
 }

@@ -14,34 +14,41 @@ public class Crop
 
 	private float witherTimer;
 
-	private System.Action _halfGrownCallback;
+	private List<System.Action> _growthCallbacks = new List<System.Action>();
 	private System.Action _doneCallback;
 
 	public void StartGrowth(DirtTile dirt)
 	{
 		CancelGrowth();
 
-		float halfTime = growthStartTime + asset.cropTimer * 0.5f;
-		float doneTime = growthStartTime + asset.cropTimer;
+		int n = (asset.growthSprites != null) ? asset.growthSprites.Count : 0;
+		int halfIdx = n / 2;
 
-		if (halfTime > Time.time)
+		// Schedule a sprite update at each growth sprite boundary
+		for (int i = 1; i < n; i++)
 		{
-			_halfGrownCallback = () =>
+			float t = growthStartTime + asset.cropTimer * ((float)i / n);
+			int capturedI = i;
+			if (t > Time.time)
 			{
-				if (state == CropState.Planted)
+				System.Action cb = () =>
 				{
-					state = CropState.Growing;
+					if (state == CropState.Done || state == CropState.Dead) return;
+					if (capturedI >= halfIdx && state == CropState.Planted)
+						state = CropState.Growing;
 					dirt.UpdateSprite(dirt);
-				}
-			};
-			GrowthManager.instance.Register(halfTime, _halfGrownCallback);
-		}
-		else if (state == CropState.Planted)
-		{
-			state = CropState.Growing;
-			dirt.UpdateSprite(dirt);
+				};
+				_growthCallbacks.Add(cb);
+				GrowthManager.instance.Register(t, cb);
+			}
+			else
+			{
+				if (capturedI >= halfIdx && state == CropState.Planted)
+					state = CropState.Growing;
+			}
 		}
 
+		float doneTime = growthStartTime + asset.cropTimer;
 		if (doneTime > Time.time)
 		{
 			_doneCallback = () =>
@@ -60,11 +67,10 @@ public class Crop
 
 	public void CancelGrowth()
 	{
-		if (_halfGrownCallback != null)
-		{
-			GrowthManager.instance.Cancel(_halfGrownCallback);
-			_halfGrownCallback = null;
-		}
+		foreach (var cb in _growthCallbacks)
+			GrowthManager.instance.Cancel(cb);
+		_growthCallbacks.Clear();
+
 		if (_doneCallback != null)
 		{
 			GrowthManager.instance.Cancel(_doneCallback);
@@ -109,23 +115,17 @@ public class Crop
 
 		switch (state)
 		{
-			case CropState.Seed:
-				return c.asset.seedSprite;
-			case CropState.Planted:
-				return c.asset.seedSprite;
-			case CropState.Growing://displays the sprout sprite
-				return c.asset.sproutSprite;
 			case CropState.Dead:
 				return c.asset.deadSprite;
 			case CropState.Done:
 				return c.asset.doneSprite;
+			default:
+				var sprites = c.asset.growthSprites;
+				if (sprites == null || sprites.Count == 0) return null;
+				float lvl = state == CropState.Seed ? 0f : GetGrowthLvl();
+				int idx = Mathf.Clamp(Mathf.FloorToInt(lvl * sprites.Count), 0, sprites.Count - 1);
+				return sprites[idx];
 		}
-
-		Debug.LogError("WHAT?!");
-        MenuController.instance.notificationBar.SetActive(false);
-		MenuController.instance.AnimateNotifcation("Seed State Error", Color.red, "Error");
-
-		return asset.seedSprite;
 	}
 
 	public bool IsOnGround()

@@ -7,6 +7,7 @@ public class DebrisTile : MonoBehaviour
     public bool isBusy = false;
     public Vector3 snapPosition;
     public int previewCells = 1;
+    public SpriteRenderer canopyOverlay;
 
     private void Start()
     {

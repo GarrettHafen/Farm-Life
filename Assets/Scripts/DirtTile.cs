@@ -162,6 +162,7 @@ public class DirtTile : MonoBehaviour
 		}
 		dirt.crop = c;
 		dirt.crop.state = CropState.Planted;
+		dirt.crop.SetGrowthLvl(0f);
 		UpdateSprite(dirt);
 		parentSprite.color = new Color(1f, 1f, 1f, 1f);
 		childSprites[1].color = new Color(1f, 1f, 1f, 1f);
@@ -169,7 +170,6 @@ public class DirtTile : MonoBehaviour
 		StatsController.instance.AddExp(1);
 		AudioManager.instance.PlaySound(plantSoundName);
 		dirt.isBusy = false;
-		dirt.crop.SetGrowthLvl(0f);
 		dirt.crop.StartGrowth(dirt);
 
 	}

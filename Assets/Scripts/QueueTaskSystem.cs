@@ -22,6 +22,8 @@ public class QueueTaskSystem : MonoBehaviour
     public void SetTask(string task, DirtTile dirt)
     {
         //dirt
+        WorkerCharacter.instance.NotifyTaskQueued();
+        queue.EnqueueAction(WorkerCharacter.instance.MoveTo(dirt.snapPosition));
         queue.EnqueueAction(TaskTimer(task, dirt));
         queue.EnqueueWait(waitTime);
     }
@@ -29,6 +31,8 @@ public class QueueTaskSystem : MonoBehaviour
     public void SetTask(string task, TreeTile tree)
     {
         //tree
+        WorkerCharacter.instance.NotifyTaskQueued();
+        queue.EnqueueAction(WorkerCharacter.instance.MoveTo(tree.snapPosition));
         queue.EnqueueAction(TaskTimer(task, tree));
         queue.EnqueueWait(waitTime);
     }
@@ -36,19 +40,33 @@ public class QueueTaskSystem : MonoBehaviour
     public void SetTask(string task, AnimalTile animal)
     {
         //animal
+        WorkerCharacter.instance.NotifyTaskQueued();
+        queue.EnqueueAction(WorkerCharacter.instance.MoveTo(animal.snapPosition));
         queue.EnqueueAction(TaskTimer(task, animal));
         queue.EnqueueWait(waitTime);
     }
 
     public void SetTask(string task, DebrisTile debris)
     {
+        WorkerCharacter.instance.NotifyTaskQueued();
+        queue.EnqueueAction(WorkerCharacter.instance.MoveTo(debris.snapPosition));
         queue.EnqueueAction(TaskTimer(task, debris));
+        queue.EnqueueWait(waitTime);
+    }
+
+    public void SetTask(string task, DecorationTile decoration)
+    {
+        WorkerCharacter.instance.NotifyTaskQueued();
+        queue.EnqueueAction(WorkerCharacter.instance.MoveTo(decoration.snapPosition));
+        queue.EnqueueAction(TaskTimer(task, decoration));
         queue.EnqueueWait(waitTime);
     }
 
     public void SetTask(Crop c, PlayerInteraction player, DirtTile dirt)
     {
         //plant seed
+        WorkerCharacter.instance.NotifyTaskQueued();
+        queue.EnqueueAction(WorkerCharacter.instance.MoveTo(dirt.snapPosition));
         queue.EnqueueAction(TaskTimer(c, player, dirt));
         queue.EnqueueWait(waitTime);
     }
@@ -59,11 +77,13 @@ public class QueueTaskSystem : MonoBehaviour
         Slider[] sliders = dirt.GetComponentsInChildren<Slider>(true);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
+        WorkerCharacter.instance.StartWorking(task);
         while (sliders[1].value < sliders[1].maxValue)
         {
             sliders[1].value += Time.deltaTime;
             yield return null;
         }
+        WorkerCharacter.instance.StopWorking();
         sliders[1].gameObject.SetActive(false);
         switch(task)
         {
@@ -89,11 +109,13 @@ public class QueueTaskSystem : MonoBehaviour
         Slider[] sliders = tree.GetComponentsInChildren<Slider>(true);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
+        WorkerCharacter.instance.StartWorking(task);
         while (sliders[1].value < sliders[1].maxValue)
         {
             sliders[1].value += Time.deltaTime;
             yield return null;
         }
+        WorkerCharacter.instance.StopWorking();
         sliders[1].gameObject.SetActive(false);
         switch (task)
         {
@@ -115,11 +137,13 @@ public class QueueTaskSystem : MonoBehaviour
         Slider[] sliders = animal.GetComponentsInChildren<Slider>(true);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
+        WorkerCharacter.instance.StartWorking(task);
         while (sliders[1].value < sliders[1].maxValue)
         {
             sliders[1].value += Time.deltaTime;
             yield return null;
         }
+        WorkerCharacter.instance.StopWorking();
         sliders[1].gameObject.SetActive(false);
         switch (task)
         {
@@ -141,16 +165,44 @@ public class QueueTaskSystem : MonoBehaviour
         Slider[] sliders = debris.GetComponentsInChildren<Slider>(true);
         sliders[0].gameObject.SetActive(true);
         sliders[0].value = sliders[0].minValue;
+        WorkerCharacter.instance.StartWorking(task);
         while (sliders[0].value < sliders[0].maxValue)
         {
             sliders[0].value += Time.deltaTime;
             yield return null;
         }
+        WorkerCharacter.instance.StopWorking();
         sliders[0].gameObject.SetActive(false);
         switch (task)
         {
             case "clearDebris":
                 DebrisTile.instance.DestroyDebris(debris);
+                break;
+        }
+    }
+
+    // Decoration prefab uses a single Slider at index [0], same as DebrisTile.
+    // FenceTile : DecorationTile, so this same overload handles fence removal too.
+    IEnumerator TaskTimer(string task, DecorationTile decoration)
+    {
+        Slider[] sliders = decoration.GetComponentsInChildren<Slider>(true);
+        sliders[0].gameObject.SetActive(true);
+        sliders[0].value = sliders[0].minValue;
+        WorkerCharacter.instance.StartWorking(task);
+        while (sliders[0].value < sliders[0].maxValue)
+        {
+            sliders[0].value += Time.deltaTime;
+            yield return null;
+        }
+        WorkerCharacter.instance.StopWorking();
+        sliders[0].gameObject.SetActive(false);
+        switch (task)
+        {
+            case "placeDecoration":
+                PlayerInteraction.instance.FinishPlaceDecoration(decoration);
+                break;
+            case "clearDecoration":
+                decoration.RemoveSelf();
                 break;
         }
     }
@@ -161,11 +213,13 @@ public class QueueTaskSystem : MonoBehaviour
         Slider[] sliders = dirt.GetComponentsInChildren<Slider>(true);
         sliders[1].gameObject.SetActive(true);
         sliders[1].value = sliders[1].minValue;
+        WorkerCharacter.instance.StartWorking("plantSeed");
         while (sliders[1].value < sliders[1].maxValue)
         {
             sliders[1].value += Time.deltaTime;
             yield return null;
         }
+        WorkerCharacter.instance.StopWorking();
         sliders[1].gameObject.SetActive(false);
 
         DirtTile.instance.PlantSeed(c, player, dirt);

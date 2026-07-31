@@ -101,6 +101,26 @@ public class Tree
         return asset.treePlantedSprite;
     }
 
+    // Mirrors GetTreeSprite for the optional canopy tier. Returns null for any species/stage
+    // that hasn't been split into trunk+canopy art yet, which simply renders nothing.
+    public Sprite GetTreeCanopySprite(Tree t)
+    {
+        if (t.asset == null)
+            return null;
+
+        switch (t.treeState)
+        {
+            case TreeState.Planted:
+                return t.asset.treePlantedCanopySprite;
+            case TreeState.Growing:
+                return t.asset.treeGrowingCanopySprite;
+            case TreeState.Done:
+                return t.asset.treeDoneCanopySprite;
+        }
+
+        return null;
+    }
+
     public string GetState()
     {
         string saveState = "Growing";

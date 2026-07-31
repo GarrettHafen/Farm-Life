@@ -27,6 +27,7 @@ public class GameHandler : MonoBehaviour
     public List<CropAsset> cropsList;
     public List<TreeAsset> treeList;
     public List<AnimalAsset> animalList;
+    public List<DecorationAsset> decorationList;
     public List<PreviewAsset> previewList;
     public List<GameObject> previewContainerList;
 
@@ -40,6 +41,8 @@ public class GameHandler : MonoBehaviour
 
     public bool devMode;
 
+    public bool randomTileRotation;
+
 
 
     // Start is called before the first frame update
@@ -50,9 +53,11 @@ public class GameHandler : MonoBehaviour
         var mainCanvas = landingPage.transform.parent.gameObject;
         if(!mainCanvas.activeSelf)
         {
-            mainCanvas.SetActive(true);    
+            mainCanvas.SetActive(true);
         }
-       
+
+        landingPage.SetActive(true);
+        landingPageOpen = true;
 
     }
 
@@ -136,7 +141,7 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < data.cropsActive; i++)
         {
             Vector3 newPlotPosition = new Vector3(data.plotX[i], data.plotY[i], 9f);
-            TileSelector.instance.PlacePlot(newPlotPosition, PlayerInteraction.instance.plotOffset);
+            TileSelector.instance.PlacePlot(newPlotPosition);
             //PlacePlot should add to new array.
 
             //get dirt object of newly instantiated plot
@@ -197,7 +202,7 @@ public class GameHandler : MonoBehaviour
         for(int i = 0; i < data.treesActive; i++)
         {
             Vector3 newTreePosition = new Vector3(data.treeX[i], data.treeY[i], 9f);
-            TileSelector.instance.PlantTree(newTreePosition, loadTreeList[i], PlayerInteraction.instance, PlayerInteraction.instance.treeOffset);
+            TileSelector.instance.PlantTree(newTreePosition, loadTreeList[i], PlayerInteraction.instance);
             TreeTile treeTile = TileSelector.instance.trees[i].GetComponent<TreeTile>();
             treeTile.tree.SetGrowthLvl(CalcTimePassed(data.activeTreeTimers[i], data.savedTime, treeTile.tree.asset.treeTimer));
             treeTile.tree.treeState = treeTile.tree.GetState(data.activeTreeStates[i]);
@@ -236,14 +241,25 @@ public class GameHandler : MonoBehaviour
         //instantiate debris, add to array
         for (int i = 0; i < data.debrisActive; i++)
         {
-            Vector3 debrisPos = new Vector3(data.debrisX[i], data.debrisY[i], 9f);
-            TileSelector.instance.PlaceDebris(debrisPos, Vector3.zero);
+            Vector3 debrisPos = new Vector3(data.debrisX[i], data.debrisY[i], 0f);
+            TileSelector.instance.PlaceDebris(debrisPos);
+        }
+
+        //instantiate player-placed decorations (border fences are regenerated separately, not saved)
+        for (int i = 0; i < data.decorationsActive; i++)
+        {
+            DecorationAsset asset = decorationList.Find(d => d != null && d.decorationName == data.decorationAssetNames[i]);
+            if (asset == null) continue;
+            Vector3 decorationPos = new Vector3(data.decorationX[i], data.decorationY[i], 0f);
+            TileSelector.instance.PlaceDecoration(decorationPos, asset);
         }
 
         MenuController.instance.ClearHand();
         Debug.Log("Data Loaded");
         MenuController.instance.notificationBar.SetActive(false);
         MenuController.instance.AnimateNotifcation("Load Complete", Color.white, "Null");
+
+        WorkerCharacter.instance.StartWander();
     }
 
     public void NewGame()
@@ -271,6 +287,7 @@ public class GameHandler : MonoBehaviour
             DebrisTile.instance.DestroyAllDebris();
             TileSelector.instance.debrisNum = 0;
         }
+        TileSelector.instance.DestroyAllDecorations();
 
         loadTreeList.Clear();
         loadAnimalList.Clear();
@@ -282,6 +299,7 @@ public class GameHandler : MonoBehaviour
 
         TileSelector.instance.GenerateAllZones();
         TileSelector.instance.SpawnDebrisOnMap();
+        WorkerCharacter.instance.StartWander();
     }
 
     public void TimeSkip()

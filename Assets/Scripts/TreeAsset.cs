@@ -7,6 +7,12 @@ public class TreeAsset : ScriptableObject
     public Sprite treeGrowingSprite;
 	public Sprite treeDoneSprite;
 	public Sprite treeIconSprite;
+
+	// Optional canopy tier, rendered on a sorting layer that always draws in front of
+	// ground-level objects. Leave unassigned to keep rendering as a single unsplit sprite.
+	public Sprite treePlantedCanopySprite;
+	public Sprite treeGrowingCanopySprite;
+	public Sprite treeDoneCanopySprite;
 	public float treeTimer; //how long it takes tree to grow
 	public int treeCost; //how much it costs per tree
 	public int treeReward; //how much money is returned per tree harvested

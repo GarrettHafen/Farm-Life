@@ -17,3 +17,5 @@ MonoBehaviour:
   unlockCost: 25000
   unlockedByDefault: 0
   iconSprite: {fileID: 0}
+  isBoundary: 0
+  debrisSet: {fileID: 11400000, guid: 50e592dd72c326842b9ad9cb02718b45, type: 2}

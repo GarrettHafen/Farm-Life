@@ -20,6 +20,8 @@ public class PlayerInteraction : MonoBehaviour
 	private Tree tree;
 	[SerializeField]
 	private Animal animal;
+	[SerializeField]
+	private DecorationAsset decoration;
 
 
 	public GameObject mouseyCompanion;
@@ -40,6 +42,7 @@ public class PlayerInteraction : MonoBehaviour
 	SpriteRenderer parentPlotSprite;
 	SpriteRenderer parentTreeSprite;
 	SpriteRenderer parentAnimalSprite;
+	SpriteRenderer parentDecorationSprite;
 
 	private bool playAnimalNoise = true;
 
@@ -74,7 +77,7 @@ public class PlayerInteraction : MonoBehaviour
 							StatsController.instance.RemoveCoins(5);
 
 							//instantiate object, set opacity to half
-							DirtTile tempPlot = TileSelector.instance.PlacePlot(MenuController.instance.GetPlacementPosition(), plotOffset);
+							DirtTile tempPlot = TileSelector.instance.PlacePlot(MenuController.instance.GetPlacementPosition());
 							parentPlotSprite = tempPlot.GetComponent<SpriteRenderer>();
 							parentPlotSprite.color = new Color(1f, 1f, 1f, .5f);
 
@@ -109,7 +112,7 @@ public class PlayerInteraction : MonoBehaviour
 							StatsController.instance.RemoveCoins(tree.GetCost());
 
 							//instantiate object, set opacity to half
-							TreeTile tempTree = TileSelector.instance.PlantTree(MenuController.instance.GetPlacementPosition(), tree, this, treeOffset);
+							TreeTile tempTree = TileSelector.instance.PlantTree(MenuController.instance.GetPlacementPosition(), tree, this);
 							parentTreeSprite = tempTree.GetComponent<SpriteRenderer>();
 							parentTreeSprite.color = new Color(1f, 1f, 1f, .5f);
 
@@ -152,6 +155,32 @@ public class PlayerInteraction : MonoBehaviour
 							MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red, "No Money");
 						}
                     }
+					if (MenuController.instance.toolState.hasDecoration && !MenuController.instance.previewObstructed)
+					{
+						//queue PLACE DECORATION
+
+						if (StatsController.instance.CheckMaster(decoration.placeCost))
+						{
+							StatsController.instance.RemoveCoins(decoration.placeCost);
+
+							//instantiate object, set opacity to half
+							DecorationTile tempDecoration = TileSelector.instance.PlaceDecoration(MenuController.instance.GetPlacementPosition(), decoration);
+							parentDecorationSprite = tempDecoration.GetComponent<SpriteRenderer>();
+							parentDecorationSprite.color = new Color(1f, 1f, 1f, .5f);
+
+							// queue task
+							tempDecoration.isBusy = true;
+							QueueTaskSystem.instance.SetTask("placeDecoration", tempDecoration);
+
+							//after task finishes, change opacity to full and play sound, see FinishPlaceDecoration()
+						}
+						else
+						{
+							//error notification and sound
+							MenuController.instance.notificationBar.SetActive(false);
+							MenuController.instance.AnimateNotifcation("Insufficient Funds", Color.red, "No Money");
+						}
+					}
 					return;
 				}
 				DirtTile dirt = target.GetComponent<DirtTile>();
@@ -180,7 +209,13 @@ public class PlayerInteraction : MonoBehaviour
                 {
 					treeTile.Interact(tree, treeTile, this);
                 }
-                //decor code
+
+				//decoration code (fences and future decoration kinds)
+				DecorationTile decorationTile = target.GetComponent<DecorationTile>();
+				if (decorationTile != null && !decorationTile.isBusy)
+				{
+					decorationTile.Interact();
+				}
 			}
 		}
 		else if (Input.GetMouseButton(1))
@@ -304,6 +339,12 @@ public class PlayerInteraction : MonoBehaviour
 			{
 				DisplayMouseyCompanion(clearDebrisSprite);
 			}
+
+			DecorationTile tempDecoration = target.GetComponent<DecorationTile>();
+			if (tempDecoration && !tempDecoration.isBusy && !(tempDecoration is FenceTile fenceTile && fenceTile.isBorderFence))
+			{
+				DisplayMouseyCompanion(clearDebrisSprite);
+			}
 		}
         else
         {
@@ -317,37 +358,46 @@ public class PlayerInteraction : MonoBehaviour
 		{
 			previousTarget = target;
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			Vector2 left = new Vector2(mousePosition.x - .01f, mousePosition.y);
-			hit = Physics2D.Raycast(mousePosition, left, 0.1f, LayerMask.NameToLayer("Plots"));
-			if (hit.collider != null && !hit.collider.CompareTag("Bound"))
+			Collider2D hit2D = null;
+			foreach (Collider2D c in Physics2D.OverlapPointAll(mousePosition))
 			{
-				if (hit.collider.gameObject == target || hit.collider.gameObject.transform.parent.gameObject == target)
+				GameObject go = c.name.Equals("OverlaySprite") ? c.transform.parent.gameObject : c.gameObject;
+				if (go.GetComponent<DirtTile>() != null || go.GetComponent<TreeTile>() != null ||
+					go.GetComponent<AnimalTile>() != null || go.GetComponent<DebrisTile>() != null ||
+					go.GetComponent<DecorationTile>() != null)
 				{
-					//this code fixed a bug where when hovering over a plot, it was considered "not the map"
+					hit2D = c;
+					break;
+				}
+			}
+			if (hit2D != null)
+			{
+				if (hit2D.gameObject == target || hit2D.gameObject.transform.parent.gameObject == target)
+				{
 					MapController.instance.overMap = true;
 				}
 				else
-                {
+				{
 					Deselect();
-					if (hit.collider.name.Equals("OverlaySprite"))
+					if (hit2D.name.Equals("OverlaySprite"))
 					{
-						target = hit.collider.gameObject.transform.parent.gameObject;
+						target = hit2D.gameObject.transform.parent.gameObject;
 					}
 					else
 					{
-						target = hit.collider.gameObject;
+						target = hit2D.gameObject;
 					}
 					mouseyCompanionImage.sprite = null;
 					MapController.instance.overMap = true;
 				}
-            }
-            else
-            {
+			}
+			else
+			{
 				if (target != null)
-                {
+				{
 					Deselect();
-                }
-            }
+				}
+			}
 		}
 	}
 
@@ -366,6 +416,11 @@ public class PlayerInteraction : MonoBehaviour
 		animal = a;
 		MenuController.instance.DisplayInventory();
     }
+	public void SetDecoration(DecorationAsset d)
+    {
+		decoration = d;
+		MenuController.instance.DisplayInventory();
+    }
 	public Crop GetCrop()
     {
 		return crop;
@@ -377,6 +432,10 @@ public class PlayerInteraction : MonoBehaviour
 	public Animal GetAnimal()
     {
 		return animal;
+    }
+	public DecorationAsset GetDecoration()
+    {
+		return decoration;
     }
 
     private void DisplayMouseyCompanion(Sprite sprite)
@@ -469,5 +528,14 @@ public class PlayerInteraction : MonoBehaviour
 		animal.isBusy = false;
 		animal.animal.SetGrowthLvl(0f);
 		animal.animal.StartGrowth(animal);
+	}
+
+	public void FinishPlaceDecoration(DecorationTile decoration)
+    {
+		parentDecorationSprite = decoration.GetComponent<SpriteRenderer>();
+		parentDecorationSprite.color = new Color(1f, 1f, 1f, 1f);
+		AudioManager.instance.PlaySound("Plow");
+		StatsController.instance.AddExp(1);
+		decoration.isBusy = false;
 	}
 }

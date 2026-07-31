@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Corn
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
-  sproutSprite: {fileID: 21300000, guid: a642c67c357b23743af7290a6ffa8aa0, type: 3}
+  growthSprites:
+  - {fileID: 21300000, guid: 27376599a5b201f4d9f45f543cf545c4, type: 3}
+  - {fileID: 21300000, guid: e7efc18018cc8c9409b6f10f17fc06b4, type: 3}
+  - {fileID: 21300000, guid: 533d9fa2873e9a041bbbfbc204d28d98, type: 3}
+  - {fileID: 21300000, guid: 77d1d0b70ab467142a198227265909f6, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 21300000, guid: 28ad4a3775eea9f4997ececadccbf0a3, type: 3}
-  iconSprite: {fileID: 21300000, guid: 71b06d491d88ac842ba994b6a6651188, type: 3}
+  doneSprite: {fileID: 5704427383285991531, guid: f4166d14a94bcbf428518dd4bbdaf88b,
+    type: 3}
+  iconSprite: {fileID: 21300000, guid: 11824357e6f83ec43982fe9f802bb7de, type: 3}
   cropTimer: 60
   cropCost: 5
   cropReward: 15

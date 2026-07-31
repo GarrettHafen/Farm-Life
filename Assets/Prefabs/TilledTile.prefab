@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1212040786392631788}
   - component: {fileID: 2543406379426354976}
   - component: {fileID: 7294815727667947939}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 198171003844974095}
   - component: {fileID: 2707411784414316879}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TaskTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 6440399168931764387}
   - component: {fileID: 2096153017067936565}
   - component: {fileID: 8587068460009998338}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,10 +279,10 @@ GameObject:
   - component: {fileID: 1181765647571676105}
   - component: {fileID: 8944482182025091002}
   - component: {fileID: 1633298131934116058}
-  - component: {fileID: 60577805356608902}
   - component: {fileID: 114009906283981976}
-  - component: {fileID: 50118480929171136}
-  m_Layer: 0
+  - component: {fileID: 1896489522946971974}
+  - component: {fileID: 5945304612710312779}
+  m_Layer: 9
   m_Name: TilledTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,12 +355,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 12b25ce943c488a41bb77bb81b347ea2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d93fb60608052924ba77d71f0afd9924, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0666667, y: 1.05}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -383,13 +383,29 @@ MonoBehaviour:
   overlay: {fileID: 1071769014754176527}
   needsPlowing: 0
   isBusy: 0
-  fallowed: {fileID: 21300000, guid: 43984a91cba874ca88135bbadab00c6d, type: 3}
+  snapPosition: {x: 0, y: 0, z: 0}
+  previewCells: 4
+  fallowed: {fileID: 21300000, guid: 3a401c05386fc6b4e8aa8e8972433061, type: 3}
   plantSoundName: Seed
   harvestSoundName: Harvest
   plowSoundName: Plow
   destroySoundName: Destroy
---- !u!60 &60577805356608902
-PolygonCollider2D:
+--- !u!114 &114009906283981976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2555449587901654986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b339daf9cf50d3b478f2aac910f3bc27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1812355155498150701}
+  timerSprite: {fileID: 8558405040070300815}
+--- !u!61 &1896489522946971974
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -422,28 +438,19 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.26}
+  m_Offset: {x: 0, y: 0.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.1688311, y: 0.64285713}
-    newSize: {x: 1.0666667, y: 1.05}
+    pivot: {x: 0.5, y: 0.25}
+    oldSize: {x: 1.1052631, y: 1.1052631}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.008855116, y: 0.30218625}
-      - {x: -0.48044163, y: 0.067184746}
-      - {x: -0.49246502, y: 0.056035936}
-      - {x: -0.026642997, y: -0.17996621}
-      - {x: -0.005619938, y: -0.17702384}
-      - {x: 0.46940908, y: 0.04036221}
-      - {x: 0.47055653, y: 0.06393987}
-      - {x: 0.0014861189, y: 0.30063742}
-  m_UseDelaunayMesh: 1
---- !u!114 &114009906283981976
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &5945304612710312779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -452,38 +459,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2555449587901654986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b339daf9cf50d3b478f2aac910f3bc27, type: 3}
+  m_Script: {fileID: 11500000, guid: f5a6f6fc6881c4d629301de9156f0014, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  slider: {fileID: 1812355155498150701}
-  timerSprite: {fileID: 8558405040070300815}
---- !u!50 &50118480929171136
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2555449587901654986}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 1
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
+  m_EditorClassIdentifier: Assembly-CSharp::DepthSortByY
+  precision: 10
+  baseOffset: 0
 --- !u!1 &2569935633682751380
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +475,7 @@ GameObject:
   - component: {fileID: 4097719650739262856}
   - component: {fileID: 4133555378021533175}
   - component: {fileID: 8558405040070300815}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: CropIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -570,7 +550,7 @@ GameObject:
   - component: {fileID: 7735794601833960970}
   - component: {fileID: 6300422101927674027}
   - component: {fileID: 8899714445765634206}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -643,7 +623,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3300207296404463773}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -681,7 +661,7 @@ GameObject:
   - component: {fileID: 3235846456889673610}
   - component: {fileID: 1812355155498150701}
   - component: {fileID: 1464605591155215521}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -786,7 +766,7 @@ GameObject:
   - component: {fileID: 6357793928587020804}
   - component: {fileID: 8112459662862662247}
   - component: {fileID: 7528339328244805402}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -861,7 +841,7 @@ GameObject:
   - component: {fileID: 1293629923300938118}
   - component: {fileID: 1071769014754176527}
   - component: {fileID: 8373361471761397983}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: OverlaySprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -930,7 +910,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -954,6 +934,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5a6f6fc6881c4d629301de9156f0014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  precision: 10
+  baseOffset: 0
 --- !u!1 &7251223355812344204
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,7 +947,7 @@ GameObject:
   - component: {fileID: 455681797221563162}
   - component: {fileID: 5647648821929331583}
   - component: {fileID: 5062831175907242392}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

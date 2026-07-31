@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
   m_Name: Dandelion
   m_EditorClassIdentifier: 
-  seedSprite: {fileID: 21300000, guid: 37e9c4d3e78aab044a6afd4d0e11d5bb, type: 3}
-  sproutSprite: {fileID: 21300000, guid: 7b482d05e07ca5942a9a0ecda0afe105, type: 3}
+  growthSprites:
+  - {fileID: 21300000, guid: 221301c08ed4e6940bc328f57b103e1c, type: 3}
+  - {fileID: 21300000, guid: 21c30b50f753e3946a777bf5d2799359, type: 3}
+  - {fileID: 21300000, guid: 3540fc1ffaa96dd4ca93d39bddfe0d5e, type: 3}
+  - {fileID: 21300000, guid: 7f3aa734b240a864fb5e8af5a687b666, type: 3}
   deadSprite: {fileID: 0}
-  doneSprite: {fileID: 21300000, guid: ec0a445854dc8ab41bd6780ae0f67a3b, type: 3}
-  iconSprite: {fileID: 21300000, guid: 737c259183777a048a9051d265a1bcf7, type: 3}
+  doneSprite: {fileID: 21300000, guid: d0e1ec7121554e448912b472cf10f833, type: 3}
+  iconSprite: {fileID: 21300000, guid: 4e1c68f1c4890b7409d79f7c97ce84d6, type: 3}
   cropTimer: 60
   cropCost: 0
   cropReward: 7
   expReward: 10
-  cropName: Dandelion
+  cropName: Beetroot
   reqLvl: 0
   seedIsOnGround: 0

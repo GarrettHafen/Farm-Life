@@ -1,36 +1,51 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MarketController : MonoBehaviour
 {
     public static MarketController instance;
     public GameObject market;
     private bool marketOpen;
-    public Text coinText;
+    public TMP_Text coinText;
     public Text lvlText;
-    public List<Text> cropNameList;
-    public List<Text> cropCostList;
-    public List<Text> cropYieldList;
-    public List<Text> cropExpList;
-    public List<Text> cropTimeList;
-    public List<Image> cropImageList;
+
+    [Header("Icon Grid")]
+    public List<Image> slotIconList;
+    public List<Button> slotButtonList;
+
+    [Header("Universal Detail Panel")]
+    public GameObject detailPanel;
+    public TMP_Text detailNameText;
+    public GameObject detailStatsPanel;
+    public TMP_Text detailYieldAmountText;
+    public TMP_Text detailExpAmountText;
+    public TMP_Text detailTimeAmountText;
+    public TMP_Text detailTimeUnitText;
+    public Button actionButton;
+    public TMP_Text actionButtonText;
+
     public List<CropAsset> cropAssetList;
-    public List<Image> cropLockedList;
-
     public List<TreeAsset> treeAssetList;
-
     public List<AnimalAsset> animalAssetList;
+    public List<DecorationAsset> decorationAssetList;
     public List<FarmZoneAsset> expansionAssetList;
+    private readonly List<bool> slotLockedList = new();
+    private static readonly Color lockedColor = new Color(0.4f, 0.4f, 0.4f, 1f);
 
-    public GameObject cropCell;
     private int pageNumber = 1;
     private int cellNumber = 0;
-    public GameObject cropCellParent;
-    
+    private int selectedSlot = -1;
+
     public GameObject backButton;
     public GameObject forwardButton;
+
+    [Header("HUD Elements")]
+    public GameObject longMenu;
+    public GameObject statsPanel;
 
     public MarketState marketState;
 
@@ -38,6 +53,18 @@ public class MarketController : MonoBehaviour
     void Start()
     {
         instance = this;
+
+        for (int i = 0; i < slotButtonList.Count; i++)
+        {
+            int slotIndex = i;
+            slotButtonList[i].onClick.AddListener(() => SelectSlot(slotIndex));
+        }
+
+        actionButton.onClick.AddListener(() =>
+        {
+            SetSeed(selectedSlot);
+            DeactivateMarket();
+        });
     }
 
     // Update is called once per frame
@@ -57,8 +84,10 @@ public class MarketController : MonoBehaviour
     {
         marketOpen = true;
         market.SetActive(true);
+        longMenu.SetActive(false);
+        statsPanel.SetActive(false);
         cellNumber = 0;
-        coinText.text = StatsController.instance.GetCoins().ToString();
+        coinText.text = $"{StatsController.instance.GetCoins().ToString()} C";
         lvlText.text = StatsController.instance.GetLvl().ToString();
         PopulateMarket();
         AudioManager.instance.PlaySound("Click");
@@ -68,6 +97,8 @@ public class MarketController : MonoBehaviour
     {
         marketOpen = false;
         market.SetActive(false);
+        longMenu.SetActive(true);
+        statsPanel.SetActive(true);
         AudioManager.instance.PlaySound("Click");
     }
 
@@ -89,17 +120,17 @@ public class MarketController : MonoBehaviour
             9   73  74  75  76  77  78  79  80  81
             10  82  83  84  85  86  87  88  89  90*/
 
-        pageNumber += 9;
+        pageNumber += slotIconList.Count;
         PopulateMarket();
         AudioManager.instance.PlaySound("Page Turn");
     }
 
     public void LowerPageNumber()
     {
-        //same as the raise, but lower. 
+        //same as the raise, but lower.
         if(pageNumber > 1)
-        { 
-            pageNumber -= 9;
+        {
+            pageNumber -= slotIconList.Count;
             PopulateMarket();
             AudioManager.instance.PlaySound("Page Turn");
         }
@@ -110,206 +141,69 @@ public class MarketController : MonoBehaviour
     {
         cropAssetList.Clear();
         treeAssetList.Clear();
+        animalAssetList.Clear();
+        decorationAssetList.Clear();
         expansionAssetList.Clear();
+        slotLockedList.Clear();
         cellNumber = 0;
         forwardButton.SetActive(true);
+        selectedSlot = -1;
+        detailPanel.SetActive(false);
 
-        // Clear all cells so previous tab content doesn't bleed through on shorter lists.
-        for (int c = 0; c < cropNameList.Count; c++)
+        int slotCount = slotIconList.Count;
+
+        // Clear all slots so previous tab content doesn't bleed through on shorter lists.
+        for (int c = 0; c < slotCount; c++)
         {
-            cropLockedList[c].gameObject.SetActive(false);
-            cropNameList[c].gameObject.SetActive(false);
-            cropCostList[c].gameObject.SetActive(false);
-            cropYieldList[c].gameObject.SetActive(false);
-            cropTimeList[c].gameObject.SetActive(false);
-            cropExpList[c].gameObject.SetActive(false);
-            cropExpList[c].transform.parent.gameObject.SetActive(false);
-            cropImageList[c].gameObject.SetActive(false);
+            if (slotIconList[c] == null || slotButtonList[c] == null)
+            {
+                Debug.LogError($"MarketController: slotIconList/slotButtonList index {c} is unassigned or points at a deleted object — check the Inspector wiring.");
+                continue;
+            }
+            slotIconList[c].gameObject.SetActive(false);
+            slotButtonList[c].interactable = false;
         }
 
         // Pre-compute list size so the loop and forward button check can't go out of bounds
         int listCount = marketState switch
         {
-            MarketState.Crop      => GameHandler.instance.cropsList.Count,
-            MarketState.Animal    => GameHandler.instance.animalList.Count,
-            MarketState.Tree      => GameHandler.instance.treeList.Count,
-            MarketState.Expansion => GetPurchasableZones().Count + 1,
-            _                     => 0
+            MarketState.Crop       => GameHandler.instance.cropsList.Count,
+            MarketState.Animal     => GameHandler.instance.animalList.Count,
+            MarketState.Tree       => GameHandler.instance.treeList.Count,
+            MarketState.Decoration => GameHandler.instance.decorationList.Count + 1,
+            MarketState.Expansion  => GetPurchasableZones().Count + 1,
+            _                      => 0
         };
 
-        int upperBound = Mathf.Min(pageNumber + 9, listCount);
+        int upperBound = Mathf.Min(pageNumber + slotCount, listCount);
 
         //based on page number, populate those crops on the market page.
         //should always start with one
         //------------------------need to eventually handle unavialable crops due to level------------------------
         for (int i = pageNumber; i < upperBound; i++)
         {
-            switch (marketState) {
+            switch (marketState)
+            {
                 case MarketState.Crop:
-                    {
-                        if (GameHandler.instance.cropsList[i] != null && GameHandler.instance.cropsList[i].reqLvl <= StatsController.instance.GetLvl())
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(false);
-                            cropNameList[cellNumber].text = GameHandler.instance.cropsList[i].cropName;
-                            cropNameList[cellNumber].gameObject.SetActive(true);
-                            cropCostList[cellNumber].text = GameHandler.instance.cropsList[i].cropCost.ToString();
-                            cropCostList[cellNumber].gameObject.SetActive(true);
-                            cropYieldList[cellNumber].text = GameHandler.instance.cropsList[i].cropReward.ToString();
-                            cropYieldList[cellNumber].gameObject.SetActive(true);
-                            cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.cropsList[i].cropTimer);
-                            cropTimeList[cellNumber].gameObject.SetActive(true);
-                            cropExpList[cellNumber].text = GameHandler.instance.cropsList[i].expReward.ToString();
-                            cropExpList[cellNumber].gameObject.SetActive(true);
-                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
-                            cropImageList[cellNumber].sprite = GameHandler.instance.cropsList[i].iconSprite;
-                            cropImageList[cellNumber].gameObject.SetActive(true);
-                            cropAssetList.Add(GameHandler.instance.cropsList[i]);
-                            cellNumber++;
-                        }
-                        else
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(true);
-
-                            if(GameHandler.instance.cropsList[i] == null)// this code probably only applies to an incomplete croplist
-                            {
-                                cropNameList[cellNumber].gameObject.SetActive(false);
-                            }
-                            else
-                            {
-                                cropNameList[cellNumber].gameObject.SetActive(true);
-                                cropNameList[cellNumber].text = "Unlocked at lvl: " + GameHandler.instance.cropsList[i].reqLvl.ToString();
-                            }
-
-                            cropCostList[cellNumber].gameObject.SetActive(false);
-                            cropYieldList[cellNumber].gameObject.SetActive(false);
-                            cropTimeList[cellNumber].gameObject.SetActive(false);
-                            cropExpList[cellNumber].gameObject.SetActive(false);
-                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
-                            cropImageList[cellNumber].gameObject.SetActive(false);
-                            cellNumber++;
-                        }
-                        break;
-                    }
+                    PopulateCropSlot(i);
+                    break;
                 case MarketState.Animal:
-                    {
-                        //populate animal stuff
-                        if (GameHandler.instance.animalList[i] != null && GameHandler.instance.animalList[i].reqLvl <= StatsController.instance.GetLvl())
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(false);
-                            cropNameList[cellNumber].text = GameHandler.instance.animalList[i].name;
-                            cropNameList[cellNumber].gameObject.SetActive(true);
-                            cropCostList[cellNumber].text = GameHandler.instance.animalList[i].animalCost.ToString();
-                            cropCostList[cellNumber].gameObject.SetActive(true);
-                            cropYieldList[cellNumber].text = GameHandler.instance.animalList[i].animalReward.ToString();
-                            cropYieldList[cellNumber].gameObject.SetActive(true);
-                            cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.animalList[i].animalTimer);
-                            cropTimeList[cellNumber].gameObject.SetActive(true);
-                            cropExpList[cellNumber].text = GameHandler.instance.animalList[i].expReward.ToString();
-                            cropExpList[cellNumber].gameObject.SetActive(true);
-                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
-                            cropImageList[cellNumber].sprite = GameHandler.instance.animalList[i].animalIconSprite;
-                            cropImageList[cellNumber].gameObject.SetActive(true);
-                            animalAssetList.Add(GameHandler.instance.animalList[i]);
-                            cellNumber++;
-                        }
-                        else
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(true);
-                            cropNameList[cellNumber].gameObject.SetActive(true);
-                            cropNameList[cellNumber].text = "Unlocked at lvl: " + GameHandler.instance.animalList[i].reqLvl.ToString();
-                            cropCostList[cellNumber].gameObject.SetActive(false);
-                            cropYieldList[cellNumber].gameObject.SetActive(false);
-                            cropTimeList[cellNumber].gameObject.SetActive(false);
-                            cropExpList[cellNumber].gameObject.SetActive(false);
-                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
-                            cropImageList[cellNumber].gameObject.SetActive(false);
-                            cellNumber++;
-                        }
-                        break;
-                    }
+                    PopulateAnimalSlot(i);
+                    break;
                 case MarketState.Tree:
-                    {
-                        //populate tree stuff
-                        if (GameHandler.instance.treeList[i] != null && GameHandler.instance.treeList[i].reqLvl <= StatsController.instance.GetLvl())
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(false);
-                            cropNameList[cellNumber].text = GameHandler.instance.treeList[i].name;
-                            cropNameList[cellNumber].gameObject.SetActive(true);
-                            cropCostList[cellNumber].text = GameHandler.instance.treeList[i].treeCost.ToString();
-                            cropCostList[cellNumber].gameObject.SetActive(true);
-                            cropYieldList[cellNumber].text = GameHandler.instance.treeList[i].treeReward.ToString();
-                            cropYieldList[cellNumber].gameObject.SetActive(true);
-                            cropTimeList[cellNumber].text = GetTimeString(GameHandler.instance.treeList[i].treeTimer);
-                            cropTimeList[cellNumber].gameObject.SetActive(true);
-                            cropExpList[cellNumber].text = GameHandler.instance.treeList[i].expReward.ToString();
-                            cropExpList[cellNumber].gameObject.SetActive(true);
-                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(true);
-                            cropImageList[cellNumber].sprite = GameHandler.instance.treeList[i].treeIconSprite;
-                            cropImageList[cellNumber].gameObject.SetActive(true);
-                            treeAssetList.Add(GameHandler.instance.treeList[i]);
-                            cellNumber++;
-                        }
-                        else
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(true);
-                            cropNameList[cellNumber].gameObject.SetActive(true);
-                            cropNameList[cellNumber].text = "Unlocked at lvl: " + GameHandler.instance.treeList[i].reqLvl.ToString();
-                            cropCostList[cellNumber].gameObject.SetActive(false);
-                            cropYieldList[cellNumber].gameObject.SetActive(false);
-                            cropTimeList[cellNumber].gameObject.SetActive(false);
-                            cropExpList[cellNumber].gameObject.SetActive(false);
-                            cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
-                            cropImageList[cellNumber].gameObject.SetActive(false);
-                            cellNumber++;
-                        }
-                        break;
-                    }
+                    PopulateTreeSlot(i);
+                    break;
+                case MarketState.Decoration:
+                    PopulateDecorationSlot(i);
+                    break;
                 case MarketState.Expansion:
-                    {
-                        List<ZoneData> purchasable = GetPurchasableZones();
-                        FarmZoneAsset zone = purchasable[i - 1].zoneAsset;
-                        bool levelMet = zone.unlockLevel <= StatsController.instance.GetLvl();
-                        bool alreadyOwned = purchasable[i - 1].isUnlocked;
-
-                        cropNameList[cellNumber].text = zone.zoneName;
-                        cropNameList[cellNumber].gameObject.SetActive(true);
-                        cropImageList[cellNumber].sprite = zone.iconSprite;
-                        cropImageList[cellNumber].gameObject.SetActive(zone.iconSprite != null);
-
-                        // hide fields that don't apply to land
-                        cropYieldList[cellNumber].gameObject.SetActive(false);
-                        cropTimeList[cellNumber].gameObject.SetActive(false);
-                        cropExpList[cellNumber].gameObject.SetActive(false);
-                        cropExpList[cellNumber].transform.parent.gameObject.SetActive(false);
-
-                        if (alreadyOwned)
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(false);
-                            cropCostList[cellNumber].text = "Owned";
-                            cropCostList[cellNumber].gameObject.SetActive(true);
-                        }
-                        else if (!levelMet)
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(true);
-                            cropCostList[cellNumber].gameObject.SetActive(false);
-                            cropNameList[cellNumber].text = "Unlocked at lvl: " + zone.unlockLevel;
-                        }
-                        else
-                        {
-                            cropLockedList[cellNumber].gameObject.SetActive(false);
-                            cropCostList[cellNumber].text = zone.unlockCost.ToString();
-                            cropCostList[cellNumber].gameObject.SetActive(true);
-                        }
-
-                        expansionAssetList.Add(zone);
-                        cellNumber++;
-                        break;
-                    }
+                    PopulateExpansionSlot(i);
+                    break;
             }
         }
 
         // Hide forward button if there's no next page or it's all locked content
-        int nextPage = pageNumber + 9;
+        int nextPage = pageNumber + slotCount;
         if (nextPage >= listCount)
         {
             forwardButton.SetActive(false);
@@ -330,11 +224,253 @@ public class MarketController : MonoBehaviour
                     if (GameHandler.instance.treeList[nextPage] == null || GameHandler.instance.treeList[nextPage].reqLvl > StatsController.instance.GetLvl())
                         forwardButton.SetActive(false);
                     break;
+                case MarketState.Decoration:
+                    if (GameHandler.instance.decorationList[nextPage - 1] == null || GameHandler.instance.decorationList[nextPage - 1].reqLvl > StatsController.instance.GetLvl())
+                        forwardButton.SetActive(false);
+                    break;
                 case MarketState.Expansion:
                     // expansions are always shown (owned or locked), so always allow paging if more exist
                     break;
             }
         }
+    }
+
+    private void PopulateCropSlot(int i)
+    {
+        CropAsset crop = GameHandler.instance.cropsList[i];
+        cropAssetList.Add(crop);
+
+        if (crop == null) // this code probably only applies to an incomplete croplist
+        {
+            slotLockedList.Add(false);
+            cellNumber++;
+            return;
+        }
+
+        bool unlocked = crop.reqLvl <= StatsController.instance.GetLvl();
+        slotIconList[cellNumber].sprite = crop.iconSprite;
+        slotIconList[cellNumber].gameObject.SetActive(true);
+        slotIconList[cellNumber].color = unlocked ? Color.white : lockedColor;
+        slotButtonList[cellNumber].interactable = true;
+
+        slotLockedList.Add(!unlocked);
+        cellNumber++;
+    }
+
+    private void PopulateAnimalSlot(int i)
+    {
+        AnimalAsset animal = GameHandler.instance.animalList[i];
+        animalAssetList.Add(animal);
+
+        if (animal == null)
+        {
+            slotLockedList.Add(false);
+            cellNumber++;
+            return;
+        }
+
+        bool unlocked = animal.reqLvl <= StatsController.instance.GetLvl();
+        slotIconList[cellNumber].sprite = animal.animalIconSprite;
+        slotIconList[cellNumber].gameObject.SetActive(true);
+        slotIconList[cellNumber].color = unlocked ? Color.white : lockedColor;
+        slotButtonList[cellNumber].interactable = true;
+
+        slotLockedList.Add(!unlocked);
+        cellNumber++;
+    }
+
+    private void PopulateTreeSlot(int i)
+    {
+        TreeAsset tree = GameHandler.instance.treeList[i];
+        treeAssetList.Add(tree);
+
+        if (tree == null)
+        {
+            slotLockedList.Add(false);
+            cellNumber++;
+            return;
+        }
+
+        bool unlocked = tree.reqLvl <= StatsController.instance.GetLvl();
+        slotIconList[cellNumber].sprite = tree.treeIconSprite;
+        slotIconList[cellNumber].gameObject.SetActive(true);
+        slotIconList[cellNumber].color = unlocked ? Color.white : lockedColor;
+        slotButtonList[cellNumber].interactable = true;
+
+        slotLockedList.Add(!unlocked);
+        cellNumber++;
+    }
+
+    private void PopulateDecorationSlot(int i)
+    {
+        DecorationAsset decoration = GameHandler.instance.decorationList[i - 1];
+        decorationAssetList.Add(decoration);
+
+        if (decoration == null)
+        {
+            slotLockedList.Add(false);
+            cellNumber++;
+            return;
+        }
+
+        bool unlocked = decoration.reqLvl <= StatsController.instance.GetLvl();
+        slotIconList[cellNumber].sprite = decoration.iconSprite;
+        slotIconList[cellNumber].gameObject.SetActive(true);
+        slotIconList[cellNumber].color = unlocked ? Color.white : lockedColor;
+        slotButtonList[cellNumber].interactable = true;
+
+        slotLockedList.Add(!unlocked);
+        cellNumber++;
+    }
+
+    private void PopulateExpansionSlot(int i)
+    {
+        List<ZoneData> purchasable = GetPurchasableZones();
+        FarmZoneAsset zone = purchasable[i - 1].zoneAsset;
+        bool levelMet = zone.unlockLevel <= StatsController.instance.GetLvl();
+
+        expansionAssetList.Add(zone);
+        slotIconList[cellNumber].sprite = zone.iconSprite;
+        slotIconList[cellNumber].gameObject.SetActive(zone.iconSprite != null);
+        slotIconList[cellNumber].color = levelMet ? Color.white : lockedColor;
+        slotButtonList[cellNumber].interactable = true;
+
+        slotLockedList.Add(!levelMet);
+        cellNumber++;
+    }
+
+    public void SelectSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= slotLockedList.Count)
+            return;
+
+        selectedSlot = slotIndex;
+        AudioManager.instance.PlaySound("Click");
+        detailPanel.SetActive(true);
+
+        bool locked = slotLockedList[slotIndex];
+
+        switch (marketState)
+        {
+            case MarketState.Crop:
+                ShowCropDetails(cropAssetList[slotIndex], locked);
+                break;
+            case MarketState.Animal:
+                ShowAnimalDetails(animalAssetList[slotIndex], locked);
+                break;
+            case MarketState.Tree:
+                ShowTreeDetails(treeAssetList[slotIndex], locked);
+                break;
+            case MarketState.Decoration:
+                ShowDecorationDetails(decorationAssetList[slotIndex], locked);
+                break;
+            case MarketState.Expansion:
+                ShowExpansionDetails(expansionAssetList[slotIndex], locked);
+                break;
+        }
+    }
+
+    private void ShowCropDetails(CropAsset crop, bool locked)
+    {
+        if (locked)
+        {
+            detailNameText.text = "Unlocked at lvl: " + crop.reqLvl;
+            detailStatsPanel.SetActive(false);
+            actionButton.gameObject.SetActive(false);
+            return;
+        }
+
+        detailNameText.text = crop.cropName;
+        detailYieldAmountText.text = crop.cropReward.ToString();
+        detailExpAmountText.text = crop.expReward.ToString();
+        SetTimeText(crop.cropTimer);
+        detailStatsPanel.SetActive(true);
+        SetActionButtonCost(crop.cropCost);
+    }
+
+    private void ShowAnimalDetails(AnimalAsset animal, bool locked)
+    {
+        if (locked)
+        {
+            detailNameText.text = "Unlocked at lvl: " + animal.reqLvl;
+            detailStatsPanel.SetActive(false);
+            actionButton.gameObject.SetActive(false);
+            return;
+        }
+
+        detailNameText.text = animal.animalName;
+        detailYieldAmountText.text = animal.animalReward.ToString();
+        detailExpAmountText.text = animal.expReward.ToString();
+        SetTimeText(animal.animalTimer);
+        detailStatsPanel.SetActive(true);
+        SetActionButtonCost(animal.animalCost);
+    }
+
+    private void ShowTreeDetails(TreeAsset tree, bool locked)
+    {
+        if (locked)
+        {
+            detailNameText.text = "Unlocked at lvl: " + tree.reqLvl;
+            detailStatsPanel.SetActive(false);
+            actionButton.gameObject.SetActive(false);
+            return;
+        }
+
+        detailNameText.text = tree.treeName;
+        detailYieldAmountText.text = tree.treeReward.ToString();
+        detailExpAmountText.text = tree.expReward.ToString();
+        SetTimeText(tree.treeTimer);
+        detailStatsPanel.SetActive(true);
+        SetActionButtonCost(tree.treeCost);
+    }
+
+    private void ShowDecorationDetails(DecorationAsset decoration, bool locked)
+    {
+        // No growth/yield/exp stats for a static prop — just name + cost, same shape as ShowExpansionDetails.
+        detailStatsPanel.SetActive(false);
+
+        if (locked)
+        {
+            detailNameText.text = "Unlocked at lvl: " + decoration.reqLvl;
+            actionButton.gameObject.SetActive(false);
+            return;
+        }
+
+        detailNameText.text = decoration.decorationName;
+        SetActionButtonCost(decoration.placeCost);
+    }
+
+    private void ShowExpansionDetails(FarmZoneAsset zone, bool locked)
+    {
+        detailStatsPanel.SetActive(false);
+
+        if (locked)
+        {
+            detailNameText.text = "Unlocked at lvl: " + zone.unlockLevel;
+            actionButton.gameObject.SetActive(false);
+            return;
+        }
+
+        detailNameText.text = zone.zoneName;
+        actionButton.gameObject.SetActive(true);
+
+        bool alreadyOwned = TileSelector.instance.zones.Find(z => z.zoneAsset == zone).isUnlocked;
+        if (alreadyOwned)
+        {
+            actionButtonText.text = "Owned";
+            actionButton.interactable = false;
+        }
+        else
+        {
+            SetActionButtonCost(zone.unlockCost);
+        }
+    }
+
+    private void SetActionButtonCost(int cost)
+    {
+        actionButton.gameObject.SetActive(true);
+        actionButton.interactable = true;
+        actionButtonText.text = cost > 0 ? cost + " C" : "Free";
     }
 
     public void SetSeed(int cropNumber)//sets trees and animals etc also
@@ -362,6 +498,13 @@ public class MarketController : MonoBehaviour
 
                     break;
                 }
+            case MarketState.Decoration:
+                {
+                    MenuController.instance.toolState.SetDecoration();
+                    PlayerInteraction.instance.SetDecoration(decorationAssetList[cropNumber]);
+
+                    break;
+                }
             case MarketState.Expansion:
                 {
                     BuyExpansion(cropNumber);
@@ -372,10 +515,9 @@ public class MarketController : MonoBehaviour
 
     }
 
-    public string GetTimeString(float timeInSeconds)
+    private void SetTimeText(float timeInSeconds)
     {
-        //return whole number based on number of seconds, if more than 60 seconds = 1 minute
-        // if more than 60 minutes = 1 hour etc.
+        //split into a whole number amount and a unit, escalating from seconds to days
         float minutes;
         float hours;
         float days;
@@ -389,46 +531,41 @@ public class MarketController : MonoBehaviour
                 if (hours >= 24)
                 {
                     days = hours / 24;
-                    return( days + " days");
+                    detailTimeAmountText.text = days.ToString();
+                    detailTimeUnitText.text = "Days";
                 }
                 else
                 {
-                    return (hours + " Hours");
+                    detailTimeAmountText.text = hours.ToString();
+                    detailTimeUnitText.text = "Hours";
                 }
             }
             else
             {
-                return (minutes + " Minutes");
+                detailTimeAmountText.text = minutes.ToString();
+                detailTimeUnitText.text = "Minutes";
             }
         }
-       else
-        { 
-            return timeInSeconds + " Seconds";
-            
+        else
+        {
+            detailTimeAmountText.text = timeInSeconds.ToString();
+            detailTimeUnitText.text = "Seconds";
         }
     }
 
+    // Kept for existing Inspector-wired OnClick calls (UnityEvent persistent calls only support string/int/float/bool/Object arguments).
     public void SetMarketState(string input)
     {
-        switch (input)
-        {
-            case "Crop":
-                marketState = MarketState.Crop;
-                pageNumber = 1;
-                break;
-            case "Tree":
-                marketState = MarketState.Tree;
-                pageNumber = 1;
-                break;
-            case "Animal":
-                marketState = MarketState.Animal;
-                pageNumber = 1;
-                break;
-            case "Expansion":
-                marketState = MarketState.Expansion;
-                pageNumber = 1;
-                break;
-        }
+        if (Enum.TryParse(input, out MarketState state))
+            SetMarketState(state);
+    }
+
+    // Preferred entry point for code-driven callers (e.g. MarketTabBar), since it can't typo a category name.
+    public void SetMarketState(MarketState state)
+    {
+        marketState = state;
+        pageNumber = 1;
+        PopulateMarket();
         AudioManager.instance.PlaySound("Click");
     }
 

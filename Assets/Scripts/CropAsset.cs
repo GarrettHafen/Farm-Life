@@ -5,8 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Crop", menuName = "Crop")]
 public class CropAsset : ScriptableObject
 {
-	public Sprite seedSprite; 
-	public Sprite sproutSprite;
+	public List<Sprite> growthSprites; // index 0 = just planted, advances based on cropTimer
 	public Sprite deadSprite;
 	public Sprite doneSprite;
 	public Sprite iconSprite;

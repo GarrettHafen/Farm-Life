@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: 4x4
   m_EditorClassIdentifier: 
   previewName: 4x4
-  previewGreenSprite: {fileID: 21300000, guid: 9e81b8cc5b60b4dbf900d98205973f6c, type: 3}
-  previewRedSprite: {fileID: 21300000, guid: a2d57c85edf494840884b0b351910a23, type: 3}
+  previewGreenSprite: {fileID: -6334104734295652618, guid: 4241a6a33aeb7284381799c2ead3fd28,
+    type: 3}
+  previewRedSprite: {fileID: 4186120334187113560, guid: 3e0fad77662b5a64c9e6e4705819c80e,
+    type: 3}

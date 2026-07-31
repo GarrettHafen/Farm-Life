@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746118d64bc72b74d9b24a01fa0fbeab, type: 3}
+  m_Name: FenceAsset
+  m_EditorClassIdentifier: Assembly-CSharp::FenceAsset
+  decorationName: Wooden Fence
+  iconSprite: {fileID: 21300000, guid: 4d32cc2c0a2914a4abfdb05cf87d6dfd, type: 3}
+  prefab: {fileID: 7448749474992436289, guid: e2d0c6baee76bcd46bfeccb76ae0ed6f, type: 3}
+  placeCost: 10
+  removalCost: 5
+  reqLvl: 1
+  preview: 4x4
+  spriteIsolated: {fileID: 21300000, guid: 4d32cc2c0a2914a4abfdb05cf87d6dfd, type: 3}
+  spriteN: {fileID: 21300000, guid: 995b239b2d505224bbdcf90f9b37b0f6, type: 3}
+  spriteE: {fileID: 21300000, guid: 715aea3277192a2449b1bea3349c8127, type: 3}
+  spriteS: {fileID: 21300000, guid: f04285a5d1e57a9469873be4d0212103, type: 3}
+  spriteW: {fileID: 21300000, guid: 20ee4ad64b83a604790a4a303d4ccc99, type: 3}
+  spriteNS: {fileID: 21300000, guid: 8380683e1b48bba4b84c93babbfe10e9, type: 3}
+  spriteEW: {fileID: 21300000, guid: f5d8422904fe6ec4ca4d3fbd182399d7, type: 3}
+  spriteNE: {fileID: 21300000, guid: 7f4d62152ca1f7b4988bb7914b05a8db, type: 3}
+  spriteSE: {fileID: 21300000, guid: 8c23346c25f41394ca5083d0af990f69, type: 3}
+  spriteSW: {fileID: 21300000, guid: 1dd5a4273a003484e8265c46928824dd, type: 3}
+  spriteNW: {fileID: 21300000, guid: db92c34ccaf6f4742adde7008c20876e, type: 3}
+  spriteNES: {fileID: 21300000, guid: 3958b8d3cd8189a4e8ca898bec003161, type: 3}
+  spriteNEW: {fileID: 21300000, guid: 56b6c92a9cf964e43a88642d68f9afb6, type: 3}
+  spriteNSW: {fileID: 21300000, guid: 47b5ec66f18b99543baccb3f9d8446be, type: 3}
+  spriteESW: {fileID: 21300000, guid: 7797dbdba6edc2a42816cbd5fb9bee00, type: 3}
+  spriteCross: {fileID: 21300000, guid: 348a32c3fd725e44682b26c047113a1c, type: 3}

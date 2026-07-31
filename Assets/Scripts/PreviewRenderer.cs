@@ -16,7 +16,7 @@ public class PreviewRenderer : MonoBehaviour
     {
         if (MenuController.instance.toolState.plowActive)
         {
-            GameObject preview = MenuController.instance.preview4x4;
+            GameObject preview = MenuController.instance.preview1x1;
             if (!MenuController.instance.GetpreviewPlacementLocation())
             {
                 MenuController.instance.ActivatePreview(preview);
@@ -24,8 +24,8 @@ public class PreviewRenderer : MonoBehaviour
             }
 
             Sprite sprite = MenuController.instance.previewObstructed
-                ? GameHandler.instance.previewList[8].previewRedSprite
-                : GameHandler.instance.previewList[8].previewGreenSprite;
+                ? GameHandler.instance.previewList[0].previewRedSprite
+                : GameHandler.instance.previewList[0].previewGreenSprite;
             MenuController.instance.SetPreviewColor(sprite, preview);
         }
 
@@ -62,6 +62,33 @@ public class PreviewRenderer : MonoBehaviour
                 ? GameHandler.instance.previewList[previewPosition].previewRedSprite
                 : GameHandler.instance.previewList[previewPosition].previewGreenSprite;
             MenuController.instance.SetPreviewColor(sprite, preview);
+        }
+
+        if (MenuController.instance.toolState.hasDecoration)
+        {
+            DecorationAsset decoration = player.GetDecoration();
+            if (decoration != null)
+            {
+                MenuController.instance.SetPreviewCells(TileSelector.PreviewSizeToCells(decoration.preview));
+
+                // Full-cell decorations (fences use "4x4") reuse Plow's dedicated whole-cell
+                // preview square instead of the generic previewContainerList/previewList "4x4"
+                // slot — nothing else has ever driven a real 4x4 footprint through that path,
+                // so it was never actually wired up, unlike Plow's known-working preview1x1.
+                bool fullCell = decoration.preview == "4x4";
+                GameObject preview = fullCell ? MenuController.instance.preview1x1 : GetPreviewContainer(decoration.preview);
+                int previewPosition = fullCell ? 0 : GetPreviewPosition(decoration.preview);
+
+                if (!MenuController.instance.GetpreviewPlacementLocation())
+                {
+                    MenuController.instance.ActivatePreview(preview);
+                    MenuController.instance.previewObstructed = false;
+                }
+                Sprite sprite = MenuController.instance.previewObstructed
+                    ? GameHandler.instance.previewList[previewPosition].previewRedSprite
+                    : GameHandler.instance.previewList[previewPosition].previewGreenSprite;
+                MenuController.instance.SetPreviewColor(sprite, preview);
+            }
         }
     }
 

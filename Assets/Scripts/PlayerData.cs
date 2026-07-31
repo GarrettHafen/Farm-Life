@@ -40,6 +40,13 @@ public class PlayerData
     public float[] debrisX;
     public float[] debrisY;
 
+    // Player-placed decorations only — border fences are regenerated deterministically
+    // from farmland shape on load/unlock, not saved here (see TileSelector.GenerateBorderFence).
+    public int decorationsActive;
+    public float[] decorationX;
+    public float[] decorationY;
+    public string[] decorationAssetNames;
+
     public PlayerData() { }
 
     public static PlayerData FromCurrentGameState()
@@ -151,6 +158,21 @@ public class PlayerData
             data.debrisX[debrisCounter] = dt.snapPosition.x;
             data.debrisY[debrisCounter] = dt.snapPosition.y;
             debrisCounter++;
+        }
+
+        // decorations (player-placed only — TileSelector.decorations never contains border fences)
+        int decorationCounter = 0;
+        data.decorationsActive = TileSelector.instance.decorations.Count;
+        data.decorationX = new float[data.decorationsActive];
+        data.decorationY = new float[data.decorationsActive];
+        data.decorationAssetNames = new string[data.decorationsActive];
+        foreach (GameObject d in TileSelector.instance.decorations)
+        {
+            DecorationTile dt = d.GetComponent<DecorationTile>();
+            data.decorationX[decorationCounter] = dt.snapPosition.x;
+            data.decorationY[decorationCounter] = dt.snapPosition.y;
+            data.decorationAssetNames[decorationCounter] = dt.asset != null ? dt.asset.decorationName : null;
+            decorationCounter++;
         }
 
         return data;
