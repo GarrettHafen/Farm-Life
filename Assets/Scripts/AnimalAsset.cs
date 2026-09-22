@@ -3,8 +3,11 @@
 [CreateAssetMenu(fileName = "New Animal", menuName = "Animal")]
 public class AnimalAsset : ScriptableObject
 {
-    public Sprite animalGrowingSprite;
-    public Sprite animalDoneSprite;
+    public AnimalAnimVariant[] animalGrowingVariants; // idle loop(s) while growing, e.g. blinking
+    public AnimalAnimVariant[] animalDoneVariants;    // idle loop(s) while done, e.g. breathing, tail swish
+    public float idleFrameRate = 4f;                  // frames per second for idle loops
+    public float variantMinHold = 3f;                 // min seconds before switching to a different variant
+    public float variantMaxHold = 8f;                 // max seconds before switching to a different variant
     public Sprite animalIconSprite;
     public float animalTimer; //how long it takes the animal to grow
     public int animalCost; //how much it costs per animal
@@ -26,4 +29,10 @@ public class AnimalAsset : ScriptableObject
      * cases for all of these need to be set up in PlayerInteration
      */
 
+}
+
+[System.Serializable]
+public class AnimalAnimVariant
+{
+    public Sprite[] frames;
 }

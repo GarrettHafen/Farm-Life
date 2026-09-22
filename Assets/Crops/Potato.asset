@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
+  m_Name: Potato
+  m_EditorClassIdentifier: 
+  growthSprites:
+  - {fileID: 21300000, guid: 0635792c62db0a54680f036292de6031, type: 3}
+  - {fileID: 21300000, guid: d9a05ae205a6b2e47959088d2bf6a84a, type: 3}
+  - {fileID: 21300000, guid: 1ee315be03217c44ebb292fb51a801a5, type: 3}
+  - {fileID: 21300000, guid: 2c3f24b1101faf84192c720413e5e0f5, type: 3}
+  deadSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: 569025f11b730e447b4ca61d5d1d5307, type: 3}
+  iconSprite: {fileID: 21300000, guid: cddded822010ab2448055a1bcdd85acb, type: 3}
+  cropTimer: 5
+  cropCost: 5
+  cropReward: 15
+  expReward: 5
+  cropName: Potato
+  reqLvl: 5
+  seedIsOnGround: 0

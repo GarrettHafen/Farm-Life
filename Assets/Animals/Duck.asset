@@ -12,14 +12,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Duck
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 0}
-  animalDoneSprite: {fileID: 0}
-  animalIconSprite: {fileID: 21300000, guid: 1a67384eeda534f1da50abc27cecbf50, type: 3}
-  animalTimer: 0
-  animalCost: 0
-  animalReward: 0
-  expReward: 0
-  animalName: 
-  reqLvl: 99
-  preview: 1x1
-  animalPrefab: {fileID: 0}
+  animalGrowingVariants:
+  - frames:
+    - {fileID: 9096381799954556368, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 4507235769348421573, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -8159627342445885785, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -9194053425292473834, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+  - frames:
+    - {fileID: -45830312202772555, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 1849712962098062611, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 1744973530904311053, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 7936714120695946776, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+  - frames:
+    - {fileID: 5556856850849498215, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 8026030360483356909, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -1630527978199531948, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 8031078323415882670, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+  - frames:
+    - {fileID: -3508149220603691442, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -1298600730859481153, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -8329534205940521083, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -4854576413519647783, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+  animalDoneVariants:
+  - frames:
+    - {fileID: -1248700827133751452, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 6508480475646686319, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -1163245413252706920, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: 7724181445087059683, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+  - frames:
+    - {fileID: 6055271536365830378, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -4176479792723229501, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -269441999938762234, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+    - {fileID: -6059152568830020596, guid: 037a0aa8cd4295c4dabd48f4582bd70f, type: 3}
+  idleFrameRate: 4
+  variantMinHold: 3
+  variantMaxHold: 8
+  animalIconSprite: {fileID: -45830312202772555, guid: 037a0aa8cd4295c4dabd48f4582bd70f,
+    type: 3}
+  animalTimer: 5
+  animalCost: 5
+  animalReward: 15
+  expReward: 5
+  animalName: Duck
+  reqLvl: 15
+  preview: 4x4
+  animalPrefab: {fileID: 5817824788561296476, guid: e2ea329a7ec1d44969cd010cf688ac70,
+    type: 3}
+  animalSound: 
+  placementOffset: {x: 0, y: 0, z: 0}

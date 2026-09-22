@@ -51,8 +51,12 @@ public class PreviewRenderer : MonoBehaviour
         {
             Animal animal = player.GetAnimal();
             MenuController.instance.SetPreviewCells(TileSelector.PreviewSizeToCells(animal.asset.preview));
-            GameObject preview = GetPreviewContainer(animal.asset.preview);
-            int previewPosition = GetPreviewPosition(animal.asset.preview);
+
+            // Full-cell animals (Donkey, Horse use "4x4") reuse Plow's dedicated whole-cell
+            // preview square, same as full-cell decorations — see the Decoration branch below.
+            bool fullCell = animal.asset.preview == "4x4";
+            GameObject preview = fullCell ? MenuController.instance.preview1x1 : GetPreviewContainer(animal.asset.preview);
+            int previewPosition = fullCell ? 0 : GetPreviewPosition(animal.asset.preview);
             if (!MenuController.instance.GetpreviewPlacementLocation())
             {
                 MenuController.instance.ActivatePreview(preview);

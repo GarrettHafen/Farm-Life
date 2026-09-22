@@ -12,10 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Cow
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 21300000, guid: 13f8f53aec3904496a0b19c3a5a16cf6,
+  animalGrowingVariants:
+  - frames:
+    - {fileID: -1377216682714417124, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -3588992324357297139, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -1840415112402127039, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 9167145022117141964, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+  - frames:
+    - {fileID: 5444503864812377683, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -3862305398062187172, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 4322595866277850743, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 994555733278948484, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+  - frames:
+    - {fileID: -4949167992967690513, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -6592005027662231631, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -5123751731079790621, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 3101893357648517715, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+  - frames:
+    - {fileID: -2890499349962358495, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 4670745384705778833, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 7236473380810849644, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -5185918460963225607, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+  animalDoneVariants:
+  - frames:
+    - {fileID: 3998409130249724284, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -7939493383681080381, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: -1405559792918097530, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+    - {fileID: 3728590692126166114, guid: be378f46f7d58cc4da6e4463070996d7, type: 3}
+  idleFrameRate: 0.75
+  variantMinHold: 15
+  variantMaxHold: 25
+  animalIconSprite: {fileID: -1377216682714417124, guid: be378f46f7d58cc4da6e4463070996d7,
     type: 3}
-  animalDoneSprite: {fileID: 21300000, guid: f9ae96b6edf5544bf8b29664d359eec7, type: 3}
-  animalIconSprite: {fileID: 21300000, guid: 16694c94fe8864434a668e60e6a5ef07, type: 3}
   animalTimer: 2700
   animalCost: 150
   animalReward: 30
@@ -26,4 +54,4 @@ MonoBehaviour:
   animalPrefab: {fileID: 5070918467947706043, guid: 00409dc2e974541b3af16e92f2d95a51,
     type: 3}
   animalSound: Cow
-  placementOffset: {x: 0, y: 0.2, z: 0}
+  placementOffset: {x: 0, y: 0.4, z: 0}

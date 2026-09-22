@@ -166,7 +166,8 @@ public class TileSelector : MonoBehaviour
 
     public AnimalTile PlaceAnimal(Vector3 mousePosition, Animal a, PlayerInteraction player)
     {
-        GameObject tempAnimal = (GameObject)Instantiate(a.asset.animalPrefab, mousePosition, transform.rotation);
+        Vector3 spawnPosition = mousePosition + a.asset.placementOffset;
+        GameObject tempAnimal = (GameObject)Instantiate(a.asset.animalPrefab, spawnPosition, transform.rotation);
         tempAnimal.name = a.asset.name + " " + animalNum;
         animalNum++;
         tempAnimal.SetActive(true);

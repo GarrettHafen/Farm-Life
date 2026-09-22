@@ -79,7 +79,7 @@ public class Animal
         return asset.animalCost;
     }
 
-    public Sprite GetAnimalSprite(Animal a)
+    public AnimalAnimVariant[] GetAnimalVariants(Animal a)
     {
         if (a.asset == null)
             return null;
@@ -87,15 +87,15 @@ public class Animal
         switch (a.animalState)
         {
             case AnimalState.Growing:
-                return a.asset.animalGrowingSprite;
+                return a.asset.animalGrowingVariants;
             case AnimalState.Done:
-                return a.asset.animalDoneSprite;
+                return a.asset.animalDoneVariants;
         }
 
         MenuController.instance.notificationBar.SetActive(false);
         MenuController.instance.AnimateNotifcation("Animal State Error", Color.red, "Error");
 
-        return asset.animalGrowingSprite;
+        return asset.animalGrowingVariants;
     }
 
     public string GetState()

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
+  m_Name: Carrots
+  m_EditorClassIdentifier: 
+  growthSprites:
+  - {fileID: 21300000, guid: 4c73bca30553ce74fb8687e6bfba2644, type: 3}
+  - {fileID: 21300000, guid: db568100cbe0dbd48828cd03b6eb1d76, type: 3}
+  - {fileID: 21300000, guid: 473ce03896f15444f9bb8bf205adc14b, type: 3}
+  - {fileID: 21300000, guid: 5579e200df8a19c4c8eaeb0dab0c4b1d, type: 3}
+  deadSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: 14706e9056fd42b40a2eed8dc08941c6, type: 3}
+  iconSprite: {fileID: 21300000, guid: 69c0cabb637ffc745a7f4e8049d01a1c, type: 3}
+  cropTimer: 300
+  cropCost: 7
+  cropReward: 13
+  expReward: 5
+  cropName: Carrots
+  reqLvl: 2
+  seedIsOnGround: 0

@@ -17,6 +17,7 @@ public class AnimalTile : MonoBehaviour
     SpriteRenderer parentSprite;
     SpriteRenderer[] childSprites;
 
+    private readonly SpriteFlipbook flipbook = new SpriteFlipbook();
 
     void Start()
     {
@@ -25,11 +26,11 @@ public class AnimalTile : MonoBehaviour
 
     void Update()
     {
-        float randomNumber = Mathf.Round(Random.Range(0.0f, 500.0f));
-        if(randomNumber == 18)
-        {
-            this.gameObject.GetComponent<SpriteRenderer>().flipX = !this.gameObject.GetComponent<SpriteRenderer>().flipX;
-        }
+        if (isBusy) return;
+
+        Sprite frame = flipbook.Advance(Time.deltaTime);
+        if (frame != null)
+            overlay.sprite = frame;
     }
 
     public void Interact(Animal a, AnimalTile animalTile, PlayerInteraction player)
@@ -101,6 +102,9 @@ public class AnimalTile : MonoBehaviour
 
     public void UpdateAnimalSprite(AnimalTile animalThingy)
     {
-        animalThingy.overlay.sprite = animal.GetAnimalSprite(animalThingy.animal);
+        AnimalAnimVariant[] variants = animal.GetAnimalVariants(animalThingy.animal);
+        AnimalAsset asset = animalThingy.animal.asset;
+        animalThingy.flipbook.SetVariants(variants, asset.idleFrameRate, asset.variantMinHold, asset.variantMaxHold);
+        animalThingy.overlay.sprite = animalThingy.flipbook.Advance(0f);
     }
 }

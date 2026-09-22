@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
+  m_Name: Spinach
+  m_EditorClassIdentifier: 
+  growthSprites: []
+  deadSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: 8619b7985906c58449da761fe252d151, type: 3}
+  iconSprite: {fileID: 21300000, guid: 205954f862138064f9e28faddf1f14c6, type: 3}
+  cropTimer: 600
+  cropCost: 18
+  cropReward: 24
+  expReward: 3
+  cropName: Spinach
+  reqLvl: 99
+  seedIsOnGround: 0

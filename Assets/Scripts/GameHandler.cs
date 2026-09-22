@@ -50,6 +50,9 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         instance = this;
+
+        SortMarketLists();
+
         var mainCanvas = landingPage.transform.parent.gameObject;
         if(!mainCanvas.activeSelf)
         {
@@ -59,6 +62,28 @@ public class GameHandler : MonoBehaviour
         landingPage.SetActive(true);
         landingPageOpen = true;
 
+    }
+
+    // Keeps the market lists in reqLvl order so new assets slot into the right page
+    // automatically instead of relying on manual ordering in the Inspector.
+    private void SortMarketLists()
+    {
+        cropsList.Sort((a, b) => CompareByReqLvl(a, b, x => x.reqLvl));
+        treeList.Sort((a, b) => CompareByReqLvl(a, b, x => x.reqLvl));
+        animalList.Sort((a, b) => CompareByReqLvl(a, b, x => x.reqLvl));
+        decorationList.Sort((a, b) => CompareByReqLvl(a, b, x => x.reqLvl));
+    }
+
+    // Nulls sort last (some market lists carry unfilled slots), otherwise by
+    // reqLvl ascending, then by asset name as a stable tiebreaker.
+    private static int CompareByReqLvl<T>(T a, T b, Func<T, int> getReqLvl) where T : UnityEngine.Object
+    {
+        if (a == null && b == null) return 0;
+        if (a == null) return 1;
+        if (b == null) return -1;
+
+        int cmp = getReqLvl(a).CompareTo(getReqLvl(b));
+        return cmp != 0 ? cmp : string.Compare(a.name, b.name, StringComparison.Ordinal);
     }
 
     // Update is called once per frame

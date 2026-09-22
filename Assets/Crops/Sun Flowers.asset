@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
+  m_Name: Sun Flowers
+  m_EditorClassIdentifier: 
+  growthSprites:
+  - {fileID: -1832279988749985154, guid: 14b5500f44d138d4485187923a49279f, type: 3}
+  - {fileID: -8646328146717833081, guid: 0ab0eab183a219341957c23bf7a52934, type: 3}
+  - {fileID: 3872921363052765966, guid: 17f89e8faa895d04d98ae56066458b2b, type: 3}
+  - {fileID: -4385636026982086680, guid: f943df006c93deb448ff4e1a4abe1484, type: 3}
+  deadSprite: {fileID: 0}
+  doneSprite: {fileID: -8697565397111060149, guid: 52cd53aba6e9ebd4d85cee16bb5b6a00,
+    type: 3}
+  iconSprite: {fileID: -9221374049188023015, guid: 5ed681d8e9b273a4caa9684bfda93fd3,
+    type: 3}
+  cropTimer: 21600
+  cropCost: 200
+  cropReward: 250
+  expReward: 2
+  cropName: Sun Flowers
+  reqLvl: 12
+  seedIsOnGround: 0

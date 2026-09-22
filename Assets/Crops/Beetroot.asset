@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
+  m_Name: Beetroot
+  m_EditorClassIdentifier: Assembly-CSharp::CropAsset
+  growthSprites:
+  - {fileID: 21300000, guid: 221301c08ed4e6940bc328f57b103e1c, type: 3}
+  - {fileID: 21300000, guid: 21c30b50f753e3946a777bf5d2799359, type: 3}
+  - {fileID: 21300000, guid: 3540fc1ffaa96dd4ca93d39bddfe0d5e, type: 3}
+  - {fileID: 21300000, guid: 7f3aa734b240a864fb5e8af5a687b666, type: 3}
+  - {fileID: 21300000, guid: d0e1ec7121554e448912b472cf10f833, type: 3}
+  deadSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: d0e1ec7121554e448912b472cf10f833, type: 3}
+  iconSprite: {fileID: 21300000, guid: 4e1c68f1c4890b7409d79f7c97ce84d6, type: 3}
+  cropTimer: 5
+  cropCost: 5
+  cropReward: 15
+  expReward: 5
+  cropName: Beetroot
+  reqLvl: 5
+  seedIsOnGround: 0

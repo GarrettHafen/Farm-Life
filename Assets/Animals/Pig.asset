@@ -12,17 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Pig
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 21300000, guid: 5e2e91d52a76e4249a5b928ddd485904,
+  animalGrowingVariants:
+  - frames:
+    - {fileID: 3273025857224711571, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 8630003108876999632, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -2177970470363141422, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 7765711194375096866, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+  - frames:
+    - {fileID: 828135926615964738, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -2867112024123392138, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 8107211322614934135, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -3314360684991513652, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+  - frames:
+    - {fileID: 233988987690832193, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -1135887766629900521, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 1941805194789424058, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 3838638128790293605, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+  - frames:
+    - {fileID: 2200246215923414537, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -2196022101548160445, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 6431026529537647226, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -66245653492636261, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+  animalDoneVariants:
+  - frames:
+    - {fileID: -3015732499394362474, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -4057072060513927704, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -2589820563390006398, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -8138768735624041203, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+  - frames:
+    - {fileID: -9186220146057602670, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -7474840339968521310, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: 8321502956896580590, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+    - {fileID: -3032128060823966667, guid: 3729999ae01e856458725c46b0c916cb, type: 3}
+  idleFrameRate: 4
+  variantMinHold: 3
+  variantMaxHold: 8
+  animalIconSprite: {fileID: 3273025857224711571, guid: 3729999ae01e856458725c46b0c916cb,
     type: 3}
-  animalDoneSprite: {fileID: 21300000, guid: ef3fad66b5a6b4a05ae74753456408fd, type: 3}
-  animalIconSprite: {fileID: 21300000, guid: 6f13bf01192ab456082f2bc8fb2de387, type: 3}
   animalTimer: 1800
   animalCost: 100
   animalReward: 20
   expReward: 1
   animalName: Pig
   reqLvl: 8
-  preview: 2x2
+  preview: 4x4
   animalPrefab: {fileID: 1037856249616860370, guid: f672818a04b49417a85e9090267df71b,
     type: 3}
   animalSound: Pig

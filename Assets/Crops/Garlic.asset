@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc588f7b321f8a4b96d43c0f1038be9, type: 3}
+  m_Name: Garlic
+  m_EditorClassIdentifier: Assembly-CSharp::CropAsset
+  growthSprites:
+  - {fileID: 21300000, guid: fb2b6f2cf1e8ac54ea488bee5ab55de4, type: 3}
+  - {fileID: 21300000, guid: 8f3983e6fb871a94785493c97ed37ce4, type: 3}
+  - {fileID: 21300000, guid: 818ebe5a701d28a4c81cd4f3a5fa12c5, type: 3}
+  deadSprite: {fileID: 0}
+  doneSprite: {fileID: 21300000, guid: e2b1cd9f5a3f62242bd6a0de36a29379, type: 3}
+  iconSprite: {fileID: 21300000, guid: a967f68d84ae41940bb27fdd5dd67bf2, type: 3}
+  cropTimer: 5
+  cropCost: 5
+  cropReward: 15
+  expReward: 5
+  cropName: Garlic
+  reqLvl: 9
+  seedIsOnGround: 0

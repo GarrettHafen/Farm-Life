@@ -12,17 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e2687a7c2a64ee7a3b8fccecad2010, type: 3}
   m_Name: Goat
   m_EditorClassIdentifier: 
-  animalGrowingSprite: {fileID: 21300000, guid: 0608168b03d494401a6a6e8d9d9bf23e,
+  animalGrowingVariants:
+  - frames:
+    - {fileID: 1625591511433124795, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -3985748561759898626, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -3045060630556131083, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -7099271852207016692, guid: 31ad106e45b592744a15629f24809162, type: 3}
+  - frames:
+    - {fileID: -6967959914734560382, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -2327087878218528407, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 3845164708039706757, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -2870837559140320922, guid: 31ad106e45b592744a15629f24809162, type: 3}
+  - frames:
+    - {fileID: -7988150217296207115, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 6117771400855463784, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -2519301443579159551, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -8557773181282409377, guid: 31ad106e45b592744a15629f24809162, type: 3}
+  - frames:
+    - {fileID: -1124582232494427912, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 1373808216368424455, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 6139015029142775160, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -2452120311303886086, guid: 31ad106e45b592744a15629f24809162, type: 3}
+  animalDoneVariants:
+  - frames:
+    - {fileID: 6309130044204889959, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -3009257695980553379, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -6400821326141614564, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: -3083383385908012296, guid: 31ad106e45b592744a15629f24809162, type: 3}
+  - frames:
+    - {fileID: 7183396043722227565, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 5723642542182830555, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 6940677416393793884, guid: 31ad106e45b592744a15629f24809162, type: 3}
+    - {fileID: 7357517757459791151, guid: 31ad106e45b592744a15629f24809162, type: 3}
+  idleFrameRate: 4
+  variantMinHold: 3
+  variantMaxHold: 8
+  animalIconSprite: {fileID: 1625591511433124795, guid: 31ad106e45b592744a15629f24809162,
     type: 3}
-  animalDoneSprite: {fileID: 21300000, guid: 80358345069f344d09bceedb825d9664, type: 3}
-  animalIconSprite: {fileID: 21300000, guid: f37422ff31e7c444eaa686c20346932d, type: 3}
   animalTimer: 2700
   animalCost: 200
   animalReward: 40
   expReward: 2
   animalName: Goat
   reqLvl: 12
-  preview: 2x2
+  preview: 4x4
   animalPrefab: {fileID: 6468135702207102009, guid: d07bcb9d5efff44688403036ff61e5eb,
     type: 3}
   animalSound: Goat
